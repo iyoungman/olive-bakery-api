@@ -33,6 +33,10 @@ public class Comment {
     @Lob
     private String content;
 
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
+    private Board board;
+
     @Builder
     public Comment(String userName, String content){
         this.userName = userName;

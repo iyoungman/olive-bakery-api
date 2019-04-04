@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 
 public class CommentDto {
 
@@ -43,6 +45,23 @@ public class CommentDto {
                     .userName(userName)
                     .content(content)
                     .build();
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class Get {
+        private LocalDateTime insertTime;
+        private LocalDateTime updateTime;
+        private String userName;
+        private String content;
+
+        @Builder
+        public Get(LocalDateTime insertTime, LocalDateTime updateTime, String userName, String content) {
+            this.insertTime = insertTime;
+            this.updateTime = updateTime;
+            this.userName = userName;
+            this.content = content;
         }
     }
 }

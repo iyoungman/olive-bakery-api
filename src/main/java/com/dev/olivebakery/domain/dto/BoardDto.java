@@ -39,32 +39,17 @@ public class BoardDto {
         }
     }
     @Getter @NoArgsConstructor
-    public static class GetPost {
-        private Long boardId;
-        private Timestamp insertTime;
-        private Timestamp updateTime;
-        private String title;
-        private String context;
-        private boolean isNotice;
-        private boolean isSecret;
-        private String userId;
-//        private List<CommentDto.Save> comments = new ArrayList<>();
-        private List<Comment> comments = new ArrayList<>();
+    public static class GetPostDetails {
+        private GetPosts posts;
+        private List<CommentDto.Get> comments = new ArrayList<>();
 
         @Builder
-        public GetPost(Long boardId, Timestamp insertTime, Timestamp updateTime, String title, String context, boolean isNotice, boolean isSecret, String userId, List<Comment> comments) {
-            this.boardId = boardId;
-            this.insertTime = insertTime;
-            this.updateTime = updateTime;
-            this.title = title;
-            this.context = context;
-            this.isNotice = isNotice;
-            this.isSecret = isSecret;
-            this.userId = userId;
+        public GetPostDetails(GetPosts posts, List<CommentDto.Get> comments) {
+            this.posts = posts;
             this.comments = comments;
         }
 
-        public void setComments(List<Comment> comments) {
+        public void setComments(List<CommentDto.Get> comments) {
             this.comments = comments;
         }
     }

@@ -49,8 +49,7 @@ public class Board {
     @JoinColumn(name = "member")
     private Member member;
 
-    @OneToMany(fetch = FetchType.EAGER)//단방향
-    @JoinColumn(name = "board_id")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "board")
     private List<Comment> comments = new ArrayList<>();
 
     @Builder

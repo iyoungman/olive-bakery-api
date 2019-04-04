@@ -32,7 +32,7 @@ public class BoardController {
 
     @ApiOperation("게시물 하나 불러오기")
     @GetMapping("/id/{boardId}")
-    public BoardDto.GetPost getPost(@PathVariable("boardId") Long boardId){
+    public BoardDto.GetPostDetails getPost(@PathVariable("boardId") Long boardId){
         return boardService.getPost(boardId);
     }
 

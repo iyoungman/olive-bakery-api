@@ -34,12 +34,12 @@ public class BoardService {
      */
     public Page<BoardDto.GetPosts> getPosts(BoardType boardType, int pageNum) {
 //        Pageable pageable = PageRequest.of(pageNum - 1, 10, new Sort(new Sort.Order(Sort.Direction.DESC, "boardId"), new Sort.Order(Sort.Direction.DESC, "isNotice")));
-        Page<BoardDto.GetPosts> byBoardType = boardRepository.getBoards(boardType,pageNum);
+        Page<BoardDto.GetPosts> byBoardType = boardRepository.getPosts(boardType,pageNum);
         return byBoardType;
     }
 
-    public BoardDto.GetPost getPost(Long boardId){
-        return boardRepository.getBoard(boardId);
+    public BoardDto.GetPostDetails getPost(Long boardId){
+        return boardRepository.getPostDetails(boardId);
     }
 
     public void saveBoard(BoardDto.Save saveDto) {
