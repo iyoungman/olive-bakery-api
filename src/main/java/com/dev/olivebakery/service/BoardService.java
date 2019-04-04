@@ -9,9 +9,6 @@ import com.dev.olivebakery.domain.enums.BoardType;
 import com.dev.olivebakery.exception.UserDefineException;
 import com.dev.olivebakery.repository.BoardRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,10 +32,14 @@ public class BoardService {
     /*
      * 공지 or 질문 게시판 타입에 맞게 페이징
      */
-    public Page<Board> getBoards(BoardType boardType, int pageNum) {
-        Pageable pageable = PageRequest.of(pageNum - 1, 10, new Sort(new Sort.Order(Sort.Direction.DESC, "boardId"), new Sort.Order(Sort.Direction.DESC, "isNotice")));
-        Page<Board> byBoardType = boardRepository.findByBoardType(boardType, pageable);
+    public Page<BoardDto.GetPosts> getPosts(BoardType boardType, int pageNum) {
+//        Pageable pageable = PageRequest.of(pageNum - 1, 10, new Sort(new Sort.Order(Sort.Direction.DESC, "boardId"), new Sort.Order(Sort.Direction.DESC, "isNotice")));
+        Page<BoardDto.GetPosts> byBoardType = boardRepository.getBoards(boardType,pageNum);
         return byBoardType;
+    }
+
+    public BoardDto.GetPost getPost(Long boardId){
+        return boardRepository.getBoard(boardId);
     }
 
     public void saveBoard(BoardDto.Save saveDto) {

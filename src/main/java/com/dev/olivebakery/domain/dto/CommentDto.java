@@ -1,6 +1,7 @@
 package com.dev.olivebakery.domain.dto;
 
 import com.dev.olivebakery.domain.entity.Comment;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,6 +20,13 @@ public class CommentDto {
                     .userName(userName)
                     .content(content)
                     .build();
+        }
+
+        @Builder
+        public Save(String boardId, String userName, String content) {
+            this.boardId = boardId;
+            this.userName = userName;
+            this.content = content;
         }
     }
 

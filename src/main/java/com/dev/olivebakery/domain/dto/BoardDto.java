@@ -2,6 +2,7 @@ package com.dev.olivebakery.domain.dto;
 
 
 import com.dev.olivebakery.domain.entity.Board;
+import com.dev.olivebakery.domain.entity.Comment;
 import com.dev.olivebakery.domain.entity.Member;
 import com.dev.olivebakery.domain.enums.BoardType;
 import lombok.AccessLevel;
@@ -9,7 +10,64 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
 public class BoardDto {
+    @Getter @NoArgsConstructor
+    public static class GetPosts {
+        private Long boardId;
+        private Timestamp insertTime;
+        private Timestamp updateTime;
+        private String title;
+        private String context;
+        private boolean isNotice;
+        private boolean isSecret;
+        private String userId;
+
+        @Builder
+        public GetPosts(Long boardId, Timestamp insertTime, Timestamp updateTime, String title, String context, boolean isNotice, boolean isSecret, String userId) {
+            this.boardId = boardId;
+            this.insertTime = insertTime;
+            this.updateTime = updateTime;
+            this.title = title;
+            this.context = context;
+            this.isNotice = isNotice;
+            this.isSecret = isSecret;
+            this.userId = userId;
+        }
+    }
+    @Getter @NoArgsConstructor
+    public static class GetPost {
+        private Long boardId;
+        private Timestamp insertTime;
+        private Timestamp updateTime;
+        private String title;
+        private String context;
+        private boolean isNotice;
+        private boolean isSecret;
+        private String userId;
+//        private List<CommentDto.Save> comments = new ArrayList<>();
+        private List<Comment> comments = new ArrayList<>();
+
+        @Builder
+        public GetPost(Long boardId, Timestamp insertTime, Timestamp updateTime, String title, String context, boolean isNotice, boolean isSecret, String userId, List<Comment> comments) {
+            this.boardId = boardId;
+            this.insertTime = insertTime;
+            this.updateTime = updateTime;
+            this.title = title;
+            this.context = context;
+            this.isNotice = isNotice;
+            this.isSecret = isSecret;
+            this.userId = userId;
+            this.comments = comments;
+        }
+
+        public void setComments(List<Comment> comments) {
+            this.comments = comments;
+        }
+    }
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)

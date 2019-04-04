@@ -2,9 +2,9 @@ package com.dev.olivebakery.controller;
 
 import com.dev.olivebakery.domain.dto.BoardDto;
 import com.dev.olivebakery.domain.dto.CommentDto;
-import com.dev.olivebakery.domain.entity.Board;
 import com.dev.olivebakery.domain.enums.BoardType;
 import com.dev.olivebakery.service.BoardService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,9 +24,16 @@ public class BoardController {
         this.boardService = boardService;
     }
 
+    @ApiOperation("게시판과 QnA의 게시물들 불러오기")
     @GetMapping("/{type}/page/{num}")
-    public Page<Board> getBoards(@PathVariable("type") BoardType boardType, @PathVariable("num") int pageNum) {
-        return boardService.getBoards(boardType, pageNum);
+    public Page<BoardDto.GetPosts> getBoards(@PathVariable("type") BoardType boardType, @PathVariable("num") int pageNum) {
+        return boardService.getPosts(boardType, pageNum);
+    }
+
+    @ApiOperation("게시물 하나 불러오기")
+    @GetMapping("/id/{boardId}")
+    public BoardDto.GetPost getPost(@PathVariable("boardId") Long boardId){
+        return boardService.getPost(boardId);
     }
 
     @PostMapping
