@@ -62,10 +62,10 @@ public class Board {
         this.member = member;
     }
 
-    public void updateBoard(BoardDto.Update updateDto) {
-        this.context = updateDto.getContext();
-        this.title = updateDto.getTitle();
-        this.isNotice = updateDto.getIsNotice().matches("true");
-        this.isSecret = updateDto.getIsSecret().matches("true");
+    public void updateBoard(BoardDto.UpdatePost updatePostDto) {
+        this.context = updatePostDto.getContext();
+        this.title = updatePostDto.getTitle();
+        this.isNotice = updatePostDto.getIsNotice().matches("true");
+        this.isSecret = updatePostDto.getIsSecret().matches("true");
     }
 }

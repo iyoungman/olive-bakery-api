@@ -5,6 +5,7 @@ import com.dev.olivebakery.domain.entity.Board;
 import com.dev.olivebakery.domain.entity.Comment;
 import com.dev.olivebakery.domain.entity.Member;
 import com.dev.olivebakery.domain.enums.BoardType;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -56,16 +57,18 @@ public class BoardDto {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class Save {
+    public static class SavePost {
         private String context;
         private String title;
         private String userId;
         private BoardType boardType;
+        @ApiModelProperty(notes = "true 또는 false로 보내야함")
         private String isNotice;
+        @ApiModelProperty(notes = "true 또는 false로 보내야함")
         private String isSecret;
 
         @Builder
-        public Save(String context, String title, String userId, BoardType boardType, String isSecret, String isNotice) {
+        public SavePost(String context, String title, String userId, BoardType boardType, String isSecret, String isNotice) {
             this.context = context;
             this.title = title;
             this.userId = userId;
@@ -88,15 +91,17 @@ public class BoardDto {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class Update {
+    public static class UpdatePost {
         private Long boardId;
         private String context;
         private String title;
+        @ApiModelProperty(notes = "true 또는 false로 보내야함")
         private String isNotice;
+        @ApiModelProperty(notes = "true 또는 false로 보내야함")
         private String isSecret;
 
         @Builder
-        public Update(Long boardId, String context, String title, String isSecret, String isNotice) {
+        public UpdatePost(Long boardId, String context, String title, String isSecret, String isNotice) {
             this.boardId = boardId;
             this.context = context;
             this.title = title;

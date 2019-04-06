@@ -33,14 +33,15 @@ public class Comment {
     @Lob
     private String content;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
 
     @Builder
-    public Comment(String userName, String content){
+    public Comment(String userName, String content, Board board){
         this.userName = userName;
         this.content = content;
+        this.board = board;
     }
 
 }

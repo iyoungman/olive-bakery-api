@@ -29,29 +29,32 @@ public class BoardService {
                 .orElseThrow(() -> new UserDefineException("해당 번호의 게시글은 존재하지 않습니다."));
     }
 
-    /*
-     * 공지 or 질문 게시판 타입에 맞게 페이징
+    /**
+     *
+     * @param boardType: 게시판 or QnA
+     * @param pageNum: 페이지 번호
+     *
      */
     public Page<BoardDto.GetPosts> getPosts(BoardType boardType, int pageNum) {
-//        Pageable pageable = PageRequest.of(pageNum - 1, 10, new Sort(new Sort.Order(Sort.Direction.DESC, "boardId"), new Sort.Order(Sort.Direction.DESC, "isNotice")));
-        Page<BoardDto.GetPosts> byBoardType = boardRepository.getPosts(boardType,pageNum);
-        return byBoardType;
+        return boardRepository.getPosts(boardType,pageNum);
+    }
+
+    public List<BoardDto.GetPosts> getNoticePosts(){
+        return boardRepository.getNoticePosts();
     }
 
     public BoardDto.GetPostDetails getPost(Long boardId){
         return boardRepository.getPostDetails(boardId);
     }
 
-    public void saveBoard(BoardDto.Save saveDto) {
-        Member member = signService.findById(saveDto.getUserId());
-
-        Board board = saveDto.toEntity(member);
-        boardRepository.save(board);
+    public void saveBoard(BoardDto.SavePost savePostDto) {
+        Member member = signService.findById(savePostDto.getUserId());
+        boardRepository.save(savePostDto.toEntity(member));
     }
 
-    public void updateBoard(BoardDto.Update updateDto) {
-        Board board = findBoardById(updateDto.getBoardId());
-        board.updateBoard(updateDto);
+    public void updateBoard(BoardDto.UpdatePost updatePostDto) {
+        Board board = findBoardById(updatePostDto.getBoardId());
+        board.updateBoard(updatePostDto);
         boardRepository.save(board);
     }
 
@@ -83,4 +86,7 @@ public class BoardService {
         boardRepository.save(board);
     }
 
+    public void deleteComment(Long commentId) {
+
+    }
 }
