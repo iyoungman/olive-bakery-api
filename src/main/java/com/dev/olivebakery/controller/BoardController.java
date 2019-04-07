@@ -81,8 +81,8 @@ public class BoardController {
     }
 
     @ApiOperation("댓글 삭제하기")
-    @DeleteMapping("/comment/id/{commentId}")
-    public void deleteComment(@PathVariable("commentId") String commentId){
-        boardService.deleteComment(Long.valueOf(commentId));
+    @DeleteMapping("/comment")
+    public void deleteComment(@RequestBody CommentDto.DeleteComment comment){
+        boardService.deleteComment(comment);
     }
 }

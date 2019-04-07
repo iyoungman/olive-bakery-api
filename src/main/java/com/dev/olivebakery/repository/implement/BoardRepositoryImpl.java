@@ -69,17 +69,20 @@ public class BoardRepositoryImpl extends QuerydslRepositorySupport implements Bo
 
         List<Comment> comments = jpaQuery.join(board.comments, comment)
                                         .transform(groupBy(board.boardId).as(list(comment))).get(boardId);
+
         List<CommentDto.GetComment> commentDtoList = new ArrayList<>();
-        comments.forEach(commentTmp ->
-            commentDtoList.add(
-                    CommentDto.GetComment.builder()
-                            .insertTime(commentTmp.getInsertTime())
-                            .updateTime(commentTmp.getUpdateTime())
-                            .userName(commentTmp.getUserName())
-                            .content(commentTmp.getContent())
-                            .build()
-            )
-        );
+        if(comments != null) {
+            comments.forEach(commentTmp ->
+                    commentDtoList.add(
+                            CommentDto.GetComment.builder()
+                                    .insertTime(commentTmp.getInsertTime())
+                                    .updateTime(commentTmp.getUpdateTime())
+                                    .userName(commentTmp.getUserName())
+                                    .content(commentTmp.getContent())
+                                    .build()
+                    )
+            );
+        }
 
         return BoardDto.GetPostDetails.builder()
                 .posts(post)

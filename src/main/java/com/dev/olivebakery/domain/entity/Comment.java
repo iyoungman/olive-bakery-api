@@ -28,6 +28,8 @@ public class Comment {
     @UpdateTimestamp
     private LocalDateTime updateTime;
 
+    private String userId;
+
     private String userName;
 
     @Lob
@@ -38,10 +40,15 @@ public class Comment {
     private Board board;
 
     @Builder
-    public Comment(String userName, String content, Board board){
+    public Comment(String userName, String userId, String content, Board board){
         this.userName = userName;
+        this.userId = userId;
         this.content = content;
         this.board = board;
     }
 
+    public Comment update(String content) {
+        this.content = content;
+        return this;
+    }
 }

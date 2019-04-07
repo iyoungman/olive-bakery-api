@@ -8,6 +8,7 @@ import com.dev.olivebakery.domain.entity.Member;
 import com.dev.olivebakery.domain.enums.BoardType;
 import com.dev.olivebakery.exception.UserDefineException;
 import com.dev.olivebakery.repository.BoardRepository;
+import com.dev.olivebakery.repository.CommentRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +18,12 @@ import java.util.List;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final CommentRepository commentRepository;
     private final SignService signService;
 
-    public BoardService(BoardRepository boardRepository, SignService signService) {
+    public BoardService(BoardRepository boardRepository, CommentRepository commentRepository, SignService signService) {
         this.boardRepository = boardRepository;
+        this.commentRepository = commentRepository;
         this.signService = signService;
     }
 
@@ -64,29 +67,23 @@ public class BoardService {
     }
 
     public void saveComment(CommentDto.SaveComment comment) {
+        signService.findById(comment.getUserId());  //validation check
         Board board = findBoardById(Long.valueOf(comment.getBoardId()));
-        List<Comment> comments = board.getComments();
-        comments.add(comment.toEntity());
-        board.setComments(comments);
-        boardRepository.save(board);
+        commentRepository.save(comment.toEntity(board));
     }
 
     public void updateComment(CommentDto.UpdateComment updateComment) {
-        Board board = findBoardById(Long.valueOf(updateComment.getBoardId()));
-        List<Comment> comments = board.getComments();
-        comments.forEach(comment->{
-            if(Long.valueOf(updateComment.getCommentId()).equals(comment.getCommentId())){
-                if(!comment.getUserName().equals(updateComment.getUserName()))
-                    throw new UserDefineException("수정은 작성자만 가능합니다.");
+        signService.findById(updateComment.getUserId());    //Validation Check
+        Comment comment = commentRepository.findByUserIdAndUpdateTime(updateComment.getUserId(), updateComment.getUpdateTime())
+                                                .orElseThrow(() -> new UserDefineException("해당 댓글이 존재하지 않습니다."));
 
-                comment.setContent(updateComment.getContent());
-            }
-        });
-        board.setComments(comments);
-        boardRepository.save(board);
+        commentRepository.save(comment.update(updateComment.getContent()));
     }
 
-    public void deleteComment(Long commentId) {
-
+    public void deleteComment(CommentDto.DeleteComment deleteComment) {
+        signService.findById(deleteComment.getUserId());    //Validation Check
+        Comment comment = commentRepository.findByUserIdAndUpdateTime(deleteComment.getUserId(), deleteComment.getUpdateTime())
+                .orElseThrow(() -> new UserDefineException("해당 댓글이 존재하지 않습니다."));
+        commentRepository.delete(comment);
     }
 }
