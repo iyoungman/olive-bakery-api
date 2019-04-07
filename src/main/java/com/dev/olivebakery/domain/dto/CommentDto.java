@@ -13,14 +13,14 @@ public class CommentDto {
     @ApiModel(value = "댓글 가져오기")
     @Getter
     @NoArgsConstructor
-    public static class Get {
+    public static class GetComment {
         private LocalDateTime insertTime;
         private LocalDateTime updateTime;
         private String userName;
         private String content;
 
         @Builder
-        public Get(LocalDateTime insertTime, LocalDateTime updateTime, String userName, String content) {
+        public GetComment(LocalDateTime insertTime, LocalDateTime updateTime, String userName, String content) {
             this.insertTime = insertTime;
             this.updateTime = updateTime;
             this.userName = userName;
@@ -30,7 +30,7 @@ public class CommentDto {
 
     @Getter
     @NoArgsConstructor
-    public static class Save{
+    public static class SaveComment {
         private String boardId;
         private String userName;
         private String content;
@@ -42,7 +42,7 @@ public class CommentDto {
                     .build();
         }
         @Builder
-        public Save(String boardId, String userName, String content) {
+        public SaveComment(String boardId, String userName, String content) {
             this.boardId = boardId;
             this.userName = userName;
             this.content = content;
@@ -51,7 +51,7 @@ public class CommentDto {
     }
     @Getter
     @NoArgsConstructor
-    public static class Update{
+    public static class UpdateComment {
         private String boardId;
         private String commentId;
         private String userName;

@@ -63,7 +63,7 @@ public class BoardService {
         boardRepository.delete(board);
     }
 
-    public void saveComment(CommentDto.Save comment) {
+    public void saveComment(CommentDto.SaveComment comment) {
         Board board = findBoardById(Long.valueOf(comment.getBoardId()));
         List<Comment> comments = board.getComments();
         comments.add(comment.toEntity());
@@ -71,7 +71,7 @@ public class BoardService {
         boardRepository.save(board);
     }
 
-    public void updateComment(CommentDto.Update updateComment) {
+    public void updateComment(CommentDto.UpdateComment updateComment) {
         Board board = findBoardById(Long.valueOf(updateComment.getBoardId()));
         List<Comment> comments = board.getComments();
         comments.forEach(comment->{

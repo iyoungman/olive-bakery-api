@@ -70,13 +70,13 @@ public class BoardController {
 
     @ApiOperation("댓글 저장하기")
     @PostMapping("/comment")
-    public void saveComment(@RequestBody CommentDto.Save comment){
+    public void saveComment(@RequestBody CommentDto.SaveComment comment){
         boardService.saveComment(comment);
     }
 
     @ApiOperation("댓글 수정하기")
     @PutMapping("/comment")
-    public void updateComment(@RequestBody CommentDto.Update comment){
+    public void updateComment(@RequestBody CommentDto.UpdateComment comment){
         boardService.updateComment(comment);
     }
 

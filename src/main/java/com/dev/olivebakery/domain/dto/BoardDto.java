@@ -2,7 +2,6 @@ package com.dev.olivebakery.domain.dto;
 
 
 import com.dev.olivebakery.domain.entity.Board;
-import com.dev.olivebakery.domain.entity.Comment;
 import com.dev.olivebakery.domain.entity.Member;
 import com.dev.olivebakery.domain.enums.BoardType;
 import io.swagger.annotations.ApiModelProperty;
@@ -42,15 +41,15 @@ public class BoardDto {
     @Getter @NoArgsConstructor
     public static class GetPostDetails {
         private GetPosts posts;
-        private List<CommentDto.Get> comments = new ArrayList<>();
+        private List<CommentDto.GetComment> comments = new ArrayList<>();
 
         @Builder
-        public GetPostDetails(GetPosts posts, List<CommentDto.Get> comments) {
+        public GetPostDetails(GetPosts posts, List<CommentDto.GetComment> comments) {
             this.posts = posts;
             this.comments = comments;
         }
 
-        public void setComments(List<CommentDto.Get> comments) {
+        public void setComments(List<CommentDto.GetComment> comments) {
             this.comments = comments;
         }
     }
