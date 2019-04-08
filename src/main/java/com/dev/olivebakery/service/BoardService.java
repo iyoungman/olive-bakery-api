@@ -8,6 +8,7 @@ import com.dev.olivebakery.domain.entity.Member;
 import com.dev.olivebakery.domain.enums.BoardType;
 import com.dev.olivebakery.exception.UserDefineException;
 import com.dev.olivebakery.repository.BoardRepository;
+import com.dev.olivebakery.repository.CommentRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +18,12 @@ import java.util.List;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final CommentRepository commentRepository;
     private final SignService signService;
 
-    public BoardService(BoardRepository boardRepository, SignService signService) {
+    public BoardService(BoardRepository boardRepository, CommentRepository commentRepository, SignService signService) {
         this.boardRepository = boardRepository;
+        this.commentRepository = commentRepository;
         this.signService = signService;
     }
 
@@ -29,29 +32,32 @@ public class BoardService {
                 .orElseThrow(() -> new UserDefineException("해당 번호의 게시글은 존재하지 않습니다."));
     }
 
-    /*
-     * 공지 or 질문 게시판 타입에 맞게 페이징
+    /**
+     *
+     * @param boardType: 게시판 or QnA
+     * @param pageNum: 페이지 번호
+     *
      */
     public Page<BoardDto.GetPosts> getPosts(BoardType boardType, int pageNum) {
-//        Pageable pageable = PageRequest.of(pageNum - 1, 10, new Sort(new Sort.Order(Sort.Direction.DESC, "boardId"), new Sort.Order(Sort.Direction.DESC, "isNotice")));
-        Page<BoardDto.GetPosts> byBoardType = boardRepository.getPosts(boardType,pageNum);
-        return byBoardType;
+        return boardRepository.getPosts(boardType,pageNum);
+    }
+
+    public List<BoardDto.GetPosts> getNoticePosts(){
+        return boardRepository.getNoticePosts();
     }
 
     public BoardDto.GetPostDetails getPost(Long boardId){
         return boardRepository.getPostDetails(boardId);
     }
 
-    public void saveBoard(BoardDto.Save saveDto) {
-        Member member = signService.findById(saveDto.getUserId());
-
-        Board board = saveDto.toEntity(member);
-        boardRepository.save(board);
+    public void saveBoard(BoardDto.SavePost savePostDto) {
+        Member member = signService.findById(savePostDto.getUserId());
+        boardRepository.save(savePostDto.toEntity(member));
     }
 
-    public void updateBoard(BoardDto.Update updateDto) {
-        Board board = findBoardById(updateDto.getBoardId());
-        board.updateBoard(updateDto);
+    public void updateBoard(BoardDto.UpdatePost updatePostDto) {
+        Board board = findBoardById(updatePostDto.getBoardId());
+        board.updateBoard(updatePostDto);
         boardRepository.save(board);
     }
 
@@ -60,27 +66,24 @@ public class BoardService {
         boardRepository.delete(board);
     }
 
-    public void saveComment(CommentDto.Save comment) {
+    public void saveComment(CommentDto.SaveComment comment) {
+        signService.findById(comment.getUserId());  //validation check
         Board board = findBoardById(Long.valueOf(comment.getBoardId()));
-        List<Comment> comments = board.getComments();
-        comments.add(comment.toEntity());
-        board.setComments(comments);
-        boardRepository.save(board);
+        commentRepository.save(comment.toEntity(board));
     }
 
-    public void updateComment(CommentDto.Update updateComment) {
-        Board board = findBoardById(Long.valueOf(updateComment.getBoardId()));
-        List<Comment> comments = board.getComments();
-        comments.forEach(comment->{
-            if(Long.valueOf(updateComment.getCommentId()).equals(comment.getCommentId())){
-                if(!comment.getUserName().equals(updateComment.getUserName()))
-                    throw new UserDefineException("수정은 작성자만 가능합니다.");
+    public void updateComment(CommentDto.UpdateComment updateComment) {
+        signService.findById(updateComment.getUserId());    //Validation Check
+        Comment comment = commentRepository.findByUserIdAndUpdateTime(updateComment.getUserId(), updateComment.getUpdateTime())
+                                                .orElseThrow(() -> new UserDefineException("해당 댓글이 존재하지 않습니다."));
 
-                comment.setContent(updateComment.getContent());
-            }
-        });
-        board.setComments(comments);
-        boardRepository.save(board);
+        commentRepository.save(comment.update(updateComment.getContent()));
     }
 
+    public void deleteComment(CommentDto.DeleteComment deleteComment) {
+        signService.findById(deleteComment.getUserId());    //Validation Check
+        Comment comment = commentRepository.findByUserIdAndUpdateTime(deleteComment.getUserId(), deleteComment.getUpdateTime())
+                .orElseThrow(() -> new UserDefineException("해당 댓글이 존재하지 않습니다."));
+        commentRepository.delete(comment);
+    }
 }
