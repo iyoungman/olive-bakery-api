@@ -48,7 +48,7 @@ public class OliveBakeryApplicationTests {
 
     @Test
     public void insertBoard() {
-        for (int i = 1; i <= 30; i++) {
+        /*for (int i = 1; i <= 30; i++) {
             Board savedBoard = boardRepository.save(
                                 Board.builder()
                                         .boardType(BoardType.BOARD)
@@ -70,7 +70,7 @@ public class OliveBakeryApplicationTests {
                 );
             }
 
-        }
+        }*/
     }
 
 
