@@ -10,9 +10,15 @@ spring:
     url: jdbc:mysql://chunsodb.c04b2rx0gbkh.ap-northeast-2.rds.amazonaws.com:3306/olive_bakery?useSSL=false&serverTimezone=Asia/Seoul
     username: chunso
     password: alswjd96
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 1MB
+
 logging:
   level:
     root: info
 
 server:
   port: 8080
+

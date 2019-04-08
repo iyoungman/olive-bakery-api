@@ -18,6 +18,8 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
 public class Bread {
 
     @Id
@@ -30,7 +32,7 @@ public class Bread {
 
     private Integer price;
 
-    private String picturePath;
+    private BreadImage breadImage;
 
     //상세정보가 아닌 간단한 소개(리스트에서 보내줄 것)
     private String description;
@@ -57,16 +59,16 @@ public class Bread {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bread", fetch = FetchType.LAZY)
     private List<Ingredients> ingredients = new ArrayList<>();
 
-    @Builder
-    public Bread(String name, Integer price, String picturePath, String detailDescription, String description, boolean isSelling, BreadState state, Set<DayType> days, List<Ingredients> ingredients) {
-        this.name = name;
-        this.price = price;
-        this.picturePath = picturePath;
-        this.description = description;
-        this.detailDescription = detailDescription;
-        this.isSelling = isSelling;
-        this.state = state;
-        this.days = days;
-        this.ingredients = ingredients;
-    }
+//    @Builder
+//    public Bread(String name, Integer price, String picturePath, String detailDescription, String description, boolean isSelling, BreadState state, Set<DayType> days, List<Ingredients> ingredients) {
+//        this.name = name;
+//        this.price = price;
+//        this.picturePath = picturePath;
+//        this.description = description;
+//        this.detailDescription = detailDescription;
+//        this.isSelling = isSelling;
+//        this.state = state;
+//        this.days = days;
+//        this.ingredients = ingredients;
+//    }
 }
