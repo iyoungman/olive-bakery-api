@@ -49,7 +49,7 @@ public class Bread {
     @Enumerated(value = EnumType.STRING)
     private Set<DayType> days = new HashSet<>();
 
-    // 빵이 매진인지. (true면 매진)
+    // 빵이 매진인지. soldout의 날짜가 오늘이면 매진
     @OneToOne(fetch = FetchType.EAGER,mappedBy = "bread")
     private SoldOut soldOut;
 

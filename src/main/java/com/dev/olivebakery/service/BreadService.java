@@ -47,16 +47,16 @@ public class BreadService {
         return finalPrice;
     }
 
-    public List<BreadDto.GetAll> getBreadByDay(DayType day){
+    public List<BreadDto.BreadGetAll> getBreadByDay(DayType day){
         List<Bread> breadList = breadRepository.findByDays(day);
-        List<BreadDto.GetAll> breadGetAll = new ArrayList<>();
+        List<BreadDto.BreadGetAll> breadGetAll = new ArrayList<>();
         breadList.forEach(bread -> {
             boolean isSoldOut = false;
             if(bread.getSoldOut() != null)
                 isSoldOut = bread.getSoldOut().getDate().isEqual(LocalDate.now());
 
             breadGetAll.add(
-                BreadDto.GetAll.builder()
+                BreadDto.BreadGetAll.builder()
                         .picturePath(bread.getPicturePath())
                         .name(bread.getName())
                         .price(bread.getPrice())
@@ -70,22 +70,22 @@ public class BreadService {
         return breadGetAll;
     }
 
-    public BreadDto.GetDetail getBreadDetails(String name){
+    public BreadDto.BreadGetDetail getBreadDetails(String name){
         Bread bread = breadRepository.findByName(name)
                 .orElseThrow(() -> new UserDefineException(name + "이란 빵은 존재하지 않습니다."));
         boolean isSoldOut = false;
         if(bread.getSoldOut() != null)
             isSoldOut = bread.getSoldOut().getDate().isEqual(LocalDate.now());
 
-        List<BreadDto.Ingredient> ingredientList = new ArrayList<>();
+        List<BreadDto.BreadIngredient> ingredientList = new ArrayList<>();
         bread.getIngredients().forEach(ingredient -> ingredientList.add(
-                BreadDto.Ingredient.builder()
+                BreadDto.BreadIngredient.builder()
                         .ingredient(ingredient.getName())
                         .origin(ingredient.getOrigin())
                         .build()
         ));
 
-        return BreadDto.GetDetail.builder()
+        return BreadDto.BreadGetDetail.builder()
                 .name(bread.getName())
                 .price(bread.getPrice())
                 .picturePath(bread.getPicturePath())
@@ -96,7 +96,7 @@ public class BreadService {
                 .build();
     }
 
-    public void updateBread(BreadDto.Save updateBread){
+    public void updateBread(BreadDto.BreadSave updateBread){
         Bread bread = breadRepository.findByName(updateBread.getName())
                 .orElseThrow(() -> new UserDefineException(updateBread.getName() + "이란 빵은 존재하지 않습니다."));
 

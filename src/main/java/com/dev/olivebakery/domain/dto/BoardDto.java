@@ -38,6 +38,7 @@ public class BoardDto {
             this.userId = userId;
         }
     }
+
     @Getter @NoArgsConstructor
     public static class GetPostDetails {
         private GetPosts posts;

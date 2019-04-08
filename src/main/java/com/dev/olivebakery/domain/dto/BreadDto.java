@@ -16,12 +16,12 @@ public class BreadDto {
 
     @Getter
     @NoArgsConstructor
-    public static class Ingredient{
+    public static class BreadIngredient{
         private String ingredient;
         private String origin;
 
         @Builder
-        public Ingredient(String ingredient, String origin){
+        public BreadIngredient(String ingredient, String origin){
             this.ingredient = ingredient;
             this.origin = origin;
         }
@@ -29,7 +29,7 @@ public class BreadDto {
 
     @Getter
     @NoArgsConstructor
-    public static class GetAll {
+    public static class BreadGetAll {
         private String name;
         private int price;
         private String picturePath;
@@ -38,7 +38,7 @@ public class BreadDto {
         private BreadState breadState;
 
         @Builder
-        public GetAll(String name, int price, String picturePath, String description, boolean soldOut, BreadState breadState){
+        public BreadGetAll(String name, int price, String picturePath, String description, boolean soldOut, BreadState breadState){
             this.name = name;
             this.price = price;
             this.picturePath = picturePath;
@@ -50,16 +50,16 @@ public class BreadDto {
 
     @Getter
     @NoArgsConstructor
-    public static class GetDetail{
+    public static class BreadGetDetail{
         private String name;
         private int price;
         private String picturePath;
         private String detailDescription;
-        private List<Ingredient> ingredientsList = new ArrayList<>();
+        private List<BreadIngredient> ingredientsList = new ArrayList<>();
         private boolean soldOut;
         private BreadState breadState;
         @Builder
-        public GetDetail(String name, int price, String picturePath, String detailDescription, boolean soldOut, List<Ingredient> ingredientsList, BreadState breadState){
+        public BreadGetDetail(String name, int price, String picturePath, String detailDescription, boolean soldOut, List<BreadIngredient> ingredientsList, BreadState breadState){
             this.name = name;
             this.price = price;
             this.picturePath = picturePath;
@@ -72,15 +72,15 @@ public class BreadDto {
 
     @Getter
     @NoArgsConstructor
-    public static class Save{
+    public static class BreadSave{
         private String name;
         private int price;
         private String picturePath;
         private String description;
         private String detailDescription;
-        private List<Ingredient> ingredientsList = new ArrayList<>();
+        private List<BreadIngredient> ingredientsList = new ArrayList<>();
         @Builder
-        public Save(String name, int price, String picturePath, String description, String detailDescription, List<Ingredient> ingredientsList){
+        public BreadSave(String name, int price, String picturePath, String description, String detailDescription, List<BreadIngredient> ingredientsList){
             this.name = name;
             this.price = price;
             this.picturePath = picturePath;

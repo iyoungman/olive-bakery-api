@@ -22,25 +22,25 @@ public class BreadController {
 
     @ApiOperation("요일별 빵 정보 가져오기")
     @GetMapping("/day/{day}")
-    public List<BreadDto.GetAll> getBread(@PathVariable DayType day){
+    public List<BreadDto.BreadGetAll> getBread(@PathVariable DayType day){
         return breadService.getBreadByDay(day);
     }
 
     @ApiOperation("빵 상세정보 가져오기")
     @GetMapping("/name/{name}")
-    public BreadDto.GetDetail getDetail(@PathVariable String name){
+    public BreadDto.BreadGetDetail getDetail(@PathVariable String name){
         return breadService.getBreadDetails(name);
     }
 
     @ApiOperation("빵 정보 수정")
     @PutMapping
-    public void updateBread(@RequestBody BreadDto.Save bread){
+    public void updateBread(@RequestBody BreadDto.BreadSave bread){
 
     }
 
     @ApiOperation("빵 저장")
     @PostMapping
-    public void saveBread(@RequestBody BreadDto.Save bread){
+    public void saveBread(@RequestBody BreadDto.BreadSave bread){
 
     }
 
