@@ -18,7 +18,7 @@ public enum ReservationType {
         this.reservationExplain = reservationExplain;
     }
 
-    /*
+    /**
      * Client 쪽에서 Enum 타입이 아닌 String 타입으로 줬을 때
      */
     public static ReservationType convertStrToEnum(String reservation) {
