@@ -1,12 +1,15 @@
 package com.dev.olivebakery.controller;
 
 import com.dev.olivebakery.domain.dto.BreadDto;
+import com.dev.olivebakery.domain.entity.Bread;
 import com.dev.olivebakery.domain.enums.DayType;
 import com.dev.olivebakery.service.BreadService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -38,9 +41,17 @@ public class BreadController {
 
     }
 
+    @ApiOperation("빵 이미지 저장")
+    @PostMapping("/image")
+    public void saveBreadImage(@RequestPart MultipartFile files) throws IOException {
+        //breadService.saveBread(bread);
+        breadService.saveImage(files);
+    }
+
     @ApiOperation("빵 저장")
-    @PostMapping
-    public void saveBread(@RequestBody BreadDto.BreadSave bread){
+    @PostMapping()
+    public void saveBread(@RequestBody BreadDto.BreadSave breadSave){
+        breadService.saveBread(breadSave);
 
     }
 

@@ -107,31 +107,35 @@ public class BreadService {
 
     }
 
-    public void saveBread(BreadDto.BreadSave breadSave) throws IOException{
+    public void saveBread(BreadDto.BreadSave breadSave){
 
-        BreadImage breadImage ;
-        if(breadSave.getBreadImage() != null){
-            breadImage = saveImage(breadSave.getBreadImage());
-        }  else {
-            breadImage = new BreadImage();
-        }
-
-        log.info(breadImage.getImageName());
+        log.info(breadSave.getName());
+//        BreadImage breadImage ;
+//        if(breadSave.getBreadImage() != null){
+//            breadImage = saveImage(breadSave.getBreadImage());
+//        }  else {
+//            breadImage = new BreadImage();
+//        }
+//
+//        log.info(breadImage.getImageName());
     }
 
     public BreadImage saveImage(MultipartFile imageFile) throws IOException{
-        String sourceFileName = imageFile.getOriginalFilename();
-        String sourceFileNameExtension = FilenameUtils.getExtension(sourceFileName).toLowerCase();
+//        String sourceFileName = imageFile.getOriginalFilename();
+//        String sourceFileNameExtension = FilenameUtils.getExtension(sourceFileName).toLowerCase();
+//
+//        File destinationFile;
+//        String destinationFileName;
+//        do {
+//            //destinationFileName = RandomStringUtils.randomAlphanumeric(32) + "." + sourceFileNameExtension;
+//            destinationFileName = sourceFileNameExtension;
+//            destinationFile = new File("C:\\Users\\Kimyunsang\\Desktop\\spring\\imageTest" + destinationFileName);
+//        } while (destinationFile.exists());
+//
+//        destinationFile.getParentFile().mkdirs();
 
-        File destinationFile;
-        String destinationFileName;
-        do {
-            //destinationFileName = RandomStringUtils.randomAlphanumeric(32) + "." + sourceFileNameExtension;
-            destinationFileName = sourceFileNameExtension;
-            destinationFile = new File("C:\\Users\\Kimyunsang\\Desktop\\spring\\imageTest" + destinationFileName);
-        } while (destinationFile.exists());
-
-        destinationFile.getParentFile().mkdirs();
+        String fileName = imageFile.getOriginalFilename();
+        File destinationFile = new File("C:\\Users\\Kimyunsang\\Desktop\\spring\\imageTest"+ File.separator + fileName);
 
         imageFile.transferTo(destinationFile);
 
@@ -139,7 +143,7 @@ public class BreadService {
                 .imageName(imageFile.getOriginalFilename())
                 .imageSize(imageFile.getSize())
                 .imageType(imageFile.getContentType())
-                .imageUrl("http://localhost:8080/Users\\Kimyunsang\\Desktop\\spring\\imageTest" + destinationFileName)
+                .imageUrl("http://localhost:8080/Users\\Kimyunsang\\Desktop\\spring\\imageTest" + fileName)
                 .build();
 
         return breadImage;

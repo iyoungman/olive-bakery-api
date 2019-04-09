@@ -32,7 +32,8 @@ public class Bread {
 
     private Integer price;
 
-    private BreadImage breadImage;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bread", fetch = FetchType.LAZY)
+    private List<BreadImage> breadImages = new ArrayList<>();
 
     //상세정보가 아닌 간단한 소개(리스트에서 보내줄 것)
     private String description;
