@@ -17,7 +17,7 @@ public class BreadDto {
     @Builder
     @AllArgsConstructor
     public static class BreadIngredient{
-        private String ingredient;
+        private String name;
         private String origin;
 
 //        @Builder

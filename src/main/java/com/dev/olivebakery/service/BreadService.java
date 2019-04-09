@@ -3,9 +3,11 @@ package com.dev.olivebakery.service;
 import com.dev.olivebakery.domain.dto.BreadDto;
 import com.dev.olivebakery.domain.entity.Bread;
 import com.dev.olivebakery.domain.entity.BreadImage;
+import com.dev.olivebakery.domain.entity.Ingredients;
 import com.dev.olivebakery.domain.enums.DayType;
 import com.dev.olivebakery.exception.UserDefineException;
 import com.dev.olivebakery.repository.BreadRepository;
+import com.dev.olivebakery.repository.IngredientsRepository;
 import jdk.nashorn.internal.runtime.logging.Logger;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FilenameUtils;
@@ -27,9 +29,11 @@ import java.util.List;
 public class BreadService {
 
     private final BreadRepository breadRepository;
+    private final IngredientsRepository ingredientsRepository;
 
-    public BreadService(BreadRepository breadRepository) {
+    public BreadService(BreadRepository breadRepository, IngredientsRepository ingredientsRepository) {
         this.breadRepository = breadRepository;
+        this.ingredientsRepository = ingredientsRepository;
     }
 
     public Bread findByName(String breadName) {
@@ -86,7 +90,7 @@ public class BreadService {
         List<BreadDto.BreadIngredient> ingredientList = new ArrayList<>();
         bread.getIngredients().forEach(ingredient -> ingredientList.add(
                 BreadDto.BreadIngredient.builder()
-                        .ingredient(ingredient.getName())
+                        .name(ingredient.getName())
                         .origin(ingredient.getOrigin())
                         .build()
         ));
@@ -110,6 +114,25 @@ public class BreadService {
     public void saveBread(BreadDto.BreadSave breadSave){
 
         log.info(breadSave.getName());
+
+        Bread bread = Bread.builder()
+                .name(breadSave.getName())
+                .price(breadSave.getPrice())
+                .description(breadSave.getDescription())
+                .detailDescription(breadSave.getDetailDescription())
+                .build();
+
+        breadRepository.save(bread);
+
+        breadSave.getIngredientsList().forEach(breadIngredient -> {
+            Ingredients ingredients = Ingredients.builder()
+                    .bread(bread)
+                    .name(breadIngredient.getName())
+                    .origin(breadIngredient.getOrigin())
+                    .build();
+
+            ingredientsRepository.save(ingredients);
+        });
 //        BreadImage breadImage ;
 //        if(breadSave.getBreadImage() != null){
 //            breadImage = saveImage(breadSave.getBreadImage());
@@ -119,6 +142,19 @@ public class BreadService {
 //
 //        log.info(breadImage.getImageName());
     }
+
+//    public List<DayType> saveDays(Bread bread, List<DayType> dayTypes){
+//        List<DayType> daysList = new ArrayList<>();
+//
+//        for(DayType dayType : dayTypes){
+//            DayType days = Days.builder()
+//                    .bread(bread)
+//                    .day(dayType).build();
+//            daysList.add(days);
+//        }
+//
+//        return daysList;
+//    }
 
     public BreadImage saveImage(MultipartFile imageFile) throws IOException{
 //        String sourceFileName = imageFile.getOriginalFilename();
