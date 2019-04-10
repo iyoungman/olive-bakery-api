@@ -44,15 +44,22 @@ public class ReservationDto {
             this.reservationBreads = reservationBreads;
         }
 
-        public void setReservationBreads(List<ReservationBread> reservationBreads) {
-            this.reservationBreads = reservationBreads;
+        public static GetResponse build(GetTemp getTemp, List<ReservationBread> reservationBreads) {
+            return GetResponse.builder()
+                    .reservationId(getTemp.getReservationId())
+                    .reservationTime(getTemp.getReservationTime())
+                    .bringTime(getTemp.getBringTime())
+                    .price(getTemp.getPrice())
+                    .memberName(getTemp.getMemberName())
+                    .reservationBreads(reservationBreads)
+                    .build();
         }
     }
 
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PUBLIC)
-    public static class GetTmp {
+    public static class GetTemp {
 
         private Long reservationId;
         private LocalDateTime reservationTime;
@@ -63,7 +70,7 @@ public class ReservationDto {
         private int breadCount;
 
         @Builder
-        public GetTmp(Long reservationId, LocalDateTime reservationTime, LocalDateTime bringTime, int price, String memberName, String breadName, int breadCount) {
+        public GetTemp(Long reservationId, LocalDateTime reservationTime, LocalDateTime bringTime, int price, String memberName, String breadName, int breadCount) {
             this.reservationId = reservationId;
             this.reservationTime = reservationTime;
             this.bringTime = bringTime;
@@ -73,10 +80,9 @@ public class ReservationDto {
             this.breadCount = breadCount;
         }
 
-
         @Override
         public String toString() {
-            return "GetTmp{" +
+            return "GetTemp{" +
                     "reservationId=" + reservationId +
                     ", reservationTime=" + reservationTime +
                     ", bringTime=" + bringTime +
@@ -100,6 +106,13 @@ public class ReservationDto {
         public ReservationBread(String breadName, int breadCount) {
             this.breadName = breadName;
             this.breadCount = breadCount;
+        }
+
+        public static ReservationBread build(GetTemp getTemp) {
+            return ReservationBread.builder()
+                    .breadName(getTemp.getBreadName())
+                    .breadCount(getTemp.getBreadCount())
+                    .build();
         }
     }
 
