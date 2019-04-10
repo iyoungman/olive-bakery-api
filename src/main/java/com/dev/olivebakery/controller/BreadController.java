@@ -3,10 +3,12 @@ package com.dev.olivebakery.controller;
 import com.dev.olivebakery.domain.dto.BreadDto;
 import com.dev.olivebakery.domain.entity.Bread;
 import com.dev.olivebakery.domain.enums.DayType;
+import com.dev.olivebakery.exception.UserDefineException;
 import com.dev.olivebakery.service.BreadService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -55,7 +57,7 @@ public class BreadController {
         breadService.saveBread(breadSave);
     }
 
-    @ApiOperation("빵 저장")
+    @ApiOperation("빵, 이미지 같이 저장")
     @PostMapping()
     public void saveBreadAndImage(@RequestPart MultipartFile files,
                                   @RequestParam String json) throws Exception{
@@ -63,6 +65,16 @@ public class BreadController {
         BreadDto.BreadSave breadSave = objectMapper.readValue(json, BreadDto.BreadSave.class);
         breadService.saveBread(breadSave);
         //breadService.saveImage(files);
+    }
+
+    @ApiOperation("빵 이름 수정")
+    @PutMapping(value = "/name")
+    public void updateBreadName(@RequestBody BreadDto.BreadUpdateName bread){
+        String updateName = breadService.updateName(bread);
+
+        if(!updateName.equals(bread.getNewName())){
+            throw new UserDefineException("저장 실패");
+        }
     }
 
     @ApiOperation("빵 삭제")

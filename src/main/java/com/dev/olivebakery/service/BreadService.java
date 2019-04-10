@@ -8,9 +8,7 @@ import com.dev.olivebakery.domain.enums.DayType;
 import com.dev.olivebakery.exception.UserDefineException;
 import com.dev.olivebakery.repository.BreadRepository;
 import com.dev.olivebakery.repository.IngredientsRepository;
-import jdk.nashorn.internal.runtime.logging.Logger;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +18,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by YoungMan on 2019-02-12.
@@ -183,5 +182,15 @@ public class BreadService {
                 .build();
 
         return breadImage;
+    }
+
+    public String updateName(BreadDto.BreadUpdateName breadNames){
+        Bread bread = breadRepository.findByName(breadNames.getOldName()).get();
+
+        bread.updateName(breadNames.getNewName());
+
+        breadRepository.save(bread);
+
+        return bread.getName();
     }
 }

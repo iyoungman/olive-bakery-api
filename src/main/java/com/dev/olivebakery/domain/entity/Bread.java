@@ -60,16 +60,7 @@ public class Bread {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bread", fetch = FetchType.LAZY)
     private List<Ingredients> ingredients = new ArrayList<>();
 
-//    @Builder
-//    public Bread(String name, Integer price, String picturePath, String detailDescription, String description, boolean isSelling, BreadState state, Set<DayType> days, List<Ingredients> ingredients) {
-//        this.name = name;
-//        this.price = price;
-//        this.picturePath = picturePath;
-//        this.description = description;
-//        this.detailDescription = detailDescription;
-//        this.isSelling = isSelling;
-//        this.state = state;
-//        this.days = days;
-//        this.ingredients = ingredients;
-//    }
+    public void updateName(String newName){
+        this.name = newName;
+    }
 }
