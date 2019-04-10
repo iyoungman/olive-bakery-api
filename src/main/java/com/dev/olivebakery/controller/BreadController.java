@@ -4,6 +4,7 @@ import com.dev.olivebakery.domain.dto.BreadDto;
 import com.dev.olivebakery.domain.entity.Bread;
 import com.dev.olivebakery.domain.enums.DayType;
 import com.dev.olivebakery.service.BreadService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
@@ -52,7 +53,16 @@ public class BreadController {
     @PostMapping()
     public void saveBread(@RequestBody BreadDto.BreadSave breadSave){
         breadService.saveBread(breadSave);
+    }
 
+    @ApiOperation("빵 저장")
+    @PostMapping()
+    public void saveBreadAndImage(@RequestPart MultipartFile files,
+                                  @RequestParam String json) throws Exception{
+        ObjectMapper objectMapper = new ObjectMapper();
+        BreadDto.BreadSave breadSave = objectMapper.readValue(json, BreadDto.BreadSave.class);
+        breadService.saveBread(breadSave);
+        //breadService.saveImage(files);
     }
 
     @ApiOperation("빵 삭제")
