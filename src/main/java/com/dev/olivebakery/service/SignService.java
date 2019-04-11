@@ -91,4 +91,16 @@ public class SignService implements UserDetailsService {
         return memberRepository.findByEmail(userId)
                 .orElseThrow(() -> new UserDefineException("해당 유저가 존재하지 않습니다."));
     }
+
+    public SignDto.MemberDto getMemberInfo(SignDto.SignIn signInDto) {
+        Member member = memberRepository.findByEmail(signInDto.getId())
+                .orElseThrow(() -> new UserDefineException("아이디가 존재하지 않습니다."));
+        return SignDto.MemberDto.builder()
+                .email(member.getEmail())
+                .name(member.getName())
+                .phoneNumber(member.getPhoneNumber())
+                .stamp(member.getStamp())
+                .build();
+
+    }
 }

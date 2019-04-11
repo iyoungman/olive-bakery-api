@@ -40,4 +40,21 @@ public class SignDto {
                     .build();
         }
     }
+
+    @Getter
+    @NoArgsConstructor
+    public static class MemberDto{
+        private String email;
+        private String name;
+        private String phoneNumber;
+        private int stamp;
+
+        @Builder
+        public MemberDto(String email, String name, String phoneNumber, int stamp) {
+            this.email = email;
+            this.name = name;
+            this.phoneNumber = phoneNumber;
+            this.stamp = stamp;
+        }
+    }
 }
