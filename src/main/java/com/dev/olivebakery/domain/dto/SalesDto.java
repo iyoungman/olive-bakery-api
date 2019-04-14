@@ -1,5 +1,6 @@
 package com.dev.olivebakery.domain.dto;
 
+import com.dev.olivebakery.domain.enums.SaleType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,11 +14,13 @@ public class SalesDto {
     public static class GetAverage{
         private LocalDate date;
         private double ave;
+        private SaleType saleType;
 
         @Builder
-        public GetAverage(LocalDate date, double ave) {
+        public GetAverage(LocalDate date, double ave, SaleType saleType) {
             this.date = date;
             this.ave = ave;
+            this.saleType = saleType;
         }
     }
 
