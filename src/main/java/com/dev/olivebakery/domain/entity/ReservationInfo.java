@@ -37,5 +37,4 @@ public class ReservationInfo {
         this.reservation = reservation;
         this.bread = bread;
     }
-
 }

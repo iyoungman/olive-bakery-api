@@ -28,19 +28,27 @@ public class Comment {
     @UpdateTimestamp
     private LocalDateTime updateTime;
 
+    private String userId;
+
     private String userName;
 
     @Lob
     private String content;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
 
     @Builder
-    public Comment(String userName, String content){
+    public Comment(String userName, String userId, String content, Board board){
         this.userName = userName;
+        this.userId = userId;
         this.content = content;
+        this.board = board;
     }
 
+    public Comment update(String content) {
+        this.content = content;
+        return this;
+    }
 }

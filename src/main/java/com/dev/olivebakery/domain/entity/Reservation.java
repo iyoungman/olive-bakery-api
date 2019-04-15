@@ -5,11 +5,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +30,10 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reservationId;
 
-    @CreatedDate
-    private Timestamp reservationTime;
+    @CreationTimestamp
+    private LocalDateTime reservationTime;
 
-    private Timestamp bringTime;
+    private LocalDateTime bringTime;
 
     private Integer price;
 
@@ -46,7 +48,7 @@ public class Reservation {
     private List<ReservationInfo> reservationInfos = new ArrayList<>();
 
     @Builder
-    public Reservation(Timestamp reservationTime, Timestamp bringTime, Integer price, Member member, List<ReservationInfo> reservationInfos) {
+    public Reservation(LocalDateTime reservationTime, LocalDateTime bringTime, Integer price, Member member, List<ReservationInfo> reservationInfos) {
         this.reservationTime = reservationTime;
         this.bringTime = bringTime;
         this.price = price;
@@ -55,7 +57,7 @@ public class Reservation {
         this.reservationInfos = reservationInfos;
     }
 
-    /*
+    /**
      * 요청 -> 수락
      * 수락 -> 완료
      */
