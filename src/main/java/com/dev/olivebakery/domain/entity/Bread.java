@@ -48,9 +48,8 @@ public class Bread {
     private BreadState state;
 
     // 무슨 요일에 파는 빵인지
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Enumerated(value = EnumType.STRING)
-    private Set<DayType> days = new HashSet<>();
+    //@ElementCollection(fetch = FetchType.EAGER)
+    //private List<Days> days = new ArrayList<>();
 
     // 빵이 매진인지. soldout의 날짜가 오늘이면 매진
     @OneToOne(fetch = FetchType.EAGER,mappedBy = "bread")

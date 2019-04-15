@@ -57,27 +57,27 @@ public class BreadService {
         return finalPrice;
     }
 
-    public List<BreadDto.BreadGetAll> getBreadByDay(DayType day){
-        List<Bread> breadList = breadRepository.findByDays(day);
-        List<BreadDto.BreadGetAll> breadGetAll = new ArrayList<>();
-        breadList.forEach(bread -> {
-            boolean isSoldOut = false;
-            if(bread.getSoldOut() != null)
-                isSoldOut = bread.getSoldOut().getDate().isEqual(LocalDate.now());
-
-            breadGetAll.add(
-                BreadDto.BreadGetAll.builder()
-                        .name(bread.getName())
-                        .price(bread.getPrice())
-                        .description(bread.getDescription())
-                        .soldOut(isSoldOut)
-                        .breadState(bread.getState())
-                        .build());
-
-        });
-
-        return breadGetAll;
-    }
+//    public List<BreadDto.BreadGetAll> getBreadByDay(DayType day){
+//        List<Bread> breadList = breadRepository.findByDays(day);
+//        List<BreadDto.BreadGetAll> breadGetAll = new ArrayList<>();
+//        breadList.forEach(bread -> {
+//            boolean isSoldOut = false;
+//            if(bread.getSoldOut() != null)
+//                isSoldOut = bread.getSoldOut().getDate().isEqual(LocalDate.now());
+//
+//            breadGetAll.add(
+//                BreadDto.BreadGetAll.builder()
+//                        .name(bread.getName())
+//                        .price(bread.getPrice())
+//                        .description(bread.getDescription())
+//                        .soldOut(isSoldOut)
+//                        .breadState(bread.getState())
+//                        .build());
+//
+//        });
+//
+//        return breadGetAll;
+//    }
 
     public BreadDto.BreadGetDetail getBreadDetails(String name){
         Bread bread = breadRepository.findByName(name)
@@ -110,79 +110,79 @@ public class BreadService {
 
     }
 
-    public void saveBread(BreadDto.BreadSave breadSave){
-
-        log.info(breadSave.getName());
-
-        Bread bread = Bread.builder()
-                .name(breadSave.getName())
-                .price(breadSave.getPrice())
-                .description(breadSave.getDescription())
-                .detailDescription(breadSave.getDetailDescription())
-                .build();
-
-        breadRepository.save(bread);
-
-        breadSave.getIngredientsList().forEach(breadIngredient -> {
-            Ingredients ingredients = Ingredients.builder()
-                    .bread(bread)
-                    .name(breadIngredient.getName())
-                    .origin(breadIngredient.getOrigin())
-                    .build();
-
-            ingredientsRepository.save(ingredients);
-        });
-//        BreadImage breadImage ;
-//        if(breadSave.getBreadImage() != null){
-//            breadImage = saveImage(breadSave.getBreadImage());
-//        }  else {
-//            breadImage = new BreadImage();
-//        }
+//    public void saveBread(BreadDto.BreadSave breadSave){
 //
-//        log.info(breadImage.getImageName());
-    }
-
-//    public List<DayType> saveDays(Bread bread, List<DayType> dayTypes){
-//        List<DayType> daysList = new ArrayList<>();
+//        log.info(breadSave.getName());
 //
-//        for(DayType dayType : dayTypes){
-//            DayType days = Days.builder()
+//        Bread bread = Bread.builder()
+//                .name(breadSave.getName())
+//                .price(breadSave.getPrice())
+//                .description(breadSave.getDescription())
+//                .detailDescription(breadSave.getDetailDescription())
+//                .build();
+//
+//        breadRepository.save(bread);
+//
+//        breadSave.getIngredientsList().forEach(breadIngredient -> {
+//            Ingredients ingredients = Ingredients.builder()
 //                    .bread(bread)
-//                    .day(dayType).build();
-//            daysList.add(days);
-//        }
+//                    .name(breadIngredient.getName())
+//                    .origin(breadIngredient.getOrigin())
+//                    .build();
 //
-//        return daysList;
+//            ingredientsRepository.save(ingredients);
+//        });
+////        BreadImage breadImage ;
+////        if(breadSave.getBreadImage() != null){
+////            breadImage = saveImage(breadSave.getBreadImage());
+////        }  else {
+////            breadImage = new BreadImage();
+////        }
+////
+////        log.info(breadImage.getImageName());
 //    }
-
-    public BreadImage saveImage(MultipartFile imageFile) throws IOException{
-//        String sourceFileName = imageFile.getOriginalFilename();
-//        String sourceFileNameExtension = FilenameUtils.getExtension(sourceFileName).toLowerCase();
 //
-//        File destinationFile;
-//        String destinationFileName;
-//        do {
-//            //destinationFileName = RandomStringUtils.randomAlphanumeric(32) + "." + sourceFileNameExtension;
-//            destinationFileName = sourceFileNameExtension;
-//            destinationFile = new File("C:\\Users\\Kimyunsang\\Desktop\\spring\\imageTest" + destinationFileName);
-//        } while (destinationFile.exists());
+////    public List<DayType> saveDays(Bread bread, List<DayType> dayTypes){
+////        List<DayType> daysList = new ArrayList<>();
+////
+////        for(DayType dayType : dayTypes){
+////            DayType days = Days.builder()
+////                    .bread(bread)
+////                    .day(dayType).build();
+////            daysList.add(days);
+////        }
+////
+////        return daysList;
+////    }
 //
-//        destinationFile.getParentFile().mkdirs();
-
-        String fileName = imageFile.getOriginalFilename();
-        File destinationFile = new File("C:\\Users\\Kimyunsang\\Desktop\\spring\\imageTest"+ File.separator + fileName);
-
-        imageFile.transferTo(destinationFile);
-
-        BreadImage breadImage = BreadImage.builder()
-                .imageName(imageFile.getOriginalFilename())
-                .imageSize(imageFile.getSize())
-                .imageType(imageFile.getContentType())
-                .imageUrl("http://localhost:8080/Users\\Kimyunsang\\Desktop\\spring\\imageTest" + fileName)
-                .build();
-
-        return breadImage;
-    }
+//    public BreadImage saveImage(MultipartFile imageFile) throws IOException{
+////        String sourceFileName = imageFile.getOriginalFilename();
+////        String sourceFileNameExtension = FilenameUtils.getExtension(sourceFileName).toLowerCase();
+////
+////        File destinationFile;
+////        String destinationFileName;
+////        do {
+////            //destinationFileName = RandomStringUtils.randomAlphanumeric(32) + "." + sourceFileNameExtension;
+////            destinationFileName = sourceFileNameExtension;
+////            destinationFile = new File("C:\\Users\\Kimyunsang\\Desktop\\spring\\imageTest" + destinationFileName);
+////        } while (destinationFile.exists());
+////
+////        destinationFile.getParentFile().mkdirs();
+//
+//        String fileName = imageFile.getOriginalFilename();
+//        File destinationFile = new File("C:\\Users\\Kimyunsang\\Desktop\\spring\\imageTest"+ File.separator + fileName);
+//
+//        imageFile.transferTo(destinationFile);
+//
+//        BreadImage breadImage = BreadImage.builder()
+//                .imageName(imageFile.getOriginalFilename())
+//                .imageSize(imageFile.getSize())
+//                .imageType(imageFile.getContentType())
+//                .imageUrl("http://localhost:8080/Users\\Kimyunsang\\Desktop\\spring\\imageTest" + fileName)
+//                .build();
+//
+//        return breadImage;
+//    }
 
     public String updateName(BreadDto.BreadUpdateName breadNames){
         Bread bread = breadRepository.findByName(breadNames.getOldName()).get();

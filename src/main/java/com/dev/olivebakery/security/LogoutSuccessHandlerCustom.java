@@ -12,7 +12,7 @@ import java.io.IOException;
 @Component
 public class LogoutSuccessHandlerCustom implements LogoutSuccessHandler {
     @Override
-    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         response.setStatus(HttpServletResponse.SC_OK);
     }
 }

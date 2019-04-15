@@ -2,6 +2,7 @@ package com.dev.olivebakery.domain.dto;
 
 
 import com.dev.olivebakery.domain.enums.BreadState;
+import com.dev.olivebakery.domain.enums.DayType;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,12 +20,6 @@ public class BreadDto {
     public static class BreadIngredient{
         private String name;
         private String origin;
-
-//        @Builder
-//        public BreadIngredient(String ingredient, String origin){
-//            this.ingredient = ingredient;
-//            this.origin = origin;
-//        }
     }
 
     @Getter
@@ -61,10 +56,11 @@ public class BreadDto {
     public static class BreadSave{
         private String name;
         private int price;
-        private MultipartFile breadImage;
+//        private MultipartFile breadImage;
         private String description;
         private String detailDescription;
         private List<BreadIngredient> ingredientsList = new ArrayList<>();
+        private List<DayType> dayTypes = new ArrayList<>();
     }
 
     @Getter
@@ -75,5 +71,27 @@ public class BreadDto {
         private String oldName;
         private String newName;
     }
+
+    @Getter
+    @NoArgsConstructor
+    @Builder
+    @AllArgsConstructor
+    public static class BreadUpdate {
+        private String oldName;
+        private int price;
+        private String description;
+        private String detailDescription;
+        private List<BreadIngredient> ingredientsList = new ArrayList<>();
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @Builder
+    @AllArgsConstructor
+    public static class BreadUpdateImage {
+        private String oldName;
+        private MultipartFile breadImage;
+    }
+
 
 }
