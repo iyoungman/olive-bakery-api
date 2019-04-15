@@ -2,10 +2,9 @@ package com.dev.olivebakery.domain.dto;
 
 
 import com.dev.olivebakery.domain.enums.BreadState;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.dev.olivebakery.domain.enums.DayType;
+import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,78 +15,91 @@ public class BreadDto {
 
     @Getter
     @NoArgsConstructor
-    public static class Ingredient{
-        private String ingredient;
+    @Builder
+    @AllArgsConstructor
+    public static class BreadIngredient{
+        private String name;
         private String origin;
-
-        @Builder
-        public Ingredient(String ingredient, String origin){
-            this.ingredient = ingredient;
-            this.origin = origin;
-        }
     }
 
     @Getter
     @NoArgsConstructor
-    public static class GetAll {
+    @Builder
+    @AllArgsConstructor
+    public static class BreadGetAll {
         private String name;
         private int price;
         private String picturePath;
         private String description;
-        private boolean soldOut;
+        private boolean isSoldOut;
         private BreadState breadState;
-
-        @Builder
-        public GetAll(String name, int price, String picturePath, String description, boolean soldOut, BreadState breadState){
-            this.name = name;
-            this.price = price;
-            this.picturePath = picturePath;
-            this.description = description;
-            this.soldOut = soldOut;
-            this.breadState = breadState;
-        }
     }
 
     @Getter
     @NoArgsConstructor
-    public static class GetDetail{
+    @Builder
+    @AllArgsConstructor
+    public static class BreadGetDetail{
         private String name;
         private int price;
         private String picturePath;
         private String detailDescription;
-        private List<Ingredient> ingredientsList = new ArrayList<>();
-        private boolean soldOut;
+        private List<BreadIngredient> ingredientsList = new ArrayList<>();
+        private boolean isSoldOut;
         private BreadState breadState;
-        @Builder
-        public GetDetail(String name, int price, String picturePath, String detailDescription, boolean soldOut, List<Ingredient> ingredientsList, BreadState breadState){
-            this.name = name;
-            this.price = price;
-            this.picturePath = picturePath;
-            this.detailDescription = detailDescription;
-            this.soldOut = soldOut;
-            this.ingredientsList = ingredientsList;
-            this.breadState = breadState;
-        }
     }
 
     @Getter
     @NoArgsConstructor
-    public static class Save{
+    @Builder
+    @AllArgsConstructor
+    public static class BreadSave{
         private String name;
         private int price;
-        private String picturePath;
+//        private MultipartFile breadImage;
         private String description;
         private String detailDescription;
-        private List<Ingredient> ingredientsList = new ArrayList<>();
-        @Builder
-        public Save(String name, int price, String picturePath, String description, String detailDescription, List<Ingredient> ingredientsList){
-            this.name = name;
-            this.price = price;
-            this.picturePath = picturePath;
-            this.description = description;
-            this.detailDescription = detailDescription;
-            this.ingredientsList = ingredientsList;
-        }
+        private List<BreadIngredient> ingredientsList = new ArrayList<>();
+        private List<DayType> dayTypes = new ArrayList<>();
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @Builder
+    @AllArgsConstructor
+    public static class BreadUpdateName {
+        private String oldName;
+        private String newName;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @Builder
+    @AllArgsConstructor
+    public static class BreadUpdate {
+        private String oldName;
+        private int price;
+        private String description;
+        private String detailDescription;
+        private List<BreadIngredient> ingredientsList = new ArrayList<>();
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @Builder
+    @AllArgsConstructor
+    public static class BreadUpdateState {
+        private String name;
+        private BreadState breadState;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @Builder
+    @AllArgsConstructor
+    public static class BreadUpdateSoldOut {
+        private String name;
+        private Boolean isSoldOut;
     }
 
 }
