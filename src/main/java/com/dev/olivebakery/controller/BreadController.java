@@ -46,12 +46,6 @@ public class BreadController {
         return breadGetService.getBreadDetails(name);
     }
 
-    @ApiOperation("빵 정보 수정")
-    @PutMapping
-    public void updateBread(@RequestBody BreadDto.BreadSave bread){
-
-    }
-
     @ApiOperation("빵, 이미지 같이 저장")
     @PostMapping()
     public void saveBreadAndImage(@RequestPart MultipartFile files,
@@ -79,13 +73,24 @@ public class BreadController {
     }
 
     @ApiOperation("빵 사진 수정")
-    @PutMapping()
+    @PutMapping("/image")
     public void updateBreadIamge(@RequestPart MultipartFile file,
                                  @RequestParam String breadName) throws Exception{
 
         breadUpdateService.updateBreadImage(file, breadName);
     }
 
+    @ApiOperation("빵 상태 변경")
+    @PutMapping("/state")
+    public void changeBreadState(@PathVariable BreadDto.BreadUpdateState breadUpdateState){
+        breadUpdateService.updateBreadState(breadUpdateState);
+    }
+
+    @ApiOperation("빵 매진 상태 변경")
+    @PutMapping("/sold_out")
+    public void changeBreadSoldOut(@PathVariable BreadDto.BreadUpdateSoldOut breadUpdateSoldOut){
+        breadUpdateService.updateBreadSoldOut(breadUpdateSoldOut);
+    }
 
     @ApiOperation("빵 삭제")
     @DeleteMapping("/name/{name}")

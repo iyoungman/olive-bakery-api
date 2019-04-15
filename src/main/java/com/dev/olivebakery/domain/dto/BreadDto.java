@@ -88,9 +88,18 @@ public class BreadDto {
     @NoArgsConstructor
     @Builder
     @AllArgsConstructor
-    public static class BreadUpdateImage {
-        private String oldName;
-        private MultipartFile breadImage;
+    public static class BreadUpdateState {
+        private String name;
+        private BreadState breadState;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @Builder
+    @AllArgsConstructor
+    public static class BreadUpdateSoldOut {
+        private String name;
+        private Boolean isSoldOut;
     }
 
 }

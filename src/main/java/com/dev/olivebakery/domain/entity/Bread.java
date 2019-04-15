@@ -85,6 +85,10 @@ public class Bread {
         this.state = breadState;
     }
 
+    public void updateBreadSoldOut(boolean isSoldOut){
+        this.isSoldOut = isSoldOut;
+    }
+
     public void deleteBread(boolean delete){
         this.deleteFlag = delete;
     }

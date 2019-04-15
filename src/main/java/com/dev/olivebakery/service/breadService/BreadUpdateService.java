@@ -71,4 +71,15 @@ public class BreadUpdateService {
         breadOptional.get().deleteBread(true);
         breadRepository.save(breadOptional.get());
     }
+
+    public void updateBreadState(BreadDto.BreadUpdateState breadUpdateState){
+        Optional<Bread> breadOptional = breadRepository.findByName(breadUpdateState.getName());
+        breadOptional.get().updateBreadState(breadUpdateState.getBreadState());
+        breadRepository.save(breadOptional.get());
+    }
+
+    public void updateBreadSoldOut(BreadDto.BreadUpdateSoldOut breadUpdateSoldOut){
+        breadRepository.findByName(breadUpdateSoldOut.getName())
+                .get().updateBreadSoldOut(breadUpdateSoldOut.getIsSoldOut());
+    }
 }
