@@ -17,17 +17,17 @@ public class SalesController {
     }
 
     @GetMapping("/graph")
-    public List<SalesDto.GetAverage> getAverageAnnualSales(){
+    public List<SalesDto.GetGraphData> getAverageAnnualSales(){
         return salesService.getAverageAnnualSales();
     }
 
     @GetMapping("/graph/year/{year}")
-    public List<SalesDto.GetAverage> getAverageMonthlySales(@PathVariable("year") int year){
+    public List<SalesDto.GetGraphData> getAverageMonthlySales(@PathVariable("year") int year){
         return salesService.getAverageMonthlySales(year);
     }
 
     @GetMapping("/graph/year/{year}/month/{month}")
-    public List<SalesDto.GetAverage> getDailySales(@PathVariable("year") int year, @PathVariable("month") int month){
+    public List<SalesDto.GetGraphData> getDailySales(@PathVariable("year") int year, @PathVariable("month") int month){
         return salesService.getDailySales(year, month);
     }
 

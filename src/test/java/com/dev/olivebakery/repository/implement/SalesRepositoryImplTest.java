@@ -20,8 +20,8 @@ public class SalesRepositoryImplTest {
 
     @Test
     public void getGraphData(){
-        List<SalesDto.GetAverage> averageAnnualSales = salesRepository.getAverageSales("DAY", LocalDate.now());
-        averageAnnualSales.forEach(getAverage -> System.out.println(getAverage.getAve() + "    " + getAverage.getDate() + "    " + getAverage.getSaleType()));
+        List<SalesDto.GetGraphTmp> averageAnnualSales = salesRepository.getAverageSales("DAY", LocalDate.now());
+        averageAnnualSales.forEach(getGraphTmp -> System.out.println(getGraphTmp.getAve() + "    " + getGraphTmp.getDate() + "    " + getGraphTmp.getSaleType()));
     }
 
 }

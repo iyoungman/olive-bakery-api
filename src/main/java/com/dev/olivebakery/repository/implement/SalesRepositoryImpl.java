@@ -25,20 +25,27 @@ public class SalesRepositoryImpl extends QuerydslRepositorySupport implements Sa
     }
 
     @Override
-    public List<SalesDto.GetAverage> getAverageSales(String dayType, LocalDate date) {
-        JPAQuery<SalesDto.GetAverage> query = setGraphQuery(dayType, date);
+    public List<SalesDto.GetGraphTmp> getAverageSales(String dayType, LocalDate date) {
+        JPAQuery<SalesDto.GetGraphTmp> query = setGraphQuery(dayType, date);
         return query.fetch();
     }
 
     @Override
-    public List<SalesDto.GetDashBoardData> getDashData() {
-        return null;
+    public List<SalesDto.GetDashBoardTmp> getDashData(LocalDate date) {
+        JPAQuery<SalesDto.GetDashBoardTmp> query = new JPAQuery<>(entityManager);
+        query.select(Projections.constructor(SalesDto.GetDashBoardTmp.class, sales.date, sales.sales, sales.reservationCnt, sales.saleType))
+                .from(sales)
+                .where(sales.date.year().eq(date.getYear()))
+                .where(sales.date.month().eq(date.getMonthValue()))
+                .groupBy(sales.date, sales.saleType);
+        return query.fetch();
     }
 
-    private JPAQuery<SalesDto.GetAverage> setGraphQuery(String DayType, LocalDate date){
-        JPAQuery<SalesDto.GetAverage> query = new JPAQuery<>(entityManager);
-        query.select(Projections.constructor(SalesDto.GetAverage.class, sales.date, sales.sales.avg(), sales.saleType))
-                .from(sales);
+    private JPAQuery<SalesDto.GetGraphTmp> setGraphQuery(String DayType, LocalDate date){
+        JPAQuery<SalesDto.GetGraphTmp> query = new JPAQuery<>(entityManager);
+        query.select(Projections.constructor(SalesDto.GetGraphTmp.class, sales.date, sales.sales.avg(), sales.saleType))
+                .from(sales)
+                .orderBy(sales.date.desc());
         if(DayType.equals("YEAR")){
             query.groupBy(sales.date.year(), sales.saleType);
         } else if (DayType.equals("MONTH")) {
