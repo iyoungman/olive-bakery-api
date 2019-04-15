@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
  * 로그인 관련 Controller
  */
 
+//TODO 회원정보조회
+
 @RestController
 @RequestMapping(value = "/olive/sign")
 public class SignController {
@@ -42,6 +44,12 @@ public class SignController {
     @DeleteMapping
     public void delete(@RequestBody SignDto.SignIn signInDto){
         signService.delete(signInDto);
+    }
+
+    @ApiOperation("회원정보 조회")
+    @PostMapping("/check")
+    public SignDto.MemberDto getMember(@RequestBody SignDto.SignIn signInDto){
+        return signService.getMemberInfo(signInDto);
     }
 
 
