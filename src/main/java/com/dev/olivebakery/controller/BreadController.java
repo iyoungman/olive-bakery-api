@@ -5,7 +5,9 @@ import com.dev.olivebakery.domain.entity.Bread;
 import com.dev.olivebakery.domain.enums.DayType;
 import com.dev.olivebakery.exception.UserDefineException;
 import com.dev.olivebakery.service.BreadService;
+import com.dev.olivebakery.service.breadService.BreadGetService;
 import com.dev.olivebakery.service.breadService.BreadSaveService;
+import com.dev.olivebakery.service.breadService.BreadUpdateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j2;
@@ -22,22 +24,27 @@ import java.util.List;
 public class BreadController {
 
     private final BreadSaveService breadSaveService;
+    private final BreadGetService breadGetService;
+    private final BreadUpdateService breadUpdateService;
 
-    public BreadController(BreadSaveService breadSaveService){
+    public BreadController(BreadSaveService breadSaveService, BreadGetService breadGetService,
+                           BreadUpdateService breadUpdateService){
         this.breadSaveService = breadSaveService;
+        this.breadGetService = breadGetService;
+        this.breadUpdateService = breadUpdateService;
     }
 
-//    @ApiOperation("요일별 빵 정보 가져오기")
-//    @GetMapping("/day/{day}")
-//    public List<BreadDto.BreadGetAll> getBread(@PathVariable DayType day){
-//        //return breadSaveService.getBreadByDay(day);
-//    }
+    @ApiOperation("요일별 빵 정보 가져오기")
+    @GetMapping("/day/{day}")
+    public List<BreadDto.BreadGetAll> getBread(@PathVariable DayType day){
+        return breadGetService.getBreadByDay(day);
+    }
 
-//    @ApiOperation("빵 상세정보 가져오기")
-//    @GetMapping("/name/{name}")
-//    public BreadDto.BreadGetDetail getDetail(@PathVariable String name){
-//        //return breadService.getBreadDetails(name);
-//    }
+    @ApiOperation("빵 상세정보 가져오기")
+    @GetMapping("/name/{name}")
+    public BreadDto.BreadGetDetail getDetail(@PathVariable String name){
+        return breadGetService.getBreadDetails(name);
+    }
 
     @ApiOperation("빵 정보 수정")
     @PutMapping
@@ -58,29 +65,31 @@ public class BreadController {
     @ApiOperation("빵 이름 수정")
     @PutMapping(value = "/name")
     public void updateBreadName(@RequestBody BreadDto.BreadUpdateName bread){
-//        String updateName = breadService.updateName(bread);
-//
-//        if(!updateName.equals(bread.getNewName())){
-//            throw new UserDefineException("저장 실패");
-//        }
+        String updateName = breadUpdateService.updateBreadName(bread);
+
+        if(!updateName.equals(bread.getNewName())){
+            throw new UserDefineException("저장 실패");
+        }
     }
 
     @ApiOperation("빵 정보 수정")
     @PutMapping()
-    public void updateBread(@RequestBody BreadDto.BreadUpdateName bread){
-
+    public void updateBread(@RequestBody BreadDto.BreadUpdate bread){
+        breadUpdateService.updateBread(bread);
     }
 
     @ApiOperation("빵 사진 수정")
     @PutMapping()
-    public void updateBreadIamge(@RequestBody BreadDto.BreadUpdateImage bread){
+    public void updateBreadIamge(@RequestPart MultipartFile file,
+                                 @RequestParam String breadName) throws Exception{
 
+        breadUpdateService.updateBreadImage(file, breadName);
     }
 
 
     @ApiOperation("빵 삭제")
     @DeleteMapping("/name/{name}")
     public void deleteBread(@PathVariable String name){
-
+        breadUpdateService.deleteBread(name);
     }
 }

@@ -36,4 +36,8 @@ public class BreadImage {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "bread_id")
     private Bread bread;
+
+    public void changeCurrentStatus(Boolean status){
+        this.current = status;
+    }
 }

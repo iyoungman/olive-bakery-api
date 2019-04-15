@@ -6,6 +6,7 @@ import com.dev.olivebakery.domain.entity.BreadImage;
 import com.dev.olivebakery.domain.entity.Days;
 import com.dev.olivebakery.domain.entity.Ingredients;
 import com.dev.olivebakery.domain.enums.DayType;
+import com.dev.olivebakery.repository.BreadImageRepository;
 import com.dev.olivebakery.repository.BreadRepository;
 import com.dev.olivebakery.repository.DaysRepository;
 import com.dev.olivebakery.repository.IngredientsRepository;
@@ -26,12 +27,15 @@ public class BreadSaveService {
     private final BreadRepository breadRepository;
     private final IngredientsRepository ingredientsRepository;
     private final DaysRepository daysRepository;
+    private final BreadImageRepository breadImageRepository;
 
 
-    public BreadSaveService(BreadRepository breadRepository, IngredientsRepository ingredientsRepository, DaysRepository daysRepository) {
+    public BreadSaveService(BreadRepository breadRepository, IngredientsRepository ingredientsRepository, DaysRepository daysRepository,
+                            BreadImageRepository breadImageRepository) {
         this.breadRepository = breadRepository;
         this.ingredientsRepository = ingredientsRepository;
         this.daysRepository = daysRepository;
+        this.breadImageRepository = breadImageRepository;
     }
 
     public void saveBread(BreadDto.BreadSave breadSave, MultipartFile image) throws IOException{
@@ -58,7 +62,7 @@ public class BreadSaveService {
                 .build();
     }
 
-    private void saveIngredients(List<BreadDto.BreadIngredient> breadIngredients, Bread bread) {
+    public void saveIngredients(List<BreadDto.BreadIngredient> breadIngredients, Bread bread) {
         breadIngredients.forEach(breadIngredient -> {
             Ingredients ingredients = Ingredients.builder()
                     .bread(bread)
@@ -96,6 +100,6 @@ public class BreadSaveService {
                 .bread(bread)
                 .build();
 
-        return breadImage;
+        return breadImageRepository.save(breadImage);
     }
 }

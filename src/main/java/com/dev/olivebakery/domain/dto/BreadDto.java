@@ -31,7 +31,7 @@ public class BreadDto {
         private int price;
         private String picturePath;
         private String description;
-        private boolean soldOut;
+        private boolean isSoldOut;
         private BreadState breadState;
     }
 
@@ -45,7 +45,7 @@ public class BreadDto {
         private String picturePath;
         private String detailDescription;
         private List<BreadIngredient> ingredientsList = new ArrayList<>();
-        private boolean soldOut;
+        private boolean isSoldOut;
         private BreadState breadState;
     }
 
@@ -92,6 +92,5 @@ public class BreadDto {
         private String oldName;
         private MultipartFile breadImage;
     }
-
 
 }

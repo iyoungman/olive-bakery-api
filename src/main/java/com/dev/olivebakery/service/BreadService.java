@@ -79,36 +79,36 @@ public class BreadService {
 //        return breadGetAll;
 //    }
 
-    public BreadDto.BreadGetDetail getBreadDetails(String name){
-        Bread bread = breadRepository.findByName(name)
-                .orElseThrow(() -> new UserDefineException(name + "이란 빵은 존재하지 않습니다."));
-        boolean isSoldOut = false;
-        if(bread.getSoldOut() != null)
-            isSoldOut = bread.getSoldOut().getDate().isEqual(LocalDate.now());
+//    public BreadDto.BreadGetDetail getBreadDetails(String name){
+//        Bread bread = breadRepository.findByName(name)
+//                .orElseThrow(() -> new UserDefineException(name + "이란 빵은 존재하지 않습니다."));
+//        boolean isSoldOut = false;
+//        if(bread.getSoldOut() != null)
+//            isSoldOut = bread.getSoldOut().getDate().isEqual(LocalDate.now());
+//
+//        List<BreadDto.BreadIngredient> ingredientList = new ArrayList<>();
+//        bread.getIngredients().forEach(ingredient -> ingredientList.add(
+//                BreadDto.BreadIngredient.builder()
+//                        .name(ingredient.getName())
+//                        .origin(ingredient.getOrigin())
+//                        .build()
+//        ));
+//
+//        return BreadDto.BreadGetDetail.builder()
+//                .name(bread.getName())
+//                .price(bread.getPrice())
+//                .detailDescription(bread.getDetailDescription())
+//                .ingredientsList(ingredientList)
+//                .isSoldOut(isSoldOut)
+//                .breadState(bread.getState())
+//                .build();
+//    }
 
-        List<BreadDto.BreadIngredient> ingredientList = new ArrayList<>();
-        bread.getIngredients().forEach(ingredient -> ingredientList.add(
-                BreadDto.BreadIngredient.builder()
-                        .name(ingredient.getName())
-                        .origin(ingredient.getOrigin())
-                        .build()
-        ));
-
-        return BreadDto.BreadGetDetail.builder()
-                .name(bread.getName())
-                .price(bread.getPrice())
-                .detailDescription(bread.getDetailDescription())
-                .ingredientsList(ingredientList)
-                .soldOut(isSoldOut)
-                .breadState(bread.getState())
-                .build();
-    }
-
-    public void updateBread(BreadDto.BreadSave updateBread){
-        Bread bread = breadRepository.findByName(updateBread.getName())
-                .orElseThrow(() -> new UserDefineException(updateBread.getName() + "이란 빵은 존재하지 않습니다."));
-
-    }
+//    public void updateBread(BreadDto.BreadSave updateBread){
+//        Bread bread = breadRepository.findByName(updateBread.getName())
+//                .orElseThrow(() -> new UserDefineException(updateBread.getName() + "이란 빵은 존재하지 않습니다."));
+//
+//    }
 
 //    public void saveBread(BreadDto.BreadSave breadSave){
 //
@@ -184,13 +184,13 @@ public class BreadService {
 //        return breadImage;
 //    }
 
-    public String updateName(BreadDto.BreadUpdateName breadNames){
-        Bread bread = breadRepository.findByName(breadNames.getOldName()).get();
-
-        bread.updateName(breadNames.getNewName());
-
-        breadRepository.save(bread);
-
-        return bread.getName();
-    }
+//    public String updateName(BreadDto.BreadUpdateName breadNames){
+//        Bread bread = breadRepository.findByName(breadNames.getOldName()).get();
+//
+//        bread.updateName(breadNames.getNewName());
+//
+//        breadRepository.save(bread);
+//
+//        return bread.getName();
+//    }
 }
