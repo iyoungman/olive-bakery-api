@@ -1,7 +1,9 @@
 package com.dev.olivebakery.service;
 
 import com.dev.olivebakery.domain.dto.SalesDto;
+import com.dev.olivebakery.domain.entity.Sales;
 import com.dev.olivebakery.domain.enums.SaleType;
+import com.dev.olivebakery.exception.UserDefineException;
 import com.dev.olivebakery.repository.SalesRepository;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
@@ -69,6 +71,33 @@ public class SalesService {
         dashBoardData.setDate(localDate);
         dashBoardDataList.add(dashBoardData);
         return dashBoardDataList;
+    }
+
+    public void saveSale(SalesDto.SaveSale sale){
+         if(!salesRepository.findByDateEqualsAndSaleType(sale.getDate(), SaleType.OFFLINE).isPresent())
+             salesRepository.save(sale.toEntity());
+         else
+             throw new UserDefineException("이미 저장되어 있는 매출정보가 있습니다.");
+    }
+
+    public void updateSale(SalesDto.SaveSale updateSales){
+        Sales sales = salesRepository.findByDateEqualsAndSaleType(updateSales.getDate(), SaleType.OFFLINE)
+                .orElseThrow(() -> new UserDefineException("해당 매출 정보가 존재하지 않습니다."));
+        sales.setSales(updateSales.getSales());
+        sales.setDate(updateSales.getDate());
+        salesRepository.save(sales);
+    }
+
+    public void deleteSale(SalesDto.DeleteSale deleteSale){
+        Sales sales = salesRepository.findByDateEqualsAndSaleType(deleteSale.getDate(), SaleType.OFFLINE)
+                .orElseThrow(() -> new UserDefineException("해당 매출 정보가 존재하지 않습니다."));
+        salesRepository.delete(sales);
+    }
+
+    public SalesDto.SaveSale getSaleInfo(int year, int month, int day) {
+        Sales sales = salesRepository.findByDateEqualsAndSaleType(LocalDate.of(year, month, day), SaleType.OFFLINE)
+                .orElseThrow(() -> new UserDefineException("해당 날짜의 매출 정보는 존재하지 않습니다."));
+        return new SalesDto.SaveSale(sales.getDate(), sales.getSales());
     }
 
     private List<SalesDto.GetGraphData> convertToGraphData(List<SalesDto.GetGraphTmp> tblData){

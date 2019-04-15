@@ -4,6 +4,7 @@ import com.dev.olivebakery.domain.enums.SaleType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -12,7 +13,7 @@ import java.time.LocalDate;
  * 스케줄러로 매일 04시 데이터 저장..
  * 예약 테이블의 데이터(온라인)은 스케줄러로 자동 저장되며 오프라인 금액은 관리자가 직접입력.
  */
-@Entity @Getter
+@Entity @Getter @Setter
 @NoArgsConstructor
 @Table(name = "sales_tbl")
 public class Sales {

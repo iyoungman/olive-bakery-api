@@ -1,10 +1,9 @@
 package com.dev.olivebakery.domain.dto;
 
+import com.dev.olivebakery.domain.entity.Sales;
 import com.dev.olivebakery.domain.enums.SaleType;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -90,7 +89,28 @@ public class SalesDto {
         }
     }
 
+    @Getter
+    @NoArgsConstructor @AllArgsConstructor
     public static class SaveSale{
+        @ApiModelProperty(notes = "2019-04-14 같은 형태.")
+        private LocalDate date;
+        private int sales;
 
+        public Sales toEntity(){
+            return Sales.builder()
+                    .date(date)
+                    .reservationCnt(0)
+                    .sales(sales)
+                    .saleType(SaleType.OFFLINE)
+                    .build();
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class DeleteSale{
+        @ApiModelProperty(notes = "2019-04-14 같은 형태.")
+        private LocalDate date;
+        private SaleType saleType;
     }
 }
