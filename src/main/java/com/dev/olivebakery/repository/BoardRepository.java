@@ -12,4 +12,5 @@ import java.util.List;
 
 public interface BoardRepository extends JpaRepository<Board, Long>, BoardRepositoryCustom {
 
+
 }

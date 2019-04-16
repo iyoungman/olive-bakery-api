@@ -1,6 +1,7 @@
 package com.dev.olivebakery.domain.entity;
 
 import com.dev.olivebakery.domain.enums.ReservationType;
+import com.dev.olivebakery.utill.Explain;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -57,10 +58,7 @@ public class Reservation {
         this.reservationInfos = reservationInfos;
     }
 
-    /**
-     * 요청 -> 수락
-     * 수락 -> 완료
-     */
+    @Explain("요청 -> 수락 -> 완료")
     public void updateReservationType() {
         reservationType = reservationType.equals(ReservationType.REQUEST) ? ReservationType.ACCEPT : ReservationType.COMPLETE;
     }

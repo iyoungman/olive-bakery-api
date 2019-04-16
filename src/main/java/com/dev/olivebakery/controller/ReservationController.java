@@ -8,14 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * TODO
- * 1. 오늘 날짜 예약 정보만 가져오기.(userId, reservationType)
- * 2. 예약 번호 발급 - AutoIncrease
- * 3. 예약할때 validation check
- * 4.
- */
-
 @RestController
 @RequestMapping(value = "/olive/reservation")
 public class ReservationController {

@@ -1,24 +1,24 @@
 package com.dev.olivebakery.domain.entity;
 
+import com.dev.olivebakery.domain.enums.DayType;
 import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Ingredients {
+public class Days {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ingredients_id")
+    @Column(name = "days_id")
     private Long id;
 
-    private String name;
-
-    private String origin;
+    @Enumerated(value = EnumType.STRING)
+    private DayType dayType;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "bread_id")
