@@ -20,7 +20,6 @@ public class ReservationDto {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    @ToString(exclude = "reservationBreads")
     public static class GetResponse {
 
         private Long reservationId;
@@ -53,6 +52,18 @@ public class ReservationDto {
                     .memberName(getTemp.getMemberName())
                     .reservationBreads(reservationBreads)
                     .build();
+        }
+
+        @Override
+        public String toString() {
+            return "GetResponse{" +
+                    "reservationId=" + reservationId +
+                    ", reservationTime=" + reservationTime +
+                    ", bringTime=" + bringTime +
+                    ", price=" + price +
+                    ", memberName='" + memberName + '\'' +
+                    ", reservationBreads=" + reservationBreads +
+                    '}';
         }
     }
 
@@ -113,6 +124,14 @@ public class ReservationDto {
                     .breadName(getTemp.getBreadName())
                     .breadCount(getTemp.getBreadCount())
                     .build();
+        }
+
+        @Override
+        public String toString() {
+            return "ReservationBread{" +
+                    "breadName='" + breadName + '\'' +
+                    ", breadCount=" + breadCount +
+                    '}';
         }
     }
 

@@ -3,6 +3,9 @@ package com.dev.olivebakery.service;
 import com.dev.olivebakery.domain.dto.ReservationDto;
 import com.dev.olivebakery.domain.enums.ReservationType;
 import com.dev.olivebakery.repository.ReservationRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,10 @@ public class ReservationServiceTest {
 
 	@Autowired
 	ReservationService reservationService;
+
+	Gson gson = new GsonBuilder()
+			.setPrettyPrinting()
+			.create();
 
 	@Test
 	public void saveReservation() throws Exception {
@@ -53,7 +60,7 @@ public class ReservationServiceTest {
 	}
 
 	@Test
-	public void getReservationInfos() throws Exception {
+	public void getReservationInfos() throws Exception, JsonProcessingException {
 
 		//given
 		final String email = "testemail";
@@ -63,7 +70,9 @@ public class ReservationServiceTest {
 		List<ReservationDto.GetResponse> getResponses = reservationService.getReservationInfos(email, reservationType);
 
 		//then
-		getResponses.stream().forEach(s -> System.out.println(s.toString()));
+		for (ReservationDto.GetResponse s : getResponses) {
+			System.out.println(gson.toJson(s));
+		}
 	}
 
 	@Test
@@ -110,6 +119,27 @@ public class ReservationServiceTest {
 
 		//then
 		getDtos.stream().forEach(s -> System.out.println(s.toString()));
+	}
+
+	@Test
+	public void timeValidationCheck() throws Exception {
+
+		//given
+		LocalDateTime validBringTime = LocalDate.now()
+				.plusDays(1)
+				.atTime(12,12,12);
+
+		LocalDateTime unValidBringTimeByBefore = LocalDateTime.now()
+				.minusHours(3);
+
+		LocalDateTime unValidBringTimeByEfter20 = LocalDate.now()
+				.atTime(20,20,20);
+
+		//then
+		reservationService.timeValidationCheck(validBringTime);
+		reservationService.timeValidationCheck(unValidBringTimeByBefore);
+		reservationService.timeValidationCheck(unValidBringTimeByEfter20);
+
 	}
 
 }

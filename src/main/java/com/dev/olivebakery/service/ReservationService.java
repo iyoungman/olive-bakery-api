@@ -11,10 +11,10 @@ import com.dev.olivebakery.repository.ReservationRepository;
 import com.dev.olivebakery.utill.Explain;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static com.dev.olivebakery.domain.dto.ReservationDto.*;
 
@@ -44,6 +44,7 @@ public class ReservationService {
 
 	@Explain("예약 정보 저장")
 	public void saveReservation(SaveRequest saveDto) {
+		timeValidationCheck(saveDto.getBringTime());
 		reservationInfoRepository.saveAll(convertSaveDtoToEntity(saveDto));
 	}
 
@@ -72,7 +73,6 @@ public class ReservationService {
 		return reservationInfos;
 	}
 
-	// TODO - 검토필요
 	@Explain("예약 정보 수정")
 	public void updateReservation(UpdateRequest updateRequest) {
 		deleteReservation(updateRequest.getReservationId());
@@ -121,12 +121,12 @@ public class ReservationService {
 		return convertGetTempDtoListToGetDtoList(getTemps);
 	}
 
-	// 수령 시간 정보 확인하는 메소드
-	// 수령시간은 매일 저녁 8시 이전이여야 하며 예약시간보다 늦을 수는 없다.
-	// 잘못된 수령 시간은 무조건 빠꾸시킴.
-	// TODO 프런트에서 처리하는게 어떤지
-	public void validationCheck(Timestamp bringTime) {
-
+	@Explain("수령시간은 매일 아침 8시 ~ 저녁 8시 사이// 예약시간보다 늦을 수는 없다")
+	private void timeValidationCheck(LocalDateTime bringTime) {
+		Predicate<LocalDateTime> predicate = b -> b.isAfter(LocalDateTime.now()) && b.getHour() > 8 && b.getHour() < 20;
+		if(!predicate.test(bringTime)) {
+			throw new UserDefineException(bringTime.toString() + "  수령시간이 올바르지 않습니다.");
+		}
 	}
 
 	@Explain("GetTemp 를 GetResponse 로 변환")
