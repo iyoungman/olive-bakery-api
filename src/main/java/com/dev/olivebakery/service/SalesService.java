@@ -1,5 +1,6 @@
 package com.dev.olivebakery.service;
 
+import com.dev.olivebakery.domain.dto.ReservationDto;
 import com.dev.olivebakery.domain.dto.SalesDto;
 import com.dev.olivebakery.domain.entity.Sales;
 import com.dev.olivebakery.domain.enums.SaleType;
@@ -73,11 +74,18 @@ public class SalesService {
         return dashBoardDataList;
     }
 
-    public void saveSale(SalesDto.SaveSale sale){
+    public void saveOfflineSale(SalesDto.SaveSale sale){
          if(!salesRepository.findByDateEqualsAndSaleType(sale.getDate(), SaleType.OFFLINE).isPresent())
              salesRepository.save(sale.toEntity());
          else
              throw new UserDefineException("이미 저장되어 있는 매출정보가 있습니다.");
+    }
+
+    public void saveReservationSale(ReservationDto.ReservationSale sale){
+        if(!salesRepository.findByDateEqualsAndSaleType(sale.getDate(), SaleType.RESERVATION).isPresent())
+            salesRepository.save(sale.toEntity());
+        else
+            throw new UserDefineException("이미 저장되어 있는 매출정보가 있습니다.");
     }
 
     public void updateSale(SalesDto.SaveSale updateSales){
