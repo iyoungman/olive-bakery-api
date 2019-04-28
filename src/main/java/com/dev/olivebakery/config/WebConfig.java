@@ -13,7 +13,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableWebMvc
 @Import(SwaggerConfig.class)
+
 public class WebConfig implements WebMvcConfigurer {
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**/**")
@@ -30,6 +32,9 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
+
+//        registry.addResourceHandler("/image/**")
+//                .addResourceLocations();
     }
 
     @Bean

@@ -13,9 +13,12 @@ import com.dev.olivebakery.repository.IngredientsRepository;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,10 +27,14 @@ import java.util.List;
 @Log
 public class BreadSaveService {
 
+    private static final String IMAGE_PATH = "C:\\Users\\Kimyunsang\\Desktop\\spring\\imageTest\\";
+
     private final BreadRepository breadRepository;
     private final IngredientsRepository ingredientsRepository;
     private final DaysRepository daysRepository;
     private final BreadImageRepository breadImageRepository;
+
+
 
 
     public BreadSaveService(BreadRepository breadRepository, IngredientsRepository ingredientsRepository, DaysRepository daysRepository,
@@ -59,6 +66,7 @@ public class BreadSaveService {
                 .price(breadSave.getPrice())
                 .description(breadSave.getDescription())
                 .detailDescription(breadSave.getDetailDescription())
+                .deleteFlag(false)
                 .build();
     }
 
@@ -88,15 +96,21 @@ public class BreadSaveService {
     public BreadImage saveImage(MultipartFile imageFile, Bread bread) throws IOException {
 
         String fileName = imageFile.getOriginalFilename();
-        File destinationFile = new File("C:\\Users\\Kimyunsang\\Desktop\\spring\\imageTest"+ File.separator + fileName);
+        File destinationFile = new File(IMAGE_PATH+ File.separator + fileName);
 
         imageFile.transferTo(destinationFile);
+
+        String imageUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/olive/image/" + fileName)
+                .toUriString();
 
         BreadImage breadImage = BreadImage.builder()
                 .imageName(imageFile.getOriginalFilename())
                 .imageSize(imageFile.getSize())
                 .imageType(imageFile.getContentType())
-                .imageUrl("http://localhost:8080/Users\\Kimyunsang\\Desktop\\spring\\imageTest" + fileName)
+                .imageUrl(imageUrl)
+                .imagePath(IMAGE_PATH + fileName)
+                .current(true)
                 .bread(bread)
                 .build();
 
