@@ -9,12 +9,16 @@ import com.dev.olivebakery.exception.UserDefineException;
 import com.dev.olivebakery.repository.ReservationInfoRepository;
 import com.dev.olivebakery.repository.ReservationRepository;
 import com.dev.olivebakery.utill.Explain;
+import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static com.dev.olivebakery.domain.dto.ReservationDto.*;
 
@@ -23,20 +27,15 @@ import static com.dev.olivebakery.domain.dto.ReservationDto.*;
  */
 
 @SuppressWarnings("Duplicates")
+@RequiredArgsConstructor
 @Service
 public class ReservationService {
 
 	private final ReservationRepository reservationRepository;
 	private final ReservationInfoRepository reservationInfoRepository;
-	private SignService signService;
-	private BreadService breadService;
-
-	public ReservationService(ReservationRepository reservationRepository, ReservationInfoRepository reservationInfoRepository, SignService signService, BreadService breadService) {
-		this.reservationRepository = reservationRepository;
-		this.reservationInfoRepository = reservationInfoRepository;
-		this.signService = signService;
-		this.breadService = breadService;
-	}
+	private final SignService signService;
+	private final BreadService breadService;
+	private final SalesService salesService;
 
 	public Reservation findById(Long reservationId) {
 		return reservationRepository.findById(reservationId).orElseThrow(() -> new UserDefineException("해당 예약내역이 없습니다."));
@@ -44,6 +43,7 @@ public class ReservationService {
 
 	@Explain("예약 정보 저장")
 	public void saveReservation(SaveRequest saveDto) {
+		timeValidationCheck(saveDto.getBringTime());
 		reservationInfoRepository.saveAll(convertSaveDtoToEntity(saveDto));
 	}
 
@@ -72,7 +72,6 @@ public class ReservationService {
 		return reservationInfos;
 	}
 
-	// TODO - 검토필요
 	@Explain("예약 정보 수정")
 	public void updateReservation(UpdateRequest updateRequest) {
 		deleteReservation(updateRequest.getReservationId());
@@ -121,12 +120,25 @@ public class ReservationService {
 		return convertGetTempDtoListToGetDtoList(getTemps);
 	}
 
-	// 수령 시간 정보 확인하는 메소드
-	// 수령시간은 매일 저녁 8시 이전이여야 하며 예약시간보다 늦을 수는 없다.
-	// 잘못된 수령 시간은 무조건 빠꾸시킴.
-	// TODO 프런트에서 처리하는게 어떤지
-	public void validationCheck(Timestamp bringTime) {
+	@Explain("수령시간은 매일 아침 8시 ~ 저녁 8시 사이// 예약시간보다 늦을 수는 없다")
+	public void timeValidationCheck(LocalDateTime bringTime) {
+		Predicate<LocalDateTime> predicate = b -> b.isAfter(LocalDateTime.now()) && b.getHour() > 8 && b.getHour() < 20;
+		if(!predicate.test(bringTime)) {
+			throw new UserDefineException(bringTime.toString() + "  수령시간이 올바르지 않습니다.");
+		}
+	}
 
+	@Explain("날짜별 예약횟수, 예약 매출 조회 후 저장")
+	@Scheduled(cron = "0 0 23 * * MON-FRI")
+	public void saveReservationSaleByDate() {
+		LocalDateTime startDate = LocalDate.now().atStartOfDay();
+		LocalDateTime endDate = LocalDate.now().atTime(23, 59, 59);
+		ReservationSale reservationSale = reservationRepository.getReservationSaleByDate(ReservationType.COMPLETE, startDate, endDate);
+
+		if(ObjectUtils.isEmpty(reservationSale)) {
+			throw new UserDefineException("예약 내역이 없습니다");
+		}
+		salesService.saveReservationSale(reservationSale);
 	}
 
 	@Explain("GetTemp 를 GetResponse 로 변환")

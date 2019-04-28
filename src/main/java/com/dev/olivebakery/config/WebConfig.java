@@ -1,8 +1,5 @@
 package com.dev.olivebakery.config;
 
-import org.apache.coyote.http11.AbstractHttp11Protocol;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -11,13 +8,13 @@ import org.springframework.web.multipart.support.StandardServletMultipartResolve
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebMvc
 @Import(SwaggerConfig.class)
-public class WebConfig extends WebMvcConfigurerAdapter {
 
+public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -25,7 +22,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
                 .allowedOrigins("*")
                 .allowedMethods("PUT", "DELETE", "GET", "POST")
                 .allowedHeaders("*")
-//                .exposedHeaders("header1", "header2")
                 .allowCredentials(false).maxAge(3600);
     }
 

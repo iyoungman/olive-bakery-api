@@ -10,7 +10,7 @@ import lombok.Getter;
 
 @Getter
 public enum ReservationType {
-    ACCEPT("수락"), COMPLETE("완료"), REQUEST("요청");
+    REQUEST("요청"),ACCEPT("수락"), COMPLETE("완료");
 
     private String reservationExplain;
 
