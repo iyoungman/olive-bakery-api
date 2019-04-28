@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface DaysRepository extends JpaRepository<Days, Long> {
 
-    @Query("select d.bread from Days d where d.dayType = :dayType")
-    List<Bread> findByDayType(@Param(value="dayType")DayType dayType);
+    @Query("select d from Days d where d.dayType = :dayType")
+    List<Days> findByDayType(@Param(value="dayType")DayType dayType);
 
 }

@@ -1,6 +1,7 @@
 package com.dev.olivebakery.config;
 
 import org.apache.coyote.http11.AbstractHttp11Protocol;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableWebMvc
 @Import(SwaggerConfig.class)
 public class WebConfig extends WebMvcConfigurerAdapter {
+
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -34,6 +36,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
+
+//        registry.addResourceHandler("/image/**")
+//                .addResourceLocations();
     }
 
     @Bean

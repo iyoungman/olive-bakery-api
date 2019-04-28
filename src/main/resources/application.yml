@@ -3,14 +3,16 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     open-in-view: true
+
   datasource:
    # url: jdbc:mysql://chunsodb.c04b2rx0gbkh.ap-northeast-2.rds.amazonaws.com:3306/olive_bakery?useSSL=false&serverTimezone=Asia/Seoul
    # username: chunso
    # password: alswjd96
-    url: jdbc:mysql://chunsodb.c04b2rx0gbkh.ap-northeast-2.rds.amazonaws.com:3306/olive_bakery?useSSL=false&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3306/olive?useSSL=false&serverTimezone=Asia/Seoul
     username: root
     password: kim111
   servlet:
@@ -18,10 +20,21 @@ spring:
       max-file-size: 1MB
       max-request-size: 1MB
 
+  http:
+    encoding:
+      charset: utf-8
+      enabled: true
+      force: true
+
+  resources:
+    static-locations: file:///C:\Users\Kimyunsang\Desktop\spring\imageTest
+
 logging:
   level:
     root: info
 
 server:
   port: 8080
+
+
 
