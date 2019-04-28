@@ -4,6 +4,7 @@ import com.dev.olivebakery.domain.entity.Sales;
 import com.dev.olivebakery.domain.enums.ReservationType;
 import com.dev.olivebakery.domain.enums.SaleType;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by YoungMan on 2019-03-06.
@@ -135,6 +137,20 @@ public class ReservationDto {
 					", breadCount=" + breadCount +
 					'}';
 		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (this == o) return true;
+			if (o == null || getClass() != o.getClass()) return false;
+			ReservationBread that = (ReservationBread) o;
+			return breadCount == that.breadCount &&
+					Objects.equals(breadName, that.breadName);
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(breadName, breadCount);
+		}
 	}
 
 
@@ -183,6 +199,8 @@ public class ReservationDto {
 	public static class DateRequest {
 
 		private ReservationType reservationType;
+
+		@ApiModelProperty(notes = "2019-04-14 같은 형태.")
 		private LocalDate selectDate;
 
 		@Builder
@@ -198,7 +216,11 @@ public class ReservationDto {
 	public static class DateRangeRequest {
 
 		private ReservationType reservationType;
+
+		@ApiModelProperty(notes = "2019-04-14 같은 형태.")
 		private LocalDate startDate;
+
+		@ApiModelProperty(notes = "2019-04-14 같은 형태.")
 		private LocalDate endDate;
 
 		@Builder

@@ -1,4 +1,10 @@
 spring:
+  profiles:
+    active: test
+
+---
+spring:
+  profiles: local
   jpa:
     hibernate:
       ddl-auto: update
@@ -7,12 +13,12 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     open-in-view: true
   datasource:
-   # url: jdbc:mysql://chunsodb.c04b2rx0gbkh.ap-northeast-2.rds.amazonaws.com:3306/olive_bakery?useSSL=false&serverTimezone=Asia/Seoul
-   # username: chunso
-   # password: alswjd96
     url: jdbc:mysql://chunsodb.c04b2rx0gbkh.ap-northeast-2.rds.amazonaws.com:3306/olive_bakery?useSSL=false&serverTimezone=Asia/Seoul
-    username: root
-    password: kim111
+    username: chunso
+    password: alswjd96
+  #    url: jdbc:mysql://chunsodb.c04b2rx0gbkh.ap-northeast-2.rds.amazonaws.com:3306/olive_bakery?useSSL=false&serverTimezone=Asia/Seoul
+  #    username: root
+  #    password: kim111
   servlet:
     multipart:
       max-file-size: 1MB
@@ -25,3 +31,15 @@ logging:
 server:
   port: 8080
 
+---
+spring:
+  profiles: test
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  h2:
+    console:
+      enabled: true
+server:
+  port: 8095
