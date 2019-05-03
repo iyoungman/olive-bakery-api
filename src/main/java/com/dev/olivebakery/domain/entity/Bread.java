@@ -16,7 +16,6 @@ import java.util.Set;
 @Entity
 @Table(name = "bread_tbl")
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor
