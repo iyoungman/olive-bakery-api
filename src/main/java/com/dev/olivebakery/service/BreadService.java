@@ -1,5 +1,6 @@
 package com.dev.olivebakery.service;
 
+import com.dev.olivebakery.domain.dto.ReservationDto;
 import com.dev.olivebakery.domain.entity.Bread;
 import com.dev.olivebakery.exception.UserDefineException;
 import com.dev.olivebakery.repository.BreadRepository;
@@ -35,7 +36,7 @@ public class BreadService {
         return breadRepository.findByNameIn(breadNames);
     }
 
-    public int getFinalPrice(LinkedHashMap<String, Integer> breadInfos) {
+    /*public int getFinalPrice(LinkedHashMap<String, Integer> breadInfos) {
         List<String> breadNames = new ArrayList<>(breadInfos.keySet());
         List<Integer> counts = new ArrayList<>(breadInfos.values());
         List<Bread> breads = findsByNames(breadNames);
@@ -45,6 +46,19 @@ public class BreadService {
             finalPrice = finalPrice + (breads.get(i).getPrice() * counts.get(i));
         }
 
+        return finalPrice;
+    }*/
+
+    public int getFinalPrice(List<String> breadNames, List<Integer> counts) {
+//        List<String> breadNames = new ArrayList<>(breadInfos.());
+//        List<Integer> counts = new ArrayList<>(breadInfos.values());
+
+        List<Bread> breads = findsByNames(breadNames);
+        int finalPrice = 0;
+
+        for (int i = 0; i < breadNames.size(); i++) {
+            finalPrice = finalPrice + (breads.get(i).getPrice() * counts.get(i));
+        }
         return finalPrice;
     }
 
@@ -63,7 +77,7 @@ public class BreadService {
 //                        .description(bread.getDescription())
 //                        .soldOut(isSoldOut)
 //                        .breadState(bread.getState())
-//                        .build());
+//                        .of());
 //
 //        });
 //
@@ -82,7 +96,7 @@ public class BreadService {
 //                BreadDto.BreadIngredient.builder()
 //                        .name(ingredient.getName())
 //                        .origin(ingredient.getOrigin())
-//                        .build()
+//                        .of()
 //        ));
 //
 //        return BreadDto.BreadGetDetail.builder()
@@ -92,7 +106,7 @@ public class BreadService {
 //                .ingredientsList(ingredientList)
 //                .isSoldOut(isSoldOut)
 //                .breadState(bread.getState())
-//                .build();
+//                .of();
 //    }
 
 //    public void updateBread(BreadDto.BreadSave updateBread){
@@ -110,7 +124,7 @@ public class BreadService {
 //                .price(breadSave.getPrice())
 //                .description(breadSave.getDescription())
 //                .detailDescription(breadSave.getDetailDescription())
-//                .build();
+//                .of();
 //
 //        breadRepository.save(bread);
 //
@@ -119,7 +133,7 @@ public class BreadService {
 //                    .bread(bread)
 //                    .name(breadIngredient.getName())
 //                    .origin(breadIngredient.getOrigin())
-//                    .build();
+//                    .of();
 //
 //            ingredientsRepository.save(ingredients);
 //        });
@@ -139,7 +153,7 @@ public class BreadService {
 ////        for(DayType dayType : dayTypes){
 ////            DayType days = Days.builder()
 ////                    .bread(bread)
-////                    .day(dayType).build();
+////                    .day(dayType).of();
 ////            daysList.add(days);
 ////        }
 ////
@@ -170,7 +184,7 @@ public class BreadService {
 //                .imageSize(imageFile.getSize())
 //                .imageType(imageFile.getContentType())
 //                .imageUrl("http://localhost:8080/Users\\Kimyunsang\\Desktop\\spring\\imageTest" + fileName)
-//                .build();
+//                .of();
 //
 //        return breadImage;
 //    }
