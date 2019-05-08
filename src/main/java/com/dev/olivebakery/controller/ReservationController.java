@@ -26,7 +26,7 @@ public class ReservationController {
 			@ApiImplicitParam(name = "type", value = "예약타입", required = true),
 			@ApiImplicitParam(name = "userId", value = "유저의 ID", required = true)
 	})
-	@GetMapping("/userId/{userId}/type/{type}")
+	@GetMapping("/userid/{userId}/type/{type}")
 	public List<ReservationDto.ReservationResponse> getReservationInfos(@PathVariable("userId") String userId,
 																		@PathVariable("type") ReservationType reservationType) {
 		return reservationService.getReservationInfos(userId, reservationType);
@@ -34,7 +34,7 @@ public class ReservationController {
 
 
 	@ApiOperation(value = "유저의 가장 최근 예약 내역 조회", notes = "유저의 가장 최근 예약내역을 예약타입에 무관하게 조회")
-	@GetMapping("/userId/{userId}/recently")
+	@GetMapping("/userid/{userId}/recently")
 	public ReservationDto.ReservationResponse getReservationInfosByDate(@PathVariable("userId") String userId) {
 		return reservationService.getReservationInfoByRecently(userId);
 	}

@@ -52,7 +52,6 @@ public class ReservationService {
 		List<ReservationInfo> reservationInfos = new ArrayList<>();
 		List<Bread> breads = breadService.findsByNames(saveDto.getBreadNames());
 		Member member = signService.findById(saveDto.getUserEmail());
-//		int finalPrice = breadService.getFinalPrice(saveDto.getBreadInfo());
 		int finalPrice = breadService.getFinalPrice(saveDto.getBreadNames(), saveDto.getBreadCounts());
 
 		Reservation reservation = Reservation.builder()

@@ -36,23 +36,7 @@ public class BreadService {
         return breadRepository.findByNameIn(breadNames);
     }
 
-    /*public int getFinalPrice(LinkedHashMap<String, Integer> breadInfos) {
-        List<String> breadNames = new ArrayList<>(breadInfos.keySet());
-        List<Integer> counts = new ArrayList<>(breadInfos.values());
-        List<Bread> breads = findsByNames(breadNames);
-        int finalPrice = 0;
-
-        for (int i = 0; i < breadInfos.size(); i++) {
-            finalPrice = finalPrice + (breads.get(i).getPrice() * counts.get(i));
-        }
-
-        return finalPrice;
-    }*/
-
     public int getFinalPrice(List<String> breadNames, List<Integer> counts) {
-//        List<String> breadNames = new ArrayList<>(breadInfos.());
-//        List<Integer> counts = new ArrayList<>(breadInfos.values());
-
         List<Bread> breads = findsByNames(breadNames);
         int finalPrice = 0;
 

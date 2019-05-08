@@ -157,7 +157,7 @@ public class ReservationDto {
 	@NoArgsConstructor(access = AccessLevel.PROTECTED)
 	public static class ReservationSaveRequest {
 
-		@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
 		@DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
 		private LocalDateTime bringTime;
 		private String userEmail;
@@ -207,7 +207,7 @@ public class ReservationDto {
 
 		private ReservationType reservationType;
 
-		@JsonFormat(pattern="yyyy-MM-dd")
+		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
 		@DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
 		@ApiModelProperty(notes = "2019-04-14 같은 형태.")
 		private LocalDate selectDate;
@@ -226,12 +226,12 @@ public class ReservationDto {
 
 		private ReservationType reservationType;
 
-		@JsonFormat(pattern="yyyy-MM-dd")
+		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
 		@DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
 		@ApiModelProperty(notes = "2019-04-14 같은 형태.")
 		private LocalDate startDate;
 
-		@JsonFormat(pattern="yyyy-MM-dd")
+		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
 		@DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
 		@ApiModelProperty(notes = "2019-04-14 같은 형태.")
 		private LocalDate endDate;
