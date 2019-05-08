@@ -50,7 +50,7 @@ public class SalesController {
     @ApiOperation("오프라인 매출정보 저장")
     @PostMapping
     public void saveSaleInfo(@RequestBody SalesDto.SaveSale saveSale){
-        salesService.saveSale(saveSale);
+        salesService.saveOfflineSale(saveSale);
     }
 
     @ApiOperation("오프라인 매출 정보 수정")

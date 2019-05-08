@@ -26,6 +26,9 @@ public class BreadImage {
     private String imageType;
 
     @NotNull
+    private String imagePath;
+
+    @NotNull
     private Long imageSize;
 
     @NotNull

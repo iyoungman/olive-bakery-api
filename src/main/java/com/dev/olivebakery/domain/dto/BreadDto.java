@@ -3,6 +3,7 @@ package com.dev.olivebakery.domain.dto;
 
 import com.dev.olivebakery.domain.enums.BreadState;
 import com.dev.olivebakery.domain.enums.DayType;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,13 +27,25 @@ public class BreadDto {
     @NoArgsConstructor
     @Builder
     @AllArgsConstructor
+    public static class BreadImageDto{
+        private String name;
+        private String encoded;
+        private String imageUrl;
+        private String contentType;
+        private Long volume;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @Builder
+    @AllArgsConstructor
     public static class BreadGetAll {
         private String name;
         private int price;
-        private String picturePath;
         private String description;
-        private boolean isSoldOut;
+        private Boolean isSoldOut;
         private BreadState breadState;
+        private BreadImageDto breadImage;
     }
 
     @Getter
@@ -42,10 +55,10 @@ public class BreadDto {
     public static class BreadGetDetail{
         private String name;
         private int price;
-        private String picturePath;
+        private String picture;
         private String detailDescription;
         private List<BreadIngredient> ingredientsList = new ArrayList<>();
-        private boolean isSoldOut;
+        private Boolean isSoldOut;
         private BreadState breadState;
     }
 

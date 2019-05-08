@@ -2,6 +2,7 @@ package com.dev.olivebakery.domain.entity;
 
 import com.dev.olivebakery.domain.enums.ReservationType;
 import com.dev.olivebakery.utill.Explain;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

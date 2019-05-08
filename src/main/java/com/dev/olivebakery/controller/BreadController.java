@@ -11,11 +11,26 @@ import com.dev.olivebakery.service.breadService.BreadUpdateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
@@ -27,6 +42,9 @@ public class BreadController {
     private final BreadGetService breadGetService;
     private final BreadUpdateService breadUpdateService;
 
+
+    private static final Logger logger = LoggerFactory.getLogger(BreadController.class);
+
     public BreadController(BreadSaveService breadSaveService, BreadGetService breadGetService,
                            BreadUpdateService breadUpdateService){
         this.breadSaveService = breadSaveService;
@@ -36,7 +54,7 @@ public class BreadController {
 
     @ApiOperation("요일별 빵 정보 가져오기")
     @GetMapping("/day/{day}")
-    public List<BreadDto.BreadGetAll> getBread(@PathVariable DayType day){
+    public List<BreadDto.BreadGetAll> getBread(@PathVariable String day){
         return breadGetService.getBreadByDay(day);
     }
 
@@ -48,12 +66,18 @@ public class BreadController {
 
     @ApiOperation("빵, 이미지 같이 저장")
     @PostMapping()
-    public void saveBreadAndImage(@RequestPart MultipartFile files,
+    public void saveBreadAndImage(@RequestPart MultipartFile file,
                                   @RequestParam String json) throws Exception{
         ObjectMapper objectMapper = new ObjectMapper();
         BreadDto.BreadSave breadSave = objectMapper.readValue(json, BreadDto.BreadSave.class);
-        breadSaveService.saveBread(breadSave, files);
+        breadSaveService.saveBread(breadSave, file);
         //breadService.saveImage(files);
+    }
+
+    @ApiOperation("빵, 이미지 같이 저장 모델 명세")
+    @PostMapping("/test")
+    public void saveBreadAndImageTest( BreadDto.BreadSave breadSave) {
+
     }
 
     @ApiOperation("빵 이름 수정")
@@ -97,4 +121,13 @@ public class BreadController {
     public void deleteBread(@PathVariable String name){
         breadUpdateService.deleteBread(name);
     }
+
+    @GetMapping(value = "/image/{image}",
+            produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<byte[]> getImage(@PathVariable String image) throws IOException {
+
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG)
+                .body(breadGetService.getImageResource(image));
+    }
+
 }
