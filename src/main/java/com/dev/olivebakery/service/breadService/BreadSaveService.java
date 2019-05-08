@@ -66,6 +66,7 @@ public class BreadSaveService {
                 .price(breadSave.getPrice())
                 .description(breadSave.getDescription())
                 .detailDescription(breadSave.getDetailDescription())
+                .isSoldOut(false)
                 .deleteFlag(false)
                 .build();
     }
