@@ -64,7 +64,7 @@ public class ReservationController {
 
 	@ApiOperation("예약 정보 저장")
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "bringTime", value = "수령 시간", required = true),
+			@ApiImplicitParam(name = "bringTime", value = "수령시간은 매일 아침 8시 ~ 저녁 8시 사이이며 예약시간(현재 시간)보다 빠를 수 없다", required = true),
 			@ApiImplicitParam(name = "userEmail", value = "유저의 이메일", required = true),
 			@ApiImplicitParam(name = "breadName", value = "예약 빵의 이름", required = true),
 			@ApiImplicitParam(name = "breadCount", value = "예약 빵의 개수", required = true)
