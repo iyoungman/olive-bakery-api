@@ -2,7 +2,7 @@ spring:
   profiles:
     active: local
 
----
+
 spring:
   profiles: local
   jpa:
@@ -29,8 +29,11 @@ spring:
       enabled: true
       force: true
 
-  resources:
-    static-locations: file:///C:\Users\Kimyunsang\Desktop\spring\imageTest
+
+resources:
+  image-locations: /home/ec2-user/img
+  #image-locations: C:\Users\Kimyunsang\Desktop\spring\imageTest
+  image-url: 15.164.57.47:8080
 
 logging:
   level:
