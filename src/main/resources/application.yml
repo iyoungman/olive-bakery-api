@@ -28,7 +28,7 @@ spring:
 
 
 resources:
-  #image-locations: /home/ec2-user/img testtest
+  #image-locations: /home/ec2-user/img ㅅㄷㄴㅅ
   image-locations: C:\Users\Kimyunsang\Desktop\spring\imageTest
   image-url: 15.164.57.47:8080
 
