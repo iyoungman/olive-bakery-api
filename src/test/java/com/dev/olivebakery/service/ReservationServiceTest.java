@@ -1,3 +1,4 @@
+/*
 package com.dev.olivebakery.service;
 
 import com.dev.olivebakery.domain.dto.ReservationDto;
@@ -25,9 +26,13 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 
+
+*/
+
 /**
  * Created by YoungMan on 2019-04-08.
- */
+ *//*
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -196,4 +201,4 @@ public class ReservationServiceTest {
 
 	}
 
-}
+}*/

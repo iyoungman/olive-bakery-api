@@ -119,9 +119,10 @@ public class ReservationService {
 		return convertGetTempDtoListToGetDtoList(reservationResponseTemps);
 	}
 
-	@Explain("수령시간은 매일 아침 8시 ~ 저녁 8시 사이// 예약시간보다 늦을 수는 없다")
+	@Explain("수령시간은 매일 아침 8시 ~ 저녁 8시 사이// 예약시간보다 빠를 수 없다")
 	public void timeValidationCheck(LocalDateTime bringTime) {
-		Predicate<LocalDateTime> predicate = b -> b.isAfter(LocalDateTime.now()) && b.getHour() > 8 && b.getHour() < 20;
+		Predicate<LocalDateTime> predicate = b -> b.isAfter(LocalDateTime.now()) && b.getHour() >= 8 && b.getHour() <= 20;
+
 		if (!predicate.test(bringTime)) {
 			throw new UserDefineException(bringTime.toString() + "  수령시간이 올바르지 않습니다.");
 		}
@@ -143,6 +144,9 @@ public class ReservationService {
 	@Explain("ReservationResponseTemp 를 ReservationResponse 로 변환")
 	private ReservationResponse convertGetTmpDtoToGetDto(List<ReservationResponseTemp> reservationResponseTemps) {
 
+		if(ObjectUtils.isEmpty(reservationResponseTemps)) {
+			throw new UserDefineException("예약 내역이 없습니다.");
+		}
 		List<ReservationBread> reservationBreads = new ArrayList<>();
 
 		for (ReservationResponseTemp reservationResponseTemp : reservationResponseTemps) {
@@ -163,18 +167,26 @@ public class ReservationService {
 				reservationBreads.add(ReservationBread.of(reservationResponseTemp));
 
 				if (reservationResponseTemps.indexOf(reservationResponseTemp) == reservationResponseTemps.size() - 1) {
-					reservationRespons.add(ReservationResponse.of(reservationResponseTemps.get(reservationResponseTemps.indexOf(reservationResponseTemp)), reservationBreads));
+					reservationRespons.add(ReservationResponse.of(reservationResponseTemps.get(reservationResponseTemps.indexOf(reservationResponseTemp)),
+							reservationBreads)
+					);
 				}
 				continue;
 			}
-			reservationRespons.add(ReservationResponse.of(reservationResponseTemps.get(reservationResponseTemps.indexOf(reservationResponseTemp) - 1), reservationBreads));
+			reservationRespons.add(ReservationResponse.of(reservationResponseTemps.get(reservationResponseTemps.indexOf(reservationResponseTemp) - 1),
+					reservationBreads));
+
 
 			reservationId = reservationResponseTemp.getReservationId();
 			reservationBreads = new ArrayList<>();
 			reservationBreads.add(ReservationBread.of(reservationResponseTemp));
 
 			if (reservationResponseTemps.indexOf(reservationResponseTemp) == reservationResponseTemps.size() - 1) {
-				reservationRespons.add(ReservationResponse.of(reservationResponseTemps.get(reservationResponseTemps.indexOf(reservationResponseTemp)), reservationBreads));
+
+				reservationRespons.add(ReservationResponse.of(reservationResponseTemps.get(reservationResponseTemps.indexOf(reservationResponseTemp)),
+						reservationBreads)
+				);
+
 			}
 		}
 		return reservationRespons;
