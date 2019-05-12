@@ -9,12 +9,12 @@ spring:
     open-in-view: true
 
   datasource:
-   # url: jdbc:mysql://chunsodb.c04b2rx0gbkh.ap-northeast-2.rds.amazonaws.com:3306/olive_bakery?useSSL=false&serverTimezone=Asia/Seoul
-   # username: chunso
-   # password: alswjd96
-    url: jdbc:mysql://localhost:3306/olive?useSSL=false&serverTimezone=Asia/Seoul
-    username: root
-    password: kim111
+    url: jdbc:mysql://chunsodb.c04b2rx0gbkh.ap-northeast-2.rds.amazonaws.com:3306/olive_bakery?useSSL=false&serverTimezone=Asia/Seoul
+    username: chunso
+    password: alswjd96
+#    url: jdbc:mysql://localhost:3306/olive?useSSL=false&serverTimezone=Asia/Seoul
+#    username: root
+#    password: kim111
   servlet:
     multipart:
       max-file-size: 1MB

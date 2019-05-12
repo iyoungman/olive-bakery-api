@@ -102,7 +102,7 @@ public class BreadSaveService {
         imageFile.transferTo(destinationFile);
 
         String imageUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/olive/image/" + fileName)
+                .path("/olive/bread/image/" + fileName)
                 .toUriString();
 
         BreadImage breadImage = BreadImage.builder()
