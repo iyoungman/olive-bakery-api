@@ -2,9 +2,6 @@ spring:
   profiles:
     active: local
 
-
-spring:
-  profiles: local
   jpa:
     hibernate:
       ddl-auto: update
