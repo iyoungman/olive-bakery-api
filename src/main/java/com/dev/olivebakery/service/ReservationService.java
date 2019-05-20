@@ -119,14 +119,6 @@ public class ReservationService {
 		return convertGetTempDtoListToGetDtoList(reservationResponseTemps);
 	}
 
-	@Explain("수령시간은 매일 아침 8시 ~ 저녁 8시 사이// 예약시간보다 빠를 수 없다")
-	public void timeValidationCheck(LocalDateTime bringTime) {
-		Predicate<LocalDateTime> predicate = b -> b.isAfter(LocalDateTime.now()) && b.getHour() >= 8 && b.getHour() <= 20;
-		if (!predicate.test(bringTime)) {
-			throw new UserDefineException(bringTime.toString() + "  수령시간이 올바르지 않습니다.");
-		}
-	}
-
 	@Explain("날짜별 예약횟수, 예약 매출 조회 후 저장")
 	@Scheduled(cron = "0 0 23 * * MON-FRI")
 	public void saveReservationSaleByDate() {
@@ -138,6 +130,14 @@ public class ReservationService {
 			throw new UserDefineException("예약 내역이 없습니다");
 		}
 		salesService.saveReservationSale(reservationSale);
+	}
+
+	@Explain("수령시간은 매일 아침 8시 ~ 저녁 8시 사이// 예약시간보다 빠를 수 없다")
+	public void timeValidationCheck(LocalDateTime bringTime) {
+		Predicate<LocalDateTime> predicate = b -> b.isAfter(LocalDateTime.now()) && b.getHour() >= 8 && b.getHour() <= 20;
+		if (!predicate.test(bringTime)) {
+			throw new UserDefineException(bringTime.toString() + "  수령시간이 올바르지 않습니다.");
+		}
 	}
 
 	@Explain("ReservationResponseTemp 를 ReservationResponse 로 변환")
