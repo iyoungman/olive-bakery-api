@@ -162,10 +162,5 @@ public class BreadGetService {
             logger.error(e.getMessage());
             return result;
         }
-
-
     }
-
-
-
 }

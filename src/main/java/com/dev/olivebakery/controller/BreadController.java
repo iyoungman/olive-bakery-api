@@ -74,6 +74,12 @@ public class BreadController {
         //breadService.saveImage(files);
     }
 
+    @ApiOperation("빵, 이미지 같이 저장 모델 명세")
+    @PostMapping("/test")
+    public void saveBreadAndImageTest( BreadDto.BreadSave breadSave) {
+
+    }
+
     @ApiOperation("빵 이름 수정")
     @PutMapping(value = "/name")
     public void updateBreadName(@RequestBody BreadDto.BreadUpdateName bread){
