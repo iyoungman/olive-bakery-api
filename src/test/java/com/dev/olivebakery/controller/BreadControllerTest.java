@@ -32,20 +32,20 @@ public class BreadControllerTest {
 
     @Before
     public void setup() {
-        List<BreadDto.BreadIngredient> breadIngredientList = new ArrayList<>();
-        BreadDto.BreadIngredient ingredient = BreadDto.BreadIngredient.builder().name("밀가루").origin("한국").build();
-
-        breadIngredientList.add(ingredient);
-
-        breadDto = BreadDto.BreadSave.builder()
-                .name("치아바타")
-                .price(10000)
-                .description("맛있는 빵")
-                .detailDescription("자세한 맛있는 빵")
-                .ingredientsList(breadIngredientList).build();
-
-        Bread bread = Bread.builder().name("치아바타").build();
-        breadRepository.save(bread);
+//        List<BreadDto.BreadIngredient> breadIngredientList = new ArrayList<>();
+//        BreadDto.BreadIngredient ingredient = BreadDto.BreadIngredient.builder().name("밀가루").origin("한국").build();
+//
+//        breadIngredientList.add(ingredient);
+//
+//        breadDto = BreadDto.BreadSave.builder()
+//                .name("치아바타")
+//                .price(10000)
+//                .description("맛있는 빵")
+//                .detailDescription("자세한 맛있는 빵")
+//                .ingredientsList(breadIngredientList).build();
+//
+//        Bread bread = Bread.builder().name("치아바타").build();
+//        breadRepository.save(bread);
     }
 
     @Test

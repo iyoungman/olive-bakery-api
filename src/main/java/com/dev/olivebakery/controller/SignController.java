@@ -6,6 +6,7 @@ import com.dev.olivebakery.service.SignService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,10 +25,16 @@ public class SignController {
         this.signService = signService;
     }
 
-    @ApiOperation("회원가입")
-    @PostMapping("/signup")
-    public String signUp(@RequestBody SignDto.SignUp signupDto){
+    @ApiOperation("관리자 회원가입")
+    @PostMapping("/admin")
+    public String signUpAdmin(@RequestBody SignDto.SignUp signupDto){
         return signService.signUp(signupDto, MemberRole.CLIENT.name());
+    }
+
+    @ApiOperation("일반 회원가입")
+    @PostMapping("/client")
+    public String signUpClient(@RequestBody SignDto.SignUp signupDto){
+        return signService.signUp(signupDto, MemberRole.ADMIN.name());
     }
 
     @ApiOperation("로그인")
@@ -50,7 +57,7 @@ public class SignController {
 
     // TODO
     @ApiOperation("회원정보 조회")
-    @GetMapping("/userId/{userId}")
+    @GetMapping("/userId/{userId:.+}")
     public SignDto.MemberDto getMember(@PathVariable String userId){
         return signService.getMemberInfo(userId);
     }
@@ -60,21 +67,4 @@ public class SignController {
     public List<SignDto.MemberDto> getWholeMembers(){
         return signService.getMembersInfo();
     }
-
-
-    /*public AuthTokenDto login(@RequestBody AuthRequestDto authRequestDto, HttpSession session){
-        String username = authRequestDto.getUsername();
-        String password = authRequestDto.getPassword();
-
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
-        Authentication authentication = authenticationManager.authenticate(token);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
-                SecurityContextHolder.getContext());
-
-        Member member = loginService.getMemberById(username);
-        return new AuthTokenDto(member.getId(), member.getRole(), session.getId());
-
-    }
-*/
 }
