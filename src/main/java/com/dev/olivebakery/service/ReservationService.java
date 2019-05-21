@@ -122,6 +122,7 @@ public class ReservationService {
 	@Explain("수령시간은 매일 아침 8시 ~ 저녁 8시 사이// 예약시간보다 빠를 수 없다")
 	public void timeValidationCheck(LocalDateTime bringTime) {
 		Predicate<LocalDateTime> predicate = b -> b.isAfter(LocalDateTime.now()) && b.getHour() >= 8 && b.getHour() <= 20;
+
 		if (!predicate.test(bringTime)) {
 			throw new UserDefineException(bringTime.toString() + "  수령시간이 올바르지 않습니다.");
 		}
@@ -175,14 +176,17 @@ public class ReservationService {
 			reservationRespons.add(ReservationResponse.of(reservationResponseTemps.get(reservationResponseTemps.indexOf(reservationResponseTemp) - 1),
 					reservationBreads));
 
+
 			reservationId = reservationResponseTemp.getReservationId();
 			reservationBreads = new ArrayList<>();
 			reservationBreads.add(ReservationBread.of(reservationResponseTemp));
 
 			if (reservationResponseTemps.indexOf(reservationResponseTemp) == reservationResponseTemps.size() - 1) {
+
 				reservationRespons.add(ReservationResponse.of(reservationResponseTemps.get(reservationResponseTemps.indexOf(reservationResponseTemp)),
 						reservationBreads)
 				);
+
 			}
 		}
 		return reservationRespons;
