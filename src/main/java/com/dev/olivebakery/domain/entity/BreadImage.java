@@ -34,7 +34,7 @@ public class BreadImage {
     @NotNull
     private String imageUrl;
 
-    private Boolean current = false;
+    private Boolean current ;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "bread_id")

@@ -3,6 +3,8 @@ package com.dev.olivebakery.domain.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,7 +22,6 @@ public class Ingredients {
 
     private String origin;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "bread_id")
-    private Bread bread;
+    @ManyToMany(mappedBy = "ingredientsList")
+    private List<Bread> breads = new ArrayList<>();
 }

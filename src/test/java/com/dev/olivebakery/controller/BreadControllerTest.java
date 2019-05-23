@@ -3,6 +3,8 @@ package com.dev.olivebakery.controller;
 import com.dev.olivebakery.domain.dto.BreadDto;
 import com.dev.olivebakery.domain.entity.Bread;
 import com.dev.olivebakery.repository.BreadRepository;
+import com.dev.olivebakery.repository.IngredientsRepository;
+import com.dev.olivebakery.service.breadService.BreadGetService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +16,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -25,6 +30,12 @@ public class BreadControllerTest {
 
     @Autowired
     private BreadRepository breadRepository;
+
+    @Autowired
+    private BreadGetService breadGetService;
+
+    @Autowired
+    private IngredientsRepository ingredientsRepository;
 
     BreadDto.BreadSave breadDto;
 
@@ -59,6 +70,22 @@ public class BreadControllerTest {
 //            .content(mapper.writeValueAsString(breadDto))
 //            .contentType(MediaType.APPLICATION_JSON.getType())
 //            .andExpect(state().))
+    }
+
+    @Test
+    public void getBreadAll() {
+//        assertThat(breadRepository.findAllByDeleteFlagIsFalse().size()).isEqualTo(3);
+        List<Bread> breadList = breadRepository.findAllByDeleteFlagIsFalse();
+
+//        breadGetService.
+    }
+
+    @Test
+    public void deleteIngredients() {
+
+        Bread bread = breadRepository.findByName("마늘빵").get();
+
+//        ingredientsRepository.deleteAllByBread(bread);
     }
 
 }

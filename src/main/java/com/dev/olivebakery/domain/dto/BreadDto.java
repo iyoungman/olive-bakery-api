@@ -47,6 +47,7 @@ public class BreadDto {
         private Boolean isSoldOut;
         private BreadState breadState;
         private BreadImageDto breadImage;
+        private List<BreadIngredient> breadIngredientList;
     }
 
     @Getter
@@ -58,7 +59,7 @@ public class BreadDto {
         private int price;
         private String picture;
         private String detailDescription;
-        private List<BreadIngredient> ingredientsList = new ArrayList<>();
+        private List<BreadIngredient> ingredientsList;
         private Boolean isSoldOut;
         private BreadState breadState;
     }
@@ -73,8 +74,8 @@ public class BreadDto {
 //        private MultipartFile breadImage;
         private String description;
         private String detailDescription;
-        private List<BreadIngredient> ingredientsList = new ArrayList<>();
-        private List<DayType> dayTypes = new ArrayList<>();
+        private List<BreadIngredient> ingredientsList;
+        private List<DayType> dayTypes;
     }
 
     @Getter
@@ -95,7 +96,7 @@ public class BreadDto {
         private int price;
         private String description;
         private String detailDescription;
-        private List<BreadIngredient> ingredientsList = new ArrayList<>();
+        private List<BreadIngredient> ingredientsList;
     }
 
     @Getter
@@ -122,7 +123,7 @@ public class BreadDto {
     @AllArgsConstructor
     public static class BreadUpdateIngredients {
         private String name;
-        private List<BreadIngredient> ingredientsList = new ArrayList<>();
+        private List<BreadIngredient> ingredientsList;
 
 
     }

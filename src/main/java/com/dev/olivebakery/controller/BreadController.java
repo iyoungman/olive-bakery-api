@@ -136,8 +136,8 @@ public class BreadController {
                 .body(breadGetService.getImageResource(image));
     }
 
-    @ApiOperation("빵 성분 추가")
-    @PutMapping("/ingredient/add")
+    @ApiOperation("빵 정보에 성분 추가")
+    @PutMapping("/ingredients/add")
     public void addIngredient(@RequestBody BreadDto.BreadUpdateIngredients breadUpdateIngredients){
 
         logger.info(breadUpdateIngredients.getIngredientsList().get(0).getName());
@@ -145,8 +145,8 @@ public class BreadController {
         breadUpdateService.addBreadIngredients(breadUpdateIngredients);
     }
 
-    @ApiOperation("빵 성분 삭제")
-    @DeleteMapping("/ingredient/delete")
+    @ApiOperation("빵 정보에 성분 삭제")
+    @DeleteMapping("/ingredients/delete")
     public void deleteIngredient(@RequestBody BreadDto.BreadUpdateIngredients breadUpdateIngredients){
 
         logger.info(breadUpdateIngredients.getIngredientsList().get(0).getName());

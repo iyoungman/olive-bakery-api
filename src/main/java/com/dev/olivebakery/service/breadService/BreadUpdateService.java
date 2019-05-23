@@ -56,9 +56,9 @@ public class BreadUpdateService {
     }
 
     public void updateIngredients(List<BreadDto.BreadIngredient> breadIngredients, Bread bread) {
-        ingredientsRepository.deleteAllByBread(bread);
+//        ingredientsRepository.deleteAllByBread(bread);
 
-        breadSaveService.saveIngredients(breadIngredients, bread);
+        //breadSaveService.saveIngredients(breadIngredients, bread);
     }
 
     public void updateBreadImage(MultipartFile image, String breadname) throws IOException {
@@ -90,7 +90,7 @@ public class BreadUpdateService {
         log.info("find bread name : " + breadUpdateIngredients.getName());
         Bread bread = breadRepository.findByName(breadUpdateIngredients.getName()).get();
 
-        bread.getIngredients().forEach(oldIngredients -> {
+        bread.getIngredientsList().forEach(oldIngredients -> {
             breadUpdateIngredients.getIngredientsList().forEach(newIngredients -> {
                 if(oldIngredients.getName().equals(newIngredients.getName()) && oldIngredients.getOrigin().equals(newIngredients.getOrigin())){
                     throw new UserDefineException("이미 성분: " + newIngredients.getName() + "  원산지 : " + newIngredients.getOrigin() + " 이(가)존재합니다.");
@@ -99,13 +99,16 @@ public class BreadUpdateService {
         });
 
         breadUpdateIngredients.getIngredientsList().forEach(newIngredientDto -> {
-            Ingredients newIngredients = Ingredients.builder().bread(bread)
-                    .name(newIngredientDto.getName())
-                    .origin(newIngredientDto.getOrigin())
-                    .build();
-
-            ingredientsRepository.save(newIngredients);
+//            Ingredients newIngredients = Ingredients.builder().bread(bread)
+//                    .name(newIngredientDto.getName())
+//                    .origin(newIngredientDto.getOrigin())
+//                    .build();
+            Ingredients newIngredients = ingredientsRepository.findByNameAndOrigin(newIngredientDto.getName(), newIngredientDto.getOrigin());
+//            ingredientsRepository.save(newIngredients);
+            bread.addBreadIngredients(newIngredients);
         });
+
+        breadRepository.save(bread);
     }
 
     public void deleteBreadIngredients(BreadDto.BreadUpdateIngredients breadUpdateIngredients){
@@ -113,7 +116,7 @@ public class BreadUpdateService {
         Bread bread = breadRepository.findByName(breadUpdateIngredients.getName()).get();
 
 
-        bread.getIngredients().forEach(oldIngredients -> {
+        bread.getIngredientsList().forEach(oldIngredients -> {
             breadUpdateIngredients.getIngredientsList().forEach(deleteIngredients -> {
                 if(oldIngredients.getName().equals(deleteIngredients.getName()) && oldIngredients.getOrigin().equals(deleteIngredients.getOrigin())){
                     deleteIngredients.setExist(true);
@@ -128,7 +131,11 @@ public class BreadUpdateService {
         });
 
         breadUpdateIngredients.getIngredientsList().forEach(deleteIngredientDto -> {
-            ingredientsRepository.deleteIngredientsByBread(bread, deleteIngredientDto.getName(), deleteIngredientDto.getOrigin());
+//            ingredientsRepository.deleteIngredientsByBread(bread, deleteIngredientDto.getName(), deleteIngredientDto.getOrigin());
+            Ingredients deleteIngredients = ingredientsRepository.findByNameAndOrigin(deleteIngredientDto.getName(), deleteIngredientDto.getOrigin());
+            bread.deleteBreadIngredients(deleteIngredients);
         });
+
+        breadRepository.save(bread);
     }
 }

@@ -59,11 +59,10 @@ public class BreadSaveService {
 
         breadRepository.save(bread);
 
-        saveIngredients(breadSave.getIngredientsList(), bread);
+        //saveIngredients(breadSave.getIngredientsList(), bread);
         saveDays(breadSave.getDayTypes(), bread);
 
         saveImage(image, bread);
-
     }
 
     private Bread breadSaveDto2Bread(BreadDto.BreadSave breadSave){
@@ -72,21 +71,27 @@ public class BreadSaveService {
                 .price(breadSave.getPrice())
                 .description(breadSave.getDescription())
                 .detailDescription(breadSave.getDetailDescription())
+                .ingredientsList(getIngredientsListFromIngredientsDtoList(breadSave.getIngredientsList()))
                 .isSoldOut(false)
                 .deleteFlag(false)
                 .build();
     }
 
-    public void saveIngredients(List<BreadDto.BreadIngredient> breadIngredients, Bread bread) {
-        breadIngredients.forEach(breadIngredient -> {
-            Ingredients ingredients = Ingredients.builder()
-                    .bread(bread)
-                    .name(breadIngredient.getName())
-                    .origin(breadIngredient.getOrigin())
-                    .build();
+    public List<Ingredients> getIngredientsListFromIngredientsDtoList(List<BreadDto.BreadIngredient> breadIngredientsList) {
+        List<Ingredients> ingredientsList = new ArrayList<>();
+        breadIngredientsList.forEach(breadIngredients -> {
+//            Ingredients ingredients = Ingredients.builder()
+//                    .name(breadIngredient.getName())
+//                    .origin(breadIngredient.getOrigin())
+//                    .build();
 
-            ingredientsRepository.save(ingredients);
+
+            Ingredients ingredients = ingredientsRepository.findByNameAndOrigin(breadIngredients.getName(), breadIngredients.getOrigin());
+            ingredientsList.add(ingredients);
+//            ingredientsRepository.save(ingredients);
         });
+
+        return ingredientsList;
     }
 
     public void saveDays(List<DayType> daysTypes, Bread bread){
