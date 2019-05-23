@@ -48,11 +48,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                     .antMatchers(HttpMethod.POST, "/olive/sign/client").permitAll()
-//                    .mvcMatchers( HttpMethod.POST,"/olive/sign/client").permitAll()
+                    .antMatchers( HttpMethod.POST,"/olive/sign").permitAll()
                     .antMatchers("/olive/sign/admin").hasRole(MemberRole.ADMIN.name())
                     .antMatchers(HttpMethod.PUT,"/olive/sign").hasRole(MemberRole.CLIENT.name())
                     .antMatchers(HttpMethod.DELETE,"/olive/sign").hasRole(MemberRole.CLIENT.name())
-                    .antMatchers("**/swagger-ui.html/**").anonymous()
 
                 //TODO("여기에 위 방식처럼 제한하고 싶은 url들 제한좀 해줘")
                     .anyRequest().authenticated()
@@ -75,7 +74,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         web.ignoring()
-                .antMatchers("/swagger-ui.html");
+                .antMatchers(HttpMethod.POST, "/olive/sign/client")
+                .antMatchers(HttpMethod.POST, "/olive/sign")
+                .antMatchers("/v2/api-docs", "/configuration/ui",
+                                "/swagger-resources", "/configuration/security",
+                                "/swagger-ui.html", "/webjars/**","/swagger/**");
     }
 
     @Bean
