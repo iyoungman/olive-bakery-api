@@ -32,7 +32,7 @@ public class Bread {
     private Integer price;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bread", fetch = FetchType.LAZY)
-    private List<BreadImage> breadImages = new ArrayList<>();
+    private List<BreadImage> breadImages;
 
     //상세정보가 아닌 간단한 소개(리스트에서 보내줄 것)
     private String description;
@@ -48,8 +48,13 @@ public class Bread {
     private BreadState state = BreadState.NEW;
 
     // 어떤 재료가 들어가며 재료의 원산지 표기
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bread", fetch = FetchType.LAZY)
-    private List<Ingredients> ingredients = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "bread_ingredients",
+            joinColumns = @JoinColumn(name = "bread_id"),
+            inverseJoinColumns = @JoinColumn(name = "ingredients_id")
+    )
+    private List<Ingredients> ingredientsList = new ArrayList<>();
 
     // 삭제 여부
     private Boolean deleteFlag;
@@ -61,7 +66,6 @@ public class Bread {
     // 빵이 매진인지. soldout의 날짜가 오늘이면 매진
 //    @OneToOne(fetch = FetchType.EAGER,mappedBy = "bread")
 //    private SoldOut soldOut;
-
 
 
     public void updateName(String newName){
@@ -93,6 +97,10 @@ public class Bread {
     }
 
     public void addBreadIngredients(Ingredients ingredients) {
-        this.ingredients.add(ingredients);
+        this.ingredientsList.add(ingredients);
+    }
+
+    public void deleteBreadIngredients(Ingredients ingredients){
+        this.ingredientsList.remove(ingredients);
     }
 }

@@ -41,8 +41,6 @@ public class BreadGetService {
     private BreadImageRepository breadImageRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(BreadGetService.class);
-    //private static final String IMAGE_PATH = "C:\\Users\\Kimyunsang\\Desktop\\spring\\imageTest\\";
-
 
     private static final String IMAGE_PATH_KEY = "resources.image-locations";
     @Autowired
@@ -56,7 +54,9 @@ public class BreadGetService {
 
     public List<BreadDto.BreadGetAll> getAllBread(){
 
-        List<Bread> breads = breadRepository.findAll();
+        List<Bread> breads = breadRepository.findAllByDeleteFlagIsFalse();
+
+        logger.info(environment.getProperty("datasource.url"));
 
         return breads2BreadGetAll(breads);
     }
@@ -78,12 +78,12 @@ public class BreadGetService {
     }
 
     // bread 엔티티 -> breadGetAll Dto
-    private List<BreadDto.BreadGetAll> breads2BreadGetAll(List<Bread> breads) {
-        List<BreadDto.BreadGetAll> breadGetAlls = new ArrayList<>();
+    public List<BreadDto.BreadGetAll> breads2BreadGetAll(List<Bread> breads) {
+        List<BreadDto.BreadGetAll> breadGetAll = new ArrayList<>();
 
         breads.forEach(bread -> {
             try {
-                breadGetAlls.add(
+                breadGetAll.add(
                         BreadDto.BreadGetAll.builder()
                                 .name(bread.getName())
                                 .price(bread.getPrice())
@@ -91,17 +91,17 @@ public class BreadGetService {
                                 .isSoldOut(bread.getIsSoldOut())
                                 .breadState(bread.getState())
                                 .breadImage(getImageDto(bread))
+                                .breadIngredientList(ingredientList2Dto(bread.getIngredientsList()))
                                 .build());
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
 
-        return breadGetAlls;
+        return breadGetAll;
     }
 
-    private void image2URL(String filePath) throws IOException {
+  /*  private void image2URL(String filePath) throws IOException {
         URL url = new URL(filePath);
         HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
         httpURLConnection.setRequestMethod("HEAD");
@@ -114,7 +114,7 @@ public class BreadGetService {
         String encodedString = Base64.getEncoder().encodeToString(fileContent);
 
         return encodedString;
-    }
+    }*/
 
     private BreadDto.BreadImageDto getImageDto(Bread bread) throws IOException{
         BreadImage breadImage = breadImageRepository.findByBread(bread).get();
@@ -126,7 +126,7 @@ public class BreadGetService {
                 .contentType(breadImage.getImageType())
                 .volume(breadImage.getImageSize())
                 .imageUrl(breadImage.getImageUrl())
-                .encoded(image2Base64(breadImage.getImagePath()))
+                //.encoded(image2Base64(breadImage.getImagePath()))
                 .build();
     }
 
@@ -135,7 +135,7 @@ public class BreadGetService {
         Bread bread = breadRepository.findByName(name)
                 .orElseThrow(() -> new UserDefineException(name + "이란 빵은 존재하지 않습니다."));
 
-        List<BreadDto.BreadIngredient> breadIngredientList = ingredientList2Dto(bread.getIngredients());
+        List<BreadDto.BreadIngredient> breadIngredientList = ingredientList2Dto(bread.getIngredientsList());
 
         return BreadDto.BreadGetDetail.builder()
                 .name(bread.getName())
