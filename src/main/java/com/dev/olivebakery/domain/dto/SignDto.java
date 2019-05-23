@@ -4,6 +4,7 @@ import com.dev.olivebakery.domain.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 public class SignDto {
 
@@ -14,7 +15,7 @@ public class SignDto {
         private String pw;
     }
 
-    @Getter
+    @Getter @Setter
     @NoArgsConstructor
     public static class SignUp {
         private String email;
