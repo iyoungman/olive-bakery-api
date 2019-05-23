@@ -6,7 +6,6 @@ import com.dev.olivebakery.service.SignService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -28,13 +27,13 @@ public class SignController {
     @ApiOperation("관리자 회원가입")
     @PostMapping("/admin")
     public String signUpAdmin(@RequestBody SignDto.SignUp signupDto){
-        return signService.signUp(signupDto, MemberRole.CLIENT.name());
+        return signService.signUp(signupDto, MemberRole.ADMIN.name());
     }
 
     @ApiOperation("일반 회원가입")
     @PostMapping("/client")
     public String signUpClient(@RequestBody SignDto.SignUp signupDto){
-        return signService.signUp(signupDto, MemberRole.ADMIN.name());
+        return signService.signUp(signupDto, MemberRole.CLIENT.name());
     }
 
     @ApiOperation("로그인")
@@ -55,7 +54,6 @@ public class SignController {
         signService.delete(signInDto);
     }
 
-    // TODO
     @ApiOperation("회원정보 조회")
     @GetMapping("/userId/{userId:.+}")
     public SignDto.MemberDto getMember(@PathVariable String userId){

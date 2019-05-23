@@ -57,5 +57,14 @@ public class SignDto {
             this.phoneNumber = phoneNumber;
             this.stamp = stamp;
         }
+
+        public Member toEntity(){
+            return Member.builder()
+                    .email(email)
+                    .name(name)
+                    .phoneNumber(phoneNumber)
+                    .stamp(stamp)
+                    .build();
+        }
     }
 }

@@ -1,6 +1,9 @@
 package com.dev.olivebakery.security;
 
+import io.jsonwebtoken.JwtException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -13,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
+@Slf4j
 public class AuthenticationTokenFilter extends GenericFilterBean {
     private final JwtProvider jwtProvider;
 
@@ -22,11 +26,24 @@ public class AuthenticationTokenFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        String token = jwtProvider.resolveToken(getAsHttpRequest(servletRequest));
-        if (token != null && jwtProvider.validateToken(token)){
-            SecurityContextHolder.getContext().setAuthentication(jwtProvider.getAuthenticationByToken(token));
+        log.info("=============토큰 검사 필터 실행=============");
+        try {
+            String token = jwtProvider.resolveToken(getAsHttpRequest(servletRequest));
+            if (token != null && jwtProvider.validateToken(token)) {
+                SecurityContextHolder.getContext().setAuthentication(jwtProvider.getAuthenticationByToken(token));
+            }
+            filterChain.doFilter(servletRequest, servletResponse);
+        } catch (JwtException | IllegalArgumentException e){
+            log.error("Expired or invalid JWT token");
+             HttpServletResponse response = (HttpServletResponse) servletResponse;
+             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+             response.getWriter().write("Expired or invalid JWT token");
+        } catch (UsernameNotFoundException e){
+            log.error("User not found");
+            HttpServletResponse response = (HttpServletResponse) servletResponse;
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("User not found");
         }
-        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     private HttpServletRequest getAsHttpRequest(ServletRequest request) {

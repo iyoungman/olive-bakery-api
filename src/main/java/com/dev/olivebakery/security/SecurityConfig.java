@@ -1,8 +1,6 @@
 package com.dev.olivebakery.security;
 
-import com.dev.olivebakery.domain.entity.Member;
 import com.dev.olivebakery.domain.enums.MemberRole;
-import com.dev.olivebakery.service.SignService;
 import com.dev.olivebakery.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +15,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity

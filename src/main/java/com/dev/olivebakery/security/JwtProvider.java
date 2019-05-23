@@ -1,15 +1,13 @@
 package com.dev.olivebakery.security;
 
 import com.dev.olivebakery.domain.enums.MemberRole;
-import com.dev.olivebakery.service.SignService;
+import com.dev.olivebakery.exception.UserDefineException;
 import com.dev.olivebakery.service.UserDetailsServiceImpl;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -17,7 +15,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Component
@@ -50,7 +47,7 @@ public class JwtProvider {
                 .compact();
     }
 
-    public boolean validateToken(String token){
+    public boolean validateToken(String token) throws JwtException, IllegalArgumentException {
         Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
         return claims.getBody().getExpiration().after(new Date());
     }
@@ -68,9 +65,8 @@ public class JwtProvider {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
-    public Authentication getAuthenticationByToken(String token){
+    public Authentication getAuthenticationByToken(String token) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(getUserNameByToken(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "" , userDetails.getAuthorities());
-
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 }
