@@ -122,7 +122,7 @@ public class BreadUpdateService {
         });
 
         breadUpdateIngredients.getIngredientsList().forEach(deleteIngredientDto -> {
-            if(!deleteIngredientDto.isExist()){
+            if(!deleteIngredientDto.getExist()){
                 throw new UserDefineException("해당 성분: " + deleteIngredientDto.getName() + "  원산지 : " + deleteIngredientDto.getOrigin() + " 은(는) 존재히지 않습니다.");
             }
         });

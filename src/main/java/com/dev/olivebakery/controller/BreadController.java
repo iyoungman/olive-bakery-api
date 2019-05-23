@@ -134,7 +134,6 @@ public class BreadController {
 
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG)
                 .body(breadGetService.getImageResource(image));
-
     }
 
     @ApiOperation("빵 성분 추가")

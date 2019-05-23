@@ -3,9 +3,8 @@ package com.dev.olivebakery.domain.dto;
 
 import com.dev.olivebakery.domain.enums.BreadState;
 import com.dev.olivebakery.domain.enums.DayType;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,7 @@ public class BreadDto {
     public static class BreadIngredient{
         private String name;
         private String origin;
-        private boolean exist;
+        private Boolean exist;
     }
 
     @Getter
