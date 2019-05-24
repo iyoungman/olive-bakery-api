@@ -1,36 +1,21 @@
 package com.dev.olivebakery.controller;
 
 import com.dev.olivebakery.domain.dto.BreadDto;
-import com.dev.olivebakery.domain.entity.Bread;
-import com.dev.olivebakery.domain.enums.DayType;
 import com.dev.olivebakery.exception.UserDefineException;
-import com.dev.olivebakery.service.BreadService;
 import com.dev.olivebakery.service.breadService.BreadGetService;
 import com.dev.olivebakery.service.breadService.BreadSaveService;
 import com.dev.olivebakery.service.breadService.BreadUpdateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
