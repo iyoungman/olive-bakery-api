@@ -11,14 +11,14 @@ spring:
     username: chunso
     password: alswjd96
 
-    jpa:
-      hibernate:
-        ddl-auto: update
-      show-sql: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
-      database: mysql
-      database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-      open-in-view: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: true
 
   servlet:
     multipart:
@@ -30,7 +30,6 @@ spring:
       charset: utf-8
       enabled: true
       force: true
-
 
 resources:
   image-locations: /home/ec2-user/img/
@@ -87,5 +86,15 @@ logging:
 server:
   port: 8080
 
-
-
+#  ---
+#  spring:
+#    profiles: test
+#    jpa:
+#      hibernate:
+#        ddl-auto: update
+#      show-sql: true
+#    h2:
+#      console:
+#        enabled: true
+#  server:
+#    port: 8095
