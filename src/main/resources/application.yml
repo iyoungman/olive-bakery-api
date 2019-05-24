@@ -42,15 +42,3 @@ logging:
 server:
   port: 8080
 
----
-spring:
-  profiles: test
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-  h2:
-    console:
-      enabled: true
-server:
-  port: 8095
