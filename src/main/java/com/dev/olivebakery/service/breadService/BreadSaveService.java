@@ -11,6 +11,8 @@ import com.dev.olivebakery.repository.BreadRepository;
 import com.dev.olivebakery.repository.DaysRepository;
 import com.dev.olivebakery.repository.IngredientsRepository;
 import lombok.extern.java.Log;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -27,7 +29,11 @@ import java.util.List;
 @Log
 public class BreadSaveService {
 
-    private static final String IMAGE_PATH = "C:\\Users\\Kimyunsang\\Desktop\\spring\\imageTest\\";
+    //private static final String IMAGE_PATH = "C:\\Users\\Kimyunsang\\Desktop\\spring\\imageTest\\";
+
+    private static final String IMAGE_PATH_KEY = "resources.image-locations";
+    @Autowired
+    private Environment environment;
 
     private final BreadRepository breadRepository;
     private final IngredientsRepository ingredientsRepository;
@@ -53,11 +59,10 @@ public class BreadSaveService {
 
         breadRepository.save(bread);
 
-        saveIngredients(breadSave.getIngredientsList(), bread);
+        //saveIngredients(breadSave.getIngredientsList(), bread);
         saveDays(breadSave.getDayTypes(), bread);
 
         saveImage(image, bread);
-
     }
 
     private Bread breadSaveDto2Bread(BreadDto.BreadSave breadSave){
@@ -66,21 +71,27 @@ public class BreadSaveService {
                 .price(breadSave.getPrice())
                 .description(breadSave.getDescription())
                 .detailDescription(breadSave.getDetailDescription())
+                .ingredientsList(getIngredientsListFromIngredientsDtoList(breadSave.getIngredientsList()))
                 .isSoldOut(false)
                 .deleteFlag(false)
                 .build();
     }
 
-    public void saveIngredients(List<BreadDto.BreadIngredient> breadIngredients, Bread bread) {
-        breadIngredients.forEach(breadIngredient -> {
-            Ingredients ingredients = Ingredients.builder()
-                    .bread(bread)
-                    .name(breadIngredient.getName())
-                    .origin(breadIngredient.getOrigin())
-                    .build();
+    public List<Ingredients> getIngredientsListFromIngredientsDtoList(List<BreadDto.BreadIngredient> breadIngredientsList) {
+        List<Ingredients> ingredientsList = new ArrayList<>();
+        breadIngredientsList.forEach(breadIngredients -> {
+//            Ingredients ingredients = Ingredients.builder()
+//                    .name(breadIngredient.getName())
+//                    .origin(breadIngredient.getOrigin())
+//                    .build();
 
-            ingredientsRepository.save(ingredients);
+
+            Ingredients ingredients = ingredientsRepository.findByNameAndOrigin(breadIngredients.getName(), breadIngredients.getOrigin());
+            ingredientsList.add(ingredients);
+//            ingredientsRepository.save(ingredients);
         });
+
+        return ingredientsList;
     }
 
     public void saveDays(List<DayType> daysTypes, Bread bread){
@@ -97,12 +108,12 @@ public class BreadSaveService {
     public BreadImage saveImage(MultipartFile imageFile, Bread bread) throws IOException {
 
         String fileName = imageFile.getOriginalFilename();
-        File destinationFile = new File(IMAGE_PATH+ File.separator + fileName);
+        File destinationFile = new File(environment.getProperty(IMAGE_PATH_KEY)+ File.separator + fileName);
 
         imageFile.transferTo(destinationFile);
 
         String imageUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/olive/image/" + fileName)
+                .path("/olive/bread/image/" + fileName)
                 .toUriString();
 
         BreadImage breadImage = BreadImage.builder()
@@ -110,7 +121,7 @@ public class BreadSaveService {
                 .imageSize(imageFile.getSize())
                 .imageType(imageFile.getContentType())
                 .imageUrl(imageUrl)
-                .imagePath(IMAGE_PATH + fileName)
+                .imagePath(environment.getProperty(IMAGE_PATH_KEY) + fileName)
                 .current(true)
                 .bread(bread)
                 .build();

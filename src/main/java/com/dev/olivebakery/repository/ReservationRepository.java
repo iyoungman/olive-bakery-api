@@ -24,6 +24,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 			"join reservationinfos.bread bread " +
 			"where memeber.email = :email and reservation.reservationType = :reservationType " +
 			"order by reservation.reservationId desc")
+
 	List<ReservationDto.ReservationResponseTemp> getReservationInfos(@Param("email") String email, @Param("reservationType") ReservationType reservationType);
 
 
@@ -35,6 +36,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 			"join reservationinfos.bread bread " +
 			"where reservation.reservationId = (select max(reservation.reservationId) from Reservation reservation join reservation.member mem where mem.email = :email) " +
 			"order by reservation.reservationId desc")
+
 	List<ReservationDto.ReservationResponseTemp> getReservationInfoByRecently(@Param("email") String email);
 
 
@@ -44,8 +46,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 			"join reservation.member memeber " +
 			"join reservation.reservationInfos reservationinfos " +
 			"join reservationinfos.bread bread " +
+
 			"where reservation.reservationType = :reservationType and reservation.reservationTime > :startDate and reservation.reservationTime < :endDate " +
 			"order by reservation.reservationId desc")
+
 	List<ReservationDto.ReservationResponseTemp> getReservationInfosByDate(@Param("reservationType") ReservationType reservationType, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
 
