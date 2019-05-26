@@ -1,8 +1,6 @@
 package com.dev.olivebakery.security;
 
-import com.dev.olivebakery.domain.entity.Member;
 import com.dev.olivebakery.domain.enums.MemberRole;
-import com.dev.olivebakery.service.SignService;
 import com.dev.olivebakery.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +15,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -39,20 +36,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .httpBasic().disable()
-//                .csrf().disable()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .httpBasic().disable()
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 //                .and()
 //                .authorizeRequests()
 //                    .antMatchers(HttpMethod.POST, "/olive/sign/client").permitAll()
-////                    .mvcMatchers( HttpMethod.POST,"/olive/sign/client").permitAll()
+//                    .antMatchers( HttpMethod.POST,"/olive/sign").permitAll()
 //                    .antMatchers("/olive/sign/admin").hasRole(MemberRole.ADMIN.name())
 //                    .antMatchers(HttpMethod.PUT,"/olive/sign").hasRole(MemberRole.CLIENT.name())
 //                    .antMatchers(HttpMethod.DELETE,"/olive/sign").hasRole(MemberRole.CLIENT.name())
-//                    .antMatchers("**/swagger-ui.html/**").anonymous()
 //
 //                //TODO("여기에 위 방식처럼 제한하고 싶은 url들 제한좀 해줘")
 //                    .anyRequest().authenticated()
@@ -61,8 +57,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .and()
 //                    .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
 //                    .logout().logoutUrl("/olive/logout").logoutSuccessHandler(logoutSuccessHandlerCustom)
-//        ;
-//    }
+        ;
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -75,8 +71,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         web.ignoring()
-                .antMatchers("/swagger-ui.html")
-                .antMatchers("/**");
+                .antMatchers(HttpMethod.POST, "/olive/sign/client")
+                .antMatchers(HttpMethod.POST, "/olive/sign")
+                .antMatchers("/v2/api-docs", "/configuration/ui",
+                                "/swagger-resources", "/configuration/security",
+                                "/swagger-ui.html", "/webjars/**","/swagger/**");
     }
 
     @Bean
