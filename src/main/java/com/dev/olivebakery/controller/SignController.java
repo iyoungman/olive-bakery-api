@@ -55,7 +55,7 @@ public class SignController {
     }
 
     @ApiOperation("회원정보 조회")
-    @GetMapping("/userId/{userId:.+}")
+    @GetMapping("/userId/{userId:.+}/")
     public SignDto.MemberDto getMember(@PathVariable String userId){
         return signService.getMemberInfo(userId);
     }
@@ -65,4 +65,5 @@ public class SignController {
     public List<SignDto.MemberDto> getWholeMembers(){
         return signService.getMembersInfo();
     }
+
 }
