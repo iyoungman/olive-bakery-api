@@ -56,7 +56,9 @@ public class BreadGetService {
 
         List<Bread> breads = breadRepository.findAllByDeleteFlagIsFalse();
 
-        logger.info(environment.getProperty("datasource.url"));
+        if(breads.size() <= 0){
+            throw new UserDefineException("등록 된 빵이 없습니다 !!!");
+        }
 
         return breads2BreadGetAll(breads);
     }
@@ -73,6 +75,10 @@ public class BreadGetService {
                 breads.add(day.getBread());
             }
         });
+
+        if( breads.size()  <= 0 ){
+            throw new UserDefineException("해당 요일의 빵이 존재하지 않습니다.");
+        }
 
         return breads2BreadGetAll(breads);
     }
@@ -126,7 +132,6 @@ public class BreadGetService {
                 .contentType(breadImage.getImageType())
                 .volume(breadImage.getImageSize())
                 .imageUrl(breadImage.getImageUrl())
-                //.encoded(image2Base64(breadImage.getImagePath()))
                 .build();
     }
 
@@ -164,9 +169,10 @@ public class BreadGetService {
 
     public byte[] getImageResource(String image) throws IOException {
 
+        BreadImage breadImage = breadImageRepository.findByBread(breadRepository.findByName(image).get()).get();
         byte[] result = null;
         try {
-            File file = new File(environment.getProperty(IMAGE_PATH_KEY) + image + ".jpg");
+            File file = new File(breadImage.getImagePath());
 
             InputStream in = new FileInputStream(file);
 
@@ -175,7 +181,7 @@ public class BreadGetService {
             return result;
         } catch (IOException e){
             logger.error(e.getMessage());
-            return result;
+            return null;
         }
     }
 }

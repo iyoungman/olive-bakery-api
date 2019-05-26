@@ -1,24 +1,24 @@
 spring:
   profiles:
-    active: dev
+    active: test
 ---
 
 spring:
   profiles: dev
 
   datasource:
-    url: jdbc:mysql://chunsodb.c04b2rx0gbkh.ap-northeast-2.rds.amazonaws.com:3306/olive_bakery?useSSL=false&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://chunsodb.c04b2rx0gbkh.ap-northeast-2.rds.amazonaws.com:3306/olive_bakery2?useSSL=false&serverTimezone=Asia/Seoul
     username: chunso
     password: alswjd96
 
-    jpa:
-      hibernate:
-        ddl-auto: update
-      show-sql: true
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
 
-      database: mysql
-      database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-      open-in-view: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: true
 
   servlet:
     multipart:
@@ -64,6 +64,8 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     open-in-view: true
+
+
 
   servlet:
     multipart:
