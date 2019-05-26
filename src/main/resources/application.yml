@@ -63,6 +63,8 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     open-in-view: true
 
+
+
   servlet:
     multipart:
       max-file-size: 1MB

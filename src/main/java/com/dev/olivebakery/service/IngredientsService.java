@@ -15,31 +15,35 @@ public class IngredientsService {
 
     private final IngredientsRepository ingredientsRepository;
 
-    public void saveIngredients(BreadDto.BreadIngredient ingredientsDto) {
+    public Ingredients saveIngredients(BreadDto.BreadIngredient ingredientsDto) {
         Ingredients newIngredients = Ingredients.builder().name(ingredientsDto.getName()).origin(ingredientsDto.getOrigin()).build();
 
-        ingredientsRepository.save(newIngredients);
+        return ingredientsRepository.save(newIngredients);
     }
 
-    public void saveIngredientsList(List<BreadDto.BreadIngredient> ingredientsList) {      //
+    public List<Ingredients> saveIngredientsList(List<BreadDto.BreadIngredient> ingredientsDtoList) {      //
 
-        ingredientsList.forEach(ingredientDto -> {
+        List<Ingredients> ingredientsList = new ArrayList<>();
+        ingredientsDtoList.forEach(ingredientDto -> {
             Ingredients newIngredients = Ingredients.builder().name(ingredientDto.getName()).origin(ingredientDto.getOrigin()).build();
-            ingredientsRepository.save(newIngredients);
+            ingredientsList.add(ingredientsRepository.save(newIngredients));
         });
+
+        return ingredientsList;
     }
 
-    public void deleteIngredients(BreadDto.BreadIngredient ingredientsDto) {
-        Ingredients deleteIngredients = Ingredients.builder().name(ingredientsDto.getName()).origin(ingredientsDto.getOrigin()).build();
+    public Ingredients deleteIngredients(BreadDto.BreadIngredient ingredientsDto) {
+        Ingredients deleteIngredients = ingredientsRepository.findByNameAndOrigin(ingredientsDto.getName(), ingredientsDto.getOrigin());
 
         ingredientsRepository.delete(deleteIngredients);
+
+        return deleteIngredients;
     }
 
     public List<BreadDto.BreadIngredient> getIngredientsList(){
         List<Ingredients> ingredientsList = ingredientsRepository.findAll();
 
         return ingredientListToIngredientsDtoList(ingredientsList);
-
     }
 
     private List<BreadDto.BreadIngredient> ingredientListToIngredientsDtoList(List<Ingredients> ingredientsList){

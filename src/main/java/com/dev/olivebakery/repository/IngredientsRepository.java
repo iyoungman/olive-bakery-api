@@ -23,6 +23,10 @@ public interface IngredientsRepository extends JpaRepository<Ingredients, Long> 
 
     Ingredients findByNameAndOrigin(String name, String origin);
 
+    @Transactional
+    @Modifying
+    void deleteIngredientsByNameAndOrigin(String name, String origin);
+
     @Override
     List<Ingredients> findAll();
 }

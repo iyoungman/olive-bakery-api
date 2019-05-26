@@ -2,6 +2,7 @@ package com.dev.olivebakery.domain.entity;
 
 import com.dev.olivebakery.domain.enums.BreadState;
 import com.dev.olivebakery.domain.enums.DayType;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,13 +27,12 @@ public class Bread {
     @Column(name = "bread_id")
     private Long breadId;
 
-    @Column(unique = true)
     private String name;
 
     private Integer price;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bread", fetch = FetchType.LAZY)
-    private List<BreadImage> breadImages;
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bread", fetch = FetchType.LAZY)
+//    private List<BreadImage> breadImages;
 
     //상세정보가 아닌 간단한 소개(리스트에서 보내줄 것)
     private String description;
@@ -48,7 +48,8 @@ public class Bread {
     private BreadState state = BreadState.NEW;
 
     // 어떤 재료가 들어가며 재료의 원산지 표기
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade={CascadeType.PERSIST,CascadeType.MERGE})
+    @JsonManagedReference
     @JoinTable(
             name = "bread_ingredients",
             joinColumns = @JoinColumn(name = "bread_id"),
