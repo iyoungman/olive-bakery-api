@@ -144,6 +144,7 @@ public class BreadGetService {
         return BreadDto.BreadGetDetail.builder()
                 .name(bread.getName())
                 .price(bread.getPrice())
+                .description(bread.getDescription())
                 .detailDescription(bread.getDetailDescription())
                 .ingredientsList(breadIngredientList)
                 .isSoldOut(bread.getIsSoldOut())
