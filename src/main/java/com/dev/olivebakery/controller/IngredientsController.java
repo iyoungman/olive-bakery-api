@@ -1,9 +1,11 @@
 package com.dev.olivebakery.controller;
 
 import com.dev.olivebakery.domain.dto.BreadDto;
+import com.dev.olivebakery.domain.entity.Ingredients;
 import com.dev.olivebakery.service.IngredientsService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,21 +19,21 @@ public class IngredientsController {
 
     @ApiOperation("빵 성분 추가")
     @PostMapping()
-    public void saveIngredients(@RequestBody BreadDto.BreadIngredient breadIngredient){
+    public ResponseEntity<Ingredients> saveIngredients(@RequestBody BreadDto.BreadIngredient breadIngredient){
 
-        ingredientsService.saveIngredients(breadIngredient);
+        return ResponseEntity.ok(ingredientsService.saveIngredients(breadIngredient));
     }
 
     @ApiOperation("빵 성분 삭제")
     @DeleteMapping()
-    public void deleteIngredients(@RequestBody BreadDto.BreadIngredient breadIngredient){
-        ingredientsService.deleteIngredients(breadIngredient);
+    public ResponseEntity<Ingredients> deleteIngredients(@RequestBody BreadDto.BreadIngredient breadIngredient){
+        return ResponseEntity.ok(ingredientsService.deleteIngredients(breadIngredient));
     }
 
     @ApiOperation("빵 성분 여러개 등록")
     @PostMapping("/list")
-    public void saveIngredientsList(@RequestBody List<BreadDto.BreadIngredient> breadIngredientList){
-        ingredientsService.saveIngredientsList(breadIngredientList);
+    public ResponseEntity<List<Ingredients>> saveIngredientsList(@RequestBody List<BreadDto.BreadIngredient> breadIngredientList){
+        return ResponseEntity.ok(ingredientsService.saveIngredientsList(breadIngredientList));
     }
 
     @ApiOperation("빵 성분 리스틑 가져오기")

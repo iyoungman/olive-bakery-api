@@ -12,6 +12,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -33,17 +34,15 @@ public class BreadUpdateService {
         this.breadImageRepository = breadImageRepository;
     }
 
-    public String updateBreadName(BreadDto.BreadUpdateName breadNames){
+    public Bread updateBreadName(BreadDto.BreadUpdateName breadNames){
         Bread bread = breadRepository.findByName(breadNames.getOldName()).get();
 
         bread.updateName(breadNames.getNewName());
 
-        breadRepository.save(bread);
-
-        return bread.getName();
+        return breadRepository.save(bread);
     }
 
-    public void updateBread(BreadDto.BreadUpdate updateBread){
+    public Bread updateBread(BreadDto.BreadUpdate updateBread){
         Bread bread = breadRepository.findByName(updateBread.getOldName())
                 .orElseThrow(() -> new UserDefineException(updateBread.getOldName() + "이란 빵은 존재하지 않습니다."));
 
@@ -52,7 +51,7 @@ public class BreadUpdateService {
         bread.updateDetailDescription(updateBread.getDetailDescription());
         updateIngredients(updateBread.getIngredientsList(), bread);
 
-        breadRepository.save(bread);
+        return breadRepository.save(bread);
     }
 
     public void updateIngredients(List<BreadDto.BreadIngredient> breadIngredients, Bread bread) {
@@ -61,29 +60,33 @@ public class BreadUpdateService {
         //breadSaveService.saveIngredients(breadIngredients, bread);
     }
 
-    public void updateBreadImage(MultipartFile image, String breadname) throws IOException {
+    @Transactional
+    public String updateBreadImage(MultipartFile image, String breadname) throws IOException {
         Optional<Bread> breadOptional = breadRepository.findByName(breadname);
         Optional<BreadImage> breadImageOptional = breadImageRepository.findByBread(breadOptional.get());
         breadImageOptional.get().changeCurrentStatus(false);
 
-        breadSaveService.saveImage(image, breadOptional.get());
+        breadImageRepository.save(breadImageOptional.get());
+
+        return breadSaveService.saveImage(image, breadOptional.get()).getImageUrl();
     }
 
-    public void deleteBread(String name){
+    public Bread deleteBread(String name){
         Optional<Bread> breadOptional = breadRepository.findByName(name);
         breadOptional.get().deleteBread(true);
-        breadRepository.save(breadOptional.get());
+        return breadRepository.save(breadOptional.get());
     }
 
-    public void updateBreadState(BreadDto.BreadUpdateState breadUpdateState){
+    public Bread updateBreadState(BreadDto.BreadUpdateState breadUpdateState){
         Optional<Bread> breadOptional = breadRepository.findByName(breadUpdateState.getName());
         breadOptional.get().updateBreadState(breadUpdateState.getBreadState());
-        breadRepository.save(breadOptional.get());
+        return breadRepository.save(breadOptional.get());
     }
 
-    public void updateBreadSoldOut(BreadDto.BreadUpdateSoldOut breadUpdateSoldOut){
-        breadRepository.findByName(breadUpdateSoldOut.getName())
-                .get().updateBreadSoldOut(breadUpdateSoldOut.getIsSoldOut());
+    public Bread updateBreadSoldOut(BreadDto.BreadUpdateSoldOut breadUpdateSoldOut){
+        Bread bread = breadRepository.findByName(breadUpdateSoldOut.getName()).get();
+        bread.updateBreadSoldOut(breadUpdateSoldOut.getIsSoldOut());
+        return breadRepository.save(bread);
     }
 
     public void addBreadIngredients(BreadDto.BreadUpdateIngredients breadUpdateIngredients){

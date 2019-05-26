@@ -57,8 +57,8 @@ public class BreadDto {
     public static class BreadGetDetail{
         private String name;
         private int price;
-        private String picture;
         private String detailDescription;
+        private String description;
         private List<BreadIngredient> ingredientsList;
         private Boolean isSoldOut;
         private BreadState breadState;
