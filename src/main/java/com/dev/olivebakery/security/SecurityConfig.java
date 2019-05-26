@@ -38,10 +38,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .httpBasic().disable()
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//        http
+//                .httpBasic().disable()
+//                .csrf().disable()
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 //                .and()
 //                .authorizeRequests()
 //                    .antMatchers(HttpMethod.POST, "/olive/sign/client").permitAll()
@@ -70,12 +70,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring()
-                .antMatchers(HttpMethod.POST, "/olive/sign/client")
-                .antMatchers(HttpMethod.POST, "/olive/sign")
-                .antMatchers("/v2/api-docs", "/configuration/ui",
-                                "/swagger-resources", "/configuration/security",
-                                "/swagger-ui.html", "/webjars/**","/swagger/**");
+//        web.ignoring()
+//                .antMatchers(HttpMethod.POST, "/olive/sign/client")
+//                .antMatchers(HttpMethod.POST, "/olive/sign")
+//                .antMatchers("/v2/api-docs", "/configuration/ui",
+//                                "/swagger-resources", "/configuration/security",
+//                                "/swagger-ui.html", "/webjars/**","/swagger/**");
+        web.ignoring().antMatchers("/**");
     }
 
     @Bean

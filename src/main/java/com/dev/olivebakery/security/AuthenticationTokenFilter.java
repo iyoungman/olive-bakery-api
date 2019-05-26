@@ -44,6 +44,7 @@ public class AuthenticationTokenFilter extends GenericFilterBean {
 //            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 //            response.getWriter().write("User not found");
 //        }
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     private HttpServletRequest getAsHttpRequest(ServletRequest request) {
