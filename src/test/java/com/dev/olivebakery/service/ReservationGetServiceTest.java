@@ -25,7 +25,7 @@ import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@Transactional
+//@Transactional
 public class ReservationGetServiceTest {
 
 	@Autowired
@@ -51,7 +51,7 @@ public class ReservationGetServiceTest {
 
 		ReservationDto.ReservationSaveRequest reservationSaveRequest = ReservationDto.ReservationSaveRequest.builder()
 				.bringTime(bringTime)
-				.userEmail("signTest@gmail.com")
+				.userEmail("signTest1@gmail.com")
 				.breadInfo(Arrays.asList(
 						ReservationDto.ReservationBread.builder()
 								.breadName("소보로빵")
@@ -75,7 +75,7 @@ public class ReservationGetServiceTest {
 	public void getReservationInfos_예약목록_조회() throws Exception {
 
 		//given
-		final String email = "signTest@gmail.com";
+		final String email = "signTest1@gmail.com";
 		final ReservationType reservationType = ReservationType.REQUEST;
 		List<ReservationDto.ReservationBread> expectedBreads = Arrays.asList(
 				new ReservationDto.ReservationBread("소보로빵", 1),

@@ -8,6 +8,7 @@ import com.dev.olivebakery.exception.UserDefineException;
 import com.dev.olivebakery.repository.BreadRepository;
 import com.dev.olivebakery.repository.MemberRepository;
 import com.dev.olivebakery.repository.ReservationInfoRepository;
+import com.dev.olivebakery.repository.ReservationRepository;
 import com.dev.olivebakery.utill.Explain;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -26,6 +28,7 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class ReservationSaveService {
 
+	private final ReservationRepository reservationRepository;
 	private final ReservationInfoRepository reservationInfoRepository;
 	private final BreadRepository breadRepository;
 	private final MemberRepository memberRepository;
@@ -59,7 +62,7 @@ public class ReservationSaveService {
 		return IntStream.range(0, breads.size())
 				.map(index -> breads.get(index).getPrice() * counts.get(index))
 				.sum()
-		;
+				;
 	}
 
 	private List<Bread> findsByNames(List<String> breadNames) {
@@ -78,4 +81,37 @@ public class ReservationSaveService {
 		}
 		return reservationInfos;
 	}
+
+	@Explain("예약 정보 수정")
+	public void updateReservation(ReservationDto.ReservationUpdateRequest reservationUpdateRequest) {
+		Reservation reservation = findById(reservationUpdateRequest.getReservationId());
+		ReservationDto.ReservationSaveRequest saveRequest = reservationUpdateRequest.getReservationSaveRequest();
+
+		timeValidationCheck(saveRequest.getBringTime());
+		reservation.updateBringTime(saveRequest.getBringTime());
+		reservation.updateTotalPrice(getTotalPrice(saveRequest.getBreadNames(),
+				saveRequest.getBreadCounts())
+		);
+
+		List<Long> ids = getReservationInfoIds(reservation.getReservationInfos());
+		reservationInfoRepository.deleteAllByIdInQuery(ids);
+
+		reservation.updateReservationInfos(getReservationInfos(saveRequest,
+				reservation)
+		);
+
+		reservationRepository.save(reservation);
+	}
+
+	private Reservation findById(Long reservationId) {
+		return reservationRepository.findById(reservationId)
+				.orElseThrow((() -> new UserDefineException("해당 예약이 존재하지 않습니다.")));
+	}
+
+	private List<Long> getReservationInfoIds(List<ReservationInfo> reservationInfos) {
+		return reservationInfos.stream()
+				.map(i -> i.getReservationInfoId())
+				.collect(Collectors.toList());
+	}
+
 }

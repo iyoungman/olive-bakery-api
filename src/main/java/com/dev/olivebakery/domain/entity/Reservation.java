@@ -49,8 +49,9 @@ public class Reservation {
     @JoinColumn(name = "email")
     private Member member;
 
-    @OneToMany(mappedBy = "reservation", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "reservation", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ReservationInfo> reservationInfos = new ArrayList<>();
+
 
     @Builder
     public Reservation(LocalDateTime reservationTime, LocalDateTime bringTime, Integer price, Member member, List<ReservationInfo> reservationInfos) {
@@ -69,6 +70,18 @@ public class Reservation {
                 .price(totalPrice)
                 .build()
         ;
+    }
+
+    public void updateReservationInfos(List<ReservationInfo> reservationInfos) {
+        this.reservationInfos = reservationInfos;
+    }
+
+    public void updateBringTime(LocalDateTime bringTime) {
+        this.bringTime = bringTime;
+    }
+
+    public void updateTotalPrice(int totalPrice) {
+        this.price = totalPrice;
     }
 
     @Explain("요청 -> 수락 -> 완료")

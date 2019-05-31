@@ -82,7 +82,7 @@ public class ReservationController {
 	@ApiOperation("예약정보 수정")
 	@PutMapping
 	public void updateReservation(@RequestBody ReservationDto.ReservationUpdateRequest request) {
-		reservationUpdateService.updateReservation(request);
+		reservationSaveService.updateReservation(request);
 	}
 
 

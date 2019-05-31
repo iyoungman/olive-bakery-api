@@ -17,21 +17,17 @@ import org.springframework.stereotype.Service;
 public class ReservationUpdateService {
 
 	private final ReservationRepository reservationRepository;
-	private final ReservationDeleteService reservationDeleteService;
-	private final ReservationSaveService reservationSaveService;
 
-	@Explain("예약 정보 수정 // 삭제 후 재저장")
-	public void updateReservation(ReservationDto.ReservationUpdateRequest reservationUpdateRequest) {
-		reservationDeleteService.deleteReservation(reservationUpdateRequest.getReservationId());
-		reservationSaveService.saveReservation(reservationUpdateRequest.getReservationSaveRequest());
-	}
 
 	@Explain("예약 상태 수정")
 	public void updateReservationType(Long reservationId) {
-		Reservation reservation = reservationRepository.findById(reservationId)
-				.orElseThrow((() -> new UserDefineException("해당 예약이 존재하지 않습니다.")));
-
+		Reservation reservation = findById(reservationId);
 		reservation.updateReservationType();
 		reservationRepository.save(reservation);
+	}
+
+	private Reservation findById(Long reservationId) {
+		return reservationRepository.findById(reservationId)
+				.orElseThrow((() -> new UserDefineException("해당 예약이 존재하지 않습니다.")));
 	}
 }
