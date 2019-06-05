@@ -9,7 +9,6 @@ import com.dev.olivebakery.repository.BreadRepository;
 import com.dev.olivebakery.repository.MemberRepository;
 import com.dev.olivebakery.repository.ReservationInfoRepository;
 import com.dev.olivebakery.repository.ReservationRepository;
-import com.dev.olivebakery.utill.Explain;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +32,9 @@ public class ReservationSaveService {
 	private final BreadRepository breadRepository;
 	private final MemberRepository memberRepository;
 
-	@Explain("예약 정보 저장")
+	/**
+	 * 시간 체크 후 예약 정보 저장
+	 */
 	public void saveReservation(ReservationDto.ReservationSaveRequest saveDto) {
 		timeValidationCheck(saveDto.getBringTime());
 		Reservation reservation = getReservationBySaveDto(saveDto);
@@ -41,7 +42,10 @@ public class ReservationSaveService {
 		reservationInfoRepository.saveAll(reservationInfos);
 	}
 
-	@Explain("수령시간은 매일 아침 8시 ~ 저녁 8시 사이// 예약시간보다 빠를 수 없다")
+	/**
+	 * 수령시간은 AM 8시 ~ PM 8시
+	 * 수령시간은 예약시간보다 빠를 수 없다
+	 */
 	public void timeValidationCheck(LocalDateTime bringTime) {
 		Predicate<LocalDateTime> predicate = b -> b.isAfter(LocalDateTime.now()) && b.getHour() >= 8 && b.getHour() <= 19;
 		if (!predicate.test(bringTime)) {
@@ -49,6 +53,9 @@ public class ReservationSaveService {
 		}
 	}
 
+	/**
+	 * ReservationSaveRequestDto -> Reservation 으로 변환
+	 */
 	private Reservation getReservationBySaveDto(ReservationDto.ReservationSaveRequest saveDto) {
 		return Reservation.of(saveDto.getBringTime(),
 				memberRepository.findByEmail(saveDto.getUserEmail()).orElseThrow(() -> new UserDefineException("해당 유저가 존재하지 않습니다.")),
@@ -56,33 +63,64 @@ public class ReservationSaveService {
 		);
 	}
 
+	/**
+	 * 빵이름과 개수를 바탕으로 총 예약 금액 반환
+	 */
 	private int getTotalPrice(List<String> breadNames, List<Integer> counts) {
 		List<Bread> breads = findsByNames(breadNames);
 
 		return IntStream.range(0, breads.size())
 				.map(index -> breads.get(index).getPrice() * counts.get(index))
-				.sum()
-				;
+				.sum();
 	}
 
+	/**
+	 * String 빵 이름을 바탕으로 Bread 를 찾는다
+	 */
 	private List<Bread> findsByNames(List<String> breadNames) {
-		return breadRepository.findByNameIn(breadNames);
+		List<Bread> findBreads = breadRepository.findAllByByNameInQuery(breadNames);
+		return sortFindBreads(findBreads, breadNames);
 	}
 
+	/**
+	 * 빵 리스트 정렬
+	 */
+	private List<Bread> sortFindBreads(List<Bread> findBreads, List<String> breadNames) {
+		List<Bread> sortFindBreads = new ArrayList<>();
+
+		for (String breadName : breadNames) {
+			for (Bread bread : findBreads) {
+				if (isEqualBreadName(breadName, bread.getName())) {
+					sortFindBreads.add(bread);
+					break;
+				}
+			}
+		}
+		return sortFindBreads;
+	}
+
+	private boolean isEqualBreadName(String strBreadName, String objectBreadName) {
+		return strBreadName.equals(objectBreadName);
+	}
+
+	/**
+	 * ReservationSaveRequest 와 Reservation -> List<ReservationInfo>
+	 */
 	private List<ReservationInfo> getReservationInfos(ReservationDto.ReservationSaveRequest saveDto, Reservation reservation) {
 		List<ReservationInfo> reservationInfos = new ArrayList<>();
 		List<Bread> breads = findsByNames(saveDto.getBreadNames());
 
 		for (int i = 0; i < breads.size(); i++) {
 			reservationInfos.add(ReservationInfo.of(saveDto.getBreadCounts().get(i),
-					reservation,
-					breads.get(i))
+					reservation, breads.get(i))
 			);
 		}
 		return reservationInfos;
 	}
 
-	@Explain("예약 정보 수정")
+	/**
+	 * 예약 수정
+	 */
 	public void updateReservation(ReservationDto.ReservationUpdateRequest reservationUpdateRequest) {
 		Reservation reservation = findById(reservationUpdateRequest.getReservationId());
 		ReservationDto.ReservationSaveRequest saveRequest = reservationUpdateRequest.getReservationSaveRequest();
@@ -108,6 +146,9 @@ public class ReservationSaveService {
 				.orElseThrow((() -> new UserDefineException("해당 예약이 존재하지 않습니다.")));
 	}
 
+	/**
+	 * 예약 정보의 id 값 반환
+	 */
 	private List<Long> getReservationInfoIds(List<ReservationInfo> reservationInfos) {
 		return reservationInfos.stream()
 				.map(i -> i.getReservationInfoId())

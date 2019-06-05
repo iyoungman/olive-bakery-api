@@ -1,19 +1,15 @@
 package com.dev.olivebakery.domain.entity;
 
 import com.dev.olivebakery.domain.enums.ReservationType;
-import com.dev.olivebakery.utill.Explain;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +80,6 @@ public class Reservation {
         this.price = totalPrice;
     }
 
-    @Explain("요청 -> 수락 -> 완료")
     public void updateReservationType() {
         reservationType = reservationType.equals(ReservationType.REQUEST) ? ReservationType.ACCEPT : ReservationType.COMPLETE;
     }
