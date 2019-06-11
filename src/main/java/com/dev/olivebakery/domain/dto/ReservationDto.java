@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class ReservationDto {
 
 	@Getter
-	@NoArgsConstructor(access = AccessLevel.PROTECTED)
+	@NoArgsConstructor
 	public static class ReservationResponse {
 
 		private Long reservationId;

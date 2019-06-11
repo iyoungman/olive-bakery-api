@@ -58,7 +58,8 @@ public class ReservationController {
 	@ApiOperation(value = "날짜구간별 예약 조회", notes = "날짜구간별 예약 조회, Admin 에서 사용")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "type", value = "예약타입", required = true),
-			@ApiImplicitParam(name = "date", value = "2019-04-14 형태", required = true)
+			@ApiImplicitParam(name = "startDate", value = "시작날짜, 2019-04-14 형태", required = true),
+			@ApiImplicitParam(name = "endDate", value = "끝날짜, 2019-04-14 형태", required = true)
 	})
 	@PostMapping("/date/range")
 	public List<ReservationDto.ReservationResponse> getReservationInfosByDateRange(@RequestBody ReservationDto.ReservationDateRangeRequest request) {

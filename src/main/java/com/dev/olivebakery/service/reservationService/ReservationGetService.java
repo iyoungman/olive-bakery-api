@@ -8,7 +8,9 @@ import com.dev.olivebakery.repository.ReservationRepository;
 import com.dev.olivebakery.utill.DateUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,6 +35,9 @@ public class ReservationGetService {
 		List<ReservationDto.ReservationResponseTemp> reservationResponseTemps = reservationRepository.getReservationInfos(email,
 				reservationType);
 
+		if(ObjectUtils.isEmpty(reservationResponseTemps)) {
+			return new ArrayList<>();
+		}
 		return ReservationConverterService.convertGetTempDtoListToGetDtoList(reservationResponseTemps);
 	}
 
@@ -41,6 +46,10 @@ public class ReservationGetService {
 	 */
 	public ReservationDto.ReservationResponse getReservationInfoByRecently(String email) {
 		List<ReservationDto.ReservationResponseTemp> reservationResponseTemps = reservationRepository.getReservationInfoByRecently(email);
+
+		if(ObjectUtils.isEmpty(reservationResponseTemps)) {
+			return new ReservationDto.ReservationResponse();
+		}
 		return ReservationConverterService.convertGetTmpDtoToGetDto(reservationResponseTemps);
 	}
 
@@ -54,6 +63,9 @@ public class ReservationGetService {
 				DateUtils.getEndOfDay(reservationDateRequest.getSelectDate())
 		);
 
+		if(ObjectUtils.isEmpty(reservationResponseTemps)) {
+			return new ArrayList<>();
+		}
 		return ReservationConverterService.convertGetTempDtoListToGetDtoList(reservationResponseTemps);
 	}
 
@@ -67,6 +79,9 @@ public class ReservationGetService {
 				DateUtils.getEndOfDay(reservationDateRangeRequest.getEndDate())
 		);
 
+		if(ObjectUtils.isEmpty(reservationResponseTemps)) {
+			return new ArrayList<>();
+		}
 		return ReservationConverterService.convertGetTempDtoListToGetDtoList(reservationResponseTemps);
 	}
 }

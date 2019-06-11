@@ -43,11 +43,11 @@ public class ReservationSaveService {
 	}
 
 	/**
-	 * 수령시간은 AM 8시 ~ PM 8시
+	 * 수령시간은 AM 10시 ~ PM 8시
 	 * 수령시간은 예약시간보다 빠를 수 없다
 	 */
 	public void timeValidationCheck(LocalDateTime bringTime) {
-		Predicate<LocalDateTime> predicate = b -> b.isAfter(LocalDateTime.now()) && b.getHour() >= 8 && b.getHour() <= 19;
+		Predicate<LocalDateTime> predicate = b -> b.isAfter(LocalDateTime.now()) && b.getHour() >= 10 && b.getHour() <= 19;
 		if (!predicate.test(bringTime)) {
 			throw new UserDefineException(bringTime.toString() + "  수령시간이 올바르지 않습니다.");
 		}
