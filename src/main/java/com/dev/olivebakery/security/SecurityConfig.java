@@ -1,7 +1,7 @@
 package com.dev.olivebakery.security;
 
 import com.dev.olivebakery.domain.enums.MemberRole;
-import com.dev.olivebakery.service.UserDetailsServiceImpl;
+import com.dev.olivebakery.service.signService.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -38,25 +38,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .httpBasic().disable()
-//                .csrf().disable()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .authorizeRequests()
-//                    .antMatchers(HttpMethod.POST, "/olive/sign/client").permitAll()
-//                    .antMatchers( HttpMethod.POST,"/olive/sign").permitAll()
-//                    .antMatchers("/olive/sign/admin").hasRole(MemberRole.ADMIN.name())
-//                    .antMatchers(HttpMethod.PUT,"/olive/sign").hasRole(MemberRole.CLIENT.name())
-//                    .antMatchers(HttpMethod.DELETE,"/olive/sign").hasRole(MemberRole.CLIENT.name())
-//
-//                //TODO("여기에 위 방식처럼 제한하고 싶은 url들 제한좀 해줘")
-//                    .anyRequest().authenticated()
-//                .and()
-//                    .exceptionHandling().authenticationEntryPoint(httpAuthenticationEntryPoint).accessDeniedHandler(accessDeniedHandler)
-//                .and()
-//                    .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
-//                    .logout().logoutUrl("/olive/logout").logoutSuccessHandler(logoutSuccessHandlerCustom)
+        http
+                .httpBasic().disable()
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
+                    .antMatchers("/olive/sign/admin").hasRole(MemberRole.ADMIN.name())
+                    .antMatchers(HttpMethod.PUT,"/olive/sign").hasRole(MemberRole.CLIENT.name())
+                    .antMatchers(HttpMethod.DELETE,"/olive/sign").hasRole(MemberRole.CLIENT.name())
+
+                //TODO("여기에 위 방식처럼 제한하고 싶은 url들 제한좀 해줘")
+                    .anyRequest().permitAll()
+                .and()
+                    .exceptionHandling().authenticationEntryPoint(httpAuthenticationEntryPoint).accessDeniedHandler(accessDeniedHandler)
+                .and()
+                    .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                    .logout().logoutUrl("/olive/logout").logoutSuccessHandler(logoutSuccessHandlerCustom)
         ;
     }
 

@@ -1,4 +1,4 @@
-package com.dev.olivebakery.service;
+package com.dev.olivebakery.service.signService;
 
 import com.dev.olivebakery.domain.dto.SignDto;
 import com.dev.olivebakery.domain.entity.Member;
@@ -77,8 +77,8 @@ public class SignService {
                 .orElseThrow(() -> new UserDefineException("해당 유저가 존재하지 않습니다."));
     }
 
-    public SignDto.MemberDto getMemberInfo(String userId) {
-        Member member = memberRepository.findByEmail(userId)
+    public SignDto.MemberDto getMemberInfo(String bearerToken) {
+        Member member = memberRepository.findByEmail(jwtProvider.getUserEmailByToken(bearerToken))
                 .orElseThrow(() -> new UserDefineException("아이디가 존재하지 않습니다."));
         return SignDto.MemberDto.builder()
                 .email(member.getEmail())
