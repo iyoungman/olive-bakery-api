@@ -1,4 +1,4 @@
-package com.dev.olivebakery.service;
+package com.dev.olivebakery.service.signService;
 
 import com.dev.olivebakery.domain.dto.SignDto;
 import com.dev.olivebakery.domain.entity.Member;

@@ -46,8 +46,8 @@ public class BoardController {
 
     @ApiOperation(value = "게시물 정보", notes = "게시물 하나 불러오기")
     @GetMapping("/id/{boardId}")
-    public BoardDto.GetPostDetails getPostDetails(@PathVariable("boardId") Long boardId){
-        return boardService.getPost(boardId);
+    public BoardDto.GetPostDetails getPostDetails(@RequestHeader(name = "Authorization") String token, @PathVariable("boardId") Long boardId){
+        return boardService.getPost(token, boardId);
     }
 
     @ApiOperation(value = "게시물 저장하기")

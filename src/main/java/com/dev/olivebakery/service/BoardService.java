@@ -9,6 +9,8 @@ import com.dev.olivebakery.domain.enums.BoardType;
 import com.dev.olivebakery.exception.UserDefineException;
 import com.dev.olivebakery.repository.BoardRepository;
 import com.dev.olivebakery.repository.CommentRepository;
+import com.dev.olivebakery.security.JwtProvider;
+import com.dev.olivebakery.service.signService.SignService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +22,13 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
     private final SignService signService;
+    private final JwtProvider jwtProvider;
 
-    public BoardService(BoardRepository boardRepository, CommentRepository commentRepository, SignService signService) {
+    public BoardService(BoardRepository boardRepository, CommentRepository commentRepository, SignService signService, JwtProvider jwtProvider) {
         this.boardRepository = boardRepository;
         this.commentRepository = commentRepository;
         this.signService = signService;
+        this.jwtProvider = jwtProvider;
     }
 
     public Board findBoardById(Long boardId) {
@@ -46,7 +50,9 @@ public class BoardService {
         return boardRepository.getNoticePosts();
     }
 
-    public BoardDto.GetPostDetails getPost(Long boardId){
+    public BoardDto.GetPostDetails getPost(String bearerToken, Long boardId){
+        String token = jwtProvider.resolveToken(bearerToken);
+//        Jwts.parser().parseClaimsJws(token).getBody().getSubject();
         return boardRepository.getPostDetails(boardId);
     }
 
