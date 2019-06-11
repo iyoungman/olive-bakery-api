@@ -16,7 +16,7 @@ import java.util.*;
 @Component
 public class JwtProvider {
     private final UserDetailsServiceImpl userDetailsService;
-    private final long validityInMilliseconds = 3600000;
+    private final long validityInMilliseconds = 36000000; // 테스트 중이라 10시간으로 설정.
     private String secretKey = "OLIVE";
 
     public JwtProvider(UserDetailsServiceImpl userDetailsService) {
@@ -65,12 +65,12 @@ public class JwtProvider {
     }
 
     public Authentication getAuthenticationByToken(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(getUserNameByToken(token));
+        UserDetails userDetails = userDetailsService.loadUserByUsername(getUserEmailByToken(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
     // 사용자 아이디
-    public String getUserNameByToken(String bearerToken){
+    public String getUserEmailByToken(String bearerToken){
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(resolveToken(bearerToken)).getBody().getSubject();
     }
 

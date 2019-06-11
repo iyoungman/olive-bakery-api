@@ -44,7 +44,7 @@ public class BoardController {
         return boardService.getNoticePosts();
     }
 
-    @ApiOperation(value = "게시물 정보", notes = "게시물 하나 불러오기")
+    @ApiOperation(value = "게시물 정보", notes = "게시물(게시판, QnA) 하나 불러오기")
     @GetMapping("/id/{boardId}")
     public BoardDto.GetPostDetails getPostDetails(@RequestHeader(name = "Authorization") String token, @PathVariable("boardId") Long boardId){
         return boardService.getPost(token, boardId);

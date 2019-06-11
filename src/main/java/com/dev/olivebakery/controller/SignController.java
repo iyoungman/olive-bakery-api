@@ -60,10 +60,16 @@ public class SignController {
         signService.delete(signInDto);
     }
 
+//    @ApiOperation("회원정보 조회")
+//    @GetMapping("/userId/{userId:.+}/")
+//    public SignDto.MemberDto getMember(@PathVariable String userId){
+//        return signService.getMemberInfo(userId);
+//    }
+
     @ApiOperation("회원정보 조회")
-    @GetMapping("/userId/{userId:.+}/")
-    public SignDto.MemberDto getMember(@PathVariable String userId){
-        return signService.getMemberInfo(userId);
+    @GetMapping("/check")
+    public SignDto.MemberDto getMember(@RequestHeader(name = "Authorization") String bearerToken){
+        return signService.getMemberInfo(bearerToken);
     }
 
     @ApiOperation("전체 회원정보 조회")
