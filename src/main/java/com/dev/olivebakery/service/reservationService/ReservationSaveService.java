@@ -9,9 +9,12 @@ import com.dev.olivebakery.repository.BreadRepository;
 import com.dev.olivebakery.repository.MemberRepository;
 import com.dev.olivebakery.repository.ReservationInfoRepository;
 import com.dev.olivebakery.repository.ReservationRepository;
+import com.dev.olivebakery.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,13 +34,15 @@ public class ReservationSaveService {
 	private final ReservationInfoRepository reservationInfoRepository;
 	private final BreadRepository breadRepository;
 	private final MemberRepository memberRepository;
+	private final JwtProvider jwtProvider;
+
 
 	/**
 	 * 시간 체크 후 예약 정보 저장
 	 */
-	public void saveReservation(ReservationDto.ReservationSaveRequest saveDto) {
+	public void saveReservation(ReservationDto.ReservationSaveRequest saveDto, String bearerToken) {
 		timeValidationCheck(saveDto.getBringTime());
-		Reservation reservation = getReservationBySaveDto(saveDto);
+		Reservation reservation = getReservationBySaveDto(saveDto, jwtProvider.getUserEmailByToken(bearerToken));
 		List<ReservationInfo> reservationInfos = getReservationInfos(saveDto, reservation);
 		reservationInfoRepository.saveAll(reservationInfos);
 	}
@@ -56,9 +61,9 @@ public class ReservationSaveService {
 	/**
 	 * ReservationSaveRequestDto -> Reservation 으로 변환
 	 */
-	private Reservation getReservationBySaveDto(ReservationDto.ReservationSaveRequest saveDto) {
+	private Reservation getReservationBySaveDto(ReservationDto.ReservationSaveRequest saveDto, String email) {
 		return Reservation.of(saveDto.getBringTime(),
-				memberRepository.findByEmail(saveDto.getUserEmail()).orElseThrow(() -> new UserDefineException("해당 유저가 존재하지 않습니다.")),
+				memberRepository.findByEmail(email).orElseThrow(() -> new UserDefineException("해당 유저가 존재하지 않습니다.")),
 				getTotalPrice(saveDto.getBreadNames(), saveDto.getBreadCounts())
 		);
 	}
@@ -121,7 +126,11 @@ public class ReservationSaveService {
 	/**
 	 * 예약 수정
 	 */
-	public void updateReservation(ReservationDto.ReservationUpdateRequest reservationUpdateRequest) {
+	@Transactional
+	public void updateReservation(ReservationDto.ReservationUpdateRequest reservationUpdateRequest, String bearerToken) {
+		String findEmail = reservationRepository.getMemberEmailByReservationId(reservationUpdateRequest.getReservationId());
+		checkValidateEmail(findEmail, bearerToken);
+
 		Reservation reservation = findById(reservationUpdateRequest.getReservationId());
 		ReservationDto.ReservationSaveRequest saveRequest = reservationUpdateRequest.getReservationSaveRequest();
 
@@ -141,6 +150,12 @@ public class ReservationSaveService {
 		reservationRepository.save(reservation);
 	}
 
+	private void checkValidateEmail(String findEmail, String bearerToken) {
+		if(!findEmail.equals(bearerToken)) {
+			throw new UserDefineException("예약자와 수정자가 일치하지 않습니다.");
+		}
+	}
+
 	private Reservation findById(Long reservationId) {
 		return reservationRepository.findById(reservationId)
 				.orElseThrow((() -> new UserDefineException("해당 예약이 존재하지 않습니다.")));
@@ -154,5 +169,6 @@ public class ReservationSaveService {
 				.map(i -> i.getReservationInfoId())
 				.collect(Collectors.toList());
 	}
+
 
 }
