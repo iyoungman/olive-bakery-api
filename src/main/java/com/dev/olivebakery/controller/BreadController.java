@@ -68,28 +68,12 @@ public class BreadController {
         return ResponseEntity.ok(breadUpdateService.updateBreadName(bread));
     }
 
-//    @ApiOperation("빵 정보 수정")
-//    @PutMapping()
-//    public ResponseEntity<Bread> updateBread(@RequestBody BreadDto.BreadUpdate bread){
-//        return ResponseEntity.ok(breadUpdateService.updateBread(bread));
-//    }
-
     @ApiOperation("빵 정보 수정")
     @PutMapping()
     public ResponseEntity<Bread> updateBread(@RequestPart(name = "file", required = false) MultipartFile file,
                                              @RequestParam String json) throws Exception {
-//        if(file == null){
-//            return ResponseEntity.ok(breadUpdateService.updateBread(null, json));
-//        }
         return ResponseEntity.ok(breadUpdateService.updateBread(file, json));
     }
-
-//    @ApiOperation("빵 사진 수정")
-//    @PutMapping("/image")
-//    public ResponseEntity<BreadImage> updateBreadIamge(@RequestPart MultipartFile file,
-//                                                       @RequestParam String breadName) throws Exception{
-//        return ResponseEntity.ok(breadUpdateService.updateBreadImage(file, breadName));
-//    }
 
     @ApiOperation("빵 상태 변경")
     @PutMapping("/state")

@@ -35,7 +35,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.accessDeniedHandler = accessDeniedHandler;
     }
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
