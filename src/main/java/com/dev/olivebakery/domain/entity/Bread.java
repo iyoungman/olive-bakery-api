@@ -4,6 +4,7 @@ import com.dev.olivebakery.domain.enums.BreadState;
 import com.dev.olivebakery.domain.enums.DayType;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import lombok.extern.java.Log;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor
+@Log
 public class Bread {
 
     @Id
@@ -31,9 +33,6 @@ public class Bread {
     private String name;
 
     private Integer price;
-
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bread", fetch = FetchType.LAZY)
-//    private List<BreadImage> breadImages;
 
     //상세정보가 아닌 간단한 소개(리스트에서 보내줄 것)
     private String description;
@@ -60,15 +59,6 @@ public class Bread {
 
     // 삭제 여부
     private Boolean deleteFlag;
-
-    // 무슨 요일에 파는 빵인지
-    //@ElementCollection(fetch = FetchType.EAGER)
-    //private List<Days> days = new ArrayList<>();
-
-    // 빵이 매진인지. soldout의 날짜가 오늘이면 매진
-//    @OneToOne(fetch = FetchType.EAGER,mappedBy = "bread")
-//    private SoldOut soldOut;
-
 
     public void updateName(String newName){
         this.name = newName;
@@ -98,11 +88,20 @@ public class Bread {
         this.deleteFlag = delete;
     }
 
+    public void updateBreadIngredients(List<Ingredients> ingredientsList) {
+        this.ingredientsList = ingredientsList;
+    }
+
     public void addBreadIngredients(Ingredients ingredients) {
         this.ingredientsList.add(ingredients);
     }
 
-    public void deleteBreadIngredients(Ingredients ingredients){
-        this.ingredientsList.remove(ingredients);
+    public void deleteBreadIngredients(Ingredients removeIngredients){
+        this.ingredientsList.forEach(ingredients -> {
+            if(ingredients.getName().equals(removeIngredients.getName()) && ingredients.getOrigin().equals(removeIngredients.getOrigin())){
+                this.ingredientsList.remove(ingredients);
+            }
+        });
+//        this.ingredientsList.remove(ingredients);
     }
 }
