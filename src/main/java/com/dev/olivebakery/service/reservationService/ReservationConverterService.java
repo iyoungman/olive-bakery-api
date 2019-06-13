@@ -36,7 +36,7 @@ public class ReservationConverterService {
 	 */
 	public static List<ReservationDto.ReservationResponse> convertGetTempDtoListToGetDtoList(List<ReservationDto.ReservationResponseTemp> reservationResponseTemps) {
 
-		List<ReservationDto.ReservationResponse> reservationRespons = new ArrayList<>();
+		List<ReservationDto.ReservationResponse> reservationResponses = new ArrayList<>();
 		List<ReservationDto.ReservationBread> reservationBreads = new ArrayList<>();
 		Long reservationId = reservationResponseTemps.get(0).getReservationId();
 
@@ -45,13 +45,13 @@ public class ReservationConverterService {
 				reservationBreads.add(ReservationDto.ReservationBread.of(reservationResponseTemp));
 
 				if (reservationResponseTemps.indexOf(reservationResponseTemp) == reservationResponseTemps.size() - 1) {
-					reservationRespons.add(ReservationDto.ReservationResponse.of(reservationResponseTemps.get(reservationResponseTemps.indexOf(reservationResponseTemp)),
+					reservationResponses.add(ReservationDto.ReservationResponse.of(reservationResponseTemps.get(reservationResponseTemps.indexOf(reservationResponseTemp)),
 							reservationBreads)
 					);
 				}
 				continue;
 			}
-			reservationRespons.add(ReservationDto.ReservationResponse.of(reservationResponseTemps.get(reservationResponseTemps.indexOf(reservationResponseTemp) - 1),
+			reservationResponses.add(ReservationDto.ReservationResponse.of(reservationResponseTemps.get(reservationResponseTemps.indexOf(reservationResponseTemp) - 1),
 					reservationBreads));
 
 			reservationId = reservationResponseTemp.getReservationId();
@@ -59,11 +59,11 @@ public class ReservationConverterService {
 			reservationBreads.add(ReservationDto.ReservationBread.of(reservationResponseTemp));
 
 			if (reservationResponseTemps.indexOf(reservationResponseTemp) == reservationResponseTemps.size() - 1) {
-				reservationRespons.add(ReservationDto.ReservationResponse.of(reservationResponseTemps.get(reservationResponseTemps.indexOf(reservationResponseTemp)),
+				reservationResponses.add(ReservationDto.ReservationResponse.of(reservationResponseTemps.get(reservationResponseTemps.indexOf(reservationResponseTemp)),
 						reservationBreads)
 				);
 			}
 		}
-		return reservationRespons;
+		return reservationResponses;
 	}
 }
