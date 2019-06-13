@@ -2,6 +2,7 @@ package com.dev.olivebakery.service.reservationService;
 
 import com.dev.olivebakery.exception.UserDefineException;
 import com.dev.olivebakery.repository.ReservationRepository;
+import com.dev.olivebakery.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public class ReservationDeleteService {
 
 	private final ReservationRepository reservationRepository;
+	private final JwtProvider jwtProvider;
 
 
 	/**
@@ -22,13 +24,14 @@ public class ReservationDeleteService {
 	 */
 	public void deleteReservation(Long reservationId, String bearerToken) {
 		String findEmail = reservationRepository.getMemberEmailByReservationId(reservationId);
-		checkValidateEmail(findEmail, bearerToken);
+		String tokenEmail = jwtProvider.getUserEmailByToken(bearerToken);
+		checkValidateEmail(findEmail, tokenEmail);
 
 		reservationRepository.deleteById(reservationId);
 	}
 
-	private void checkValidateEmail(String findEmail, String bearerToken) {
-		if(!findEmail.equals(bearerToken)) {
+	private void checkValidateEmail(String findEmail, String tokenEmail) {
+		if(!findEmail.equals(tokenEmail)) {
 			throw new UserDefineException("예약자와 삭제자가 일치하지 않습니다.");
 		}
 	}
