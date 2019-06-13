@@ -67,13 +67,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-//        web.ignoring()
-//                .antMatchers(HttpMethod.POST, "/olive/sign/client")
-//                .antMatchers(HttpMethod.POST, "/olive/sign")
-//                .antMatchers("/v2/api-docs", "/configuration/ui",
-//                                "/swagger-resources", "/configuration/security",
-//                                "/swagger-ui.html", "/webjars/**","/swagger/**");
-        web.ignoring().antMatchers("/**");
+        web.ignoring()
+                .antMatchers(HttpMethod.POST, "/olive/sign/client")
+                .antMatchers(HttpMethod.POST, "/olive/sign")
+                .antMatchers("/v2/api-docs", "/configuration/ui",
+                                "/swagger-resources", "/configuration/security",
+                                "/swagger-ui.html", "/webjars/**","/swagger/**");
+//        web.ignoring().antMatchers("/**");
     }
 
     @Bean
