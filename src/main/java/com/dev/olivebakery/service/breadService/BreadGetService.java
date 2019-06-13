@@ -10,6 +10,7 @@ import com.dev.olivebakery.exception.UserDefineException;
 import com.dev.olivebakery.repository.BreadImageRepository;
 import com.dev.olivebakery.repository.BreadRepository;
 import com.dev.olivebakery.repository.DaysRepository;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -33,23 +34,19 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class BreadGetService {
 
-    private BreadRepository breadRepository;
-    private DaysRepository daysRepository;
-    private BreadImageRepository breadImageRepository;
+    private final BreadRepository breadRepository;
+    private final DaysRepository daysRepository;
+    private final BreadImageRepository breadImageRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(BreadGetService.class);
 
     private static final String IMAGE_PATH_KEY = "resources.image-locations";
+
     @Autowired
     private Environment environment;
-
-    public BreadGetService(BreadRepository breadRepository, DaysRepository daysRepository, BreadImageRepository breadImageRepository){
-        this.breadRepository = breadRepository;
-        this.daysRepository = daysRepository;
-        this.breadImageRepository = breadImageRepository;
-    }
 
     public List<BreadDto.BreadGetAll> getAllBread(){
 
@@ -140,6 +137,7 @@ public class BreadGetService {
                 .orElseThrow(() -> new UserDefineException(name + "이란 빵은 존재하지 않습니다."));
 
         List<BreadDto.BreadIngredient> breadIngredientList = ingredientList2Dto(bread.getIngredientsList());
+        List<DayType> dayTypes = daysRepository.findByBread(bread);
 
         return BreadDto.BreadGetDetail.builder()
                 .name(bread.getName())
@@ -149,6 +147,7 @@ public class BreadGetService {
                 .ingredientsList(breadIngredientList)
                 .isSoldOut(bread.getIsSoldOut())
                 .breadState(bread.getState())
+                .daysList(dayTypes)
                 .build();
     }
 

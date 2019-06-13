@@ -35,7 +35,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.accessDeniedHandler = accessDeniedHandler;
     }
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -47,9 +46,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/olive/sign/admin").hasRole(MemberRole.ADMIN.name())
                     .antMatchers(HttpMethod.PUT,"/olive/sign").hasRole(MemberRole.CLIENT.name())
                     .antMatchers(HttpMethod.DELETE,"/olive/sign").hasRole(MemberRole.CLIENT.name())
+                    .antMatchers("/olive/ingredients").hasRole(MemberRole.ADMIN.name())
+                    .antMatchers(HttpMethod.POST, "/olive/bread/**").hasRole(MemberRole.ADMIN.name())
+                    .antMatchers(HttpMethod.DELETE, "/olive/bread/**").hasRole(MemberRole.ADMIN.name())
+                    .antMatchers(HttpMethod.PUT, "/olive/bread/**").hasRole(MemberRole.ADMIN.name())
 
                 //TODO("여기에 위 방식처럼 제한하고 싶은 url들 제한좀 해줘")
-                    .anyRequest().permitAll()
+                    .anyRequest().anonymous()
                 .and()
                     .exceptionHandling().authenticationEntryPoint(httpAuthenticationEntryPoint).accessDeniedHandler(accessDeniedHandler)
                 .and()
@@ -68,12 +71,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-//        web.ignoring()
-//                .antMatchers(HttpMethod.POST, "/olive/sign/client")
-//                .antMatchers(HttpMethod.POST, "/olive/sign")
-//                .antMatchers("/v2/api-docs", "/configuration/ui",
-//                                "/swagger-resources", "/configuration/security",
-//                                "/swagger-ui.html", "/webjars/**","/swagger/**");
+        web.ignoring()
+                .antMatchers(HttpMethod.POST, "/olive/sign/client")
+                .antMatchers(HttpMethod.POST, "/olive/sign")
+                .antMatchers("/v2/api-docs", "/configuration/ui",
+                                "/swagger-resources", "/configuration/security",
+                                "/swagger-ui.html", "/webjars/**","/swagger/**");
         web.ignoring().antMatchers("/**");
     }
 

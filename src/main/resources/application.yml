@@ -42,15 +42,13 @@ logging:
 server:
   port: 8080
 
-
 ---
-
 
 spring:
   profiles: test
 
   datasource:
-    url: jdbc:mysql://localhost:3306/olive_bakery?useSSL=false&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3306/olive_bakery?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Seoul
     username: root
     password: kim111
 
@@ -62,7 +60,6 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     open-in-view: true
-
 
 
   servlet:
