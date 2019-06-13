@@ -5,6 +5,7 @@ import com.dev.olivebakery.domain.entity.Bread;
 import com.dev.olivebakery.domain.entity.BreadImage;
 import com.dev.olivebakery.domain.entity.Days;
 import com.dev.olivebakery.domain.entity.Ingredients;
+import com.dev.olivebakery.domain.enums.BreadState;
 import com.dev.olivebakery.domain.enums.DayType;
 import com.dev.olivebakery.exception.UserDefineException;
 import com.dev.olivebakery.repository.BreadImageRepository;
@@ -84,6 +85,7 @@ public class BreadSaveService {
                 .description(breadSave.getDescription())
                 .detailDescription(breadSave.getDetailDescription())
                 .ingredientsList(getIngredientsListFromIngredientsDtoList(breadSave.getIngredientsList()))
+                .state(BreadState.NEW)
                 .isSoldOut(false)
                 .deleteFlag(false)
                 .build();

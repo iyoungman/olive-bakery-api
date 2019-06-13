@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: test
 ---
 
 spring:
@@ -42,9 +42,7 @@ logging:
 server:
   port: 8080
 
-
 ---
-
 
 spring:
   profiles: test

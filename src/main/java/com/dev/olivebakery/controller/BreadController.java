@@ -30,7 +30,6 @@ public class BreadController {
     @ApiOperation("모든 빵 정보 가져오기")
     @GetMapping()
     public ResponseEntity<List<BreadDto.BreadGetAll>> getAllBread(){
-
         return ResponseEntity.ok(breadGetService.getAllBread());
     }
 
@@ -62,12 +61,6 @@ public class BreadController {
     public void saveBreadAndImageTest( BreadDto.BreadSave breadSave) {
     }
 
-    @ApiOperation("빵 이름 수정")
-    @PutMapping(value = "/name")
-    public ResponseEntity<Bread> updateBreadName(@RequestBody BreadDto.BreadUpdateName bread){
-        return ResponseEntity.ok(breadUpdateService.updateBreadName(bread));
-    }
-
     @ApiOperation("빵 정보 수정")
     @PutMapping()
     public ResponseEntity<Bread> updateBread(@RequestPart(name = "file", required = false) MultipartFile file,
@@ -77,13 +70,15 @@ public class BreadController {
 
     @ApiOperation("빵 상태 변경")
     @PutMapping("/state")
-    public ResponseEntity<Bread> changeBreadState(@PathVariable BreadDto.BreadUpdateState breadUpdateState){
+    public ResponseEntity<Bread> changeBreadState(@RequestBody BreadDto.BreadUpdateState breadUpdateState){
+        log.info("-----빵 상태 변경 컨트롤러");
         return ResponseEntity.ok(breadUpdateService.updateBreadState(breadUpdateState));
     }
 
     @ApiOperation("빵 매진 상태 변경")
     @PutMapping("/sold_out")
-    public ResponseEntity<Bread> changeBreadSoldOut(@PathVariable BreadDto.BreadUpdateSoldOut breadUpdateSoldOut){
+    public ResponseEntity<Bread> changeBreadSoldOut(@RequestBody  BreadDto.BreadUpdateSoldOut breadUpdateSoldOut){
+        log.info("-----빵 매진상태 변경 컨트롤러");
         return ResponseEntity.ok(breadUpdateService.updateBreadSoldOut(breadUpdateSoldOut));
     }
 
@@ -122,6 +117,4 @@ public class BreadController {
 //
 //        return ResponseEntity.ok(HttpStatus.OK);
 //    }
-
-
 }

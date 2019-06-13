@@ -117,6 +117,7 @@ public class BreadUpdateService {
     /* 빵 매진 상태 변경 */
     public Bread updateBreadSoldOut(BreadDto.BreadUpdateSoldOut breadUpdateSoldOut){
         Bread bread = breadRepository.findByName(breadUpdateSoldOut.getName()).get();
+        log.info("매진상태 변경 ---- ");
         bread.updateBreadSoldOut(breadUpdateSoldOut.getIsSoldOut());
         return breadRepository.save(bread);
     }
