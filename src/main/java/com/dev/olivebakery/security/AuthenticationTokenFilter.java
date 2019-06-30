@@ -32,7 +32,6 @@ public class AuthenticationTokenFilter extends GenericFilterBean {
             if (token != null && jwtProvider.validateToken(token)) {
                 SecurityContextHolder.getContext().setAuthentication(jwtProvider.getAuthenticationByToken(token));
             }
-            filterChain.doFilter(servletRequest, servletResponse);
         } catch (JwtException | IllegalArgumentException e){
             log.error("Expired or invalid JWT token");
              HttpServletResponse response = (HttpServletResponse) servletResponse;

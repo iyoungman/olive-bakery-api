@@ -1,6 +1,7 @@
 package com.dev.olivebakery.service;
 
 import com.dev.olivebakery.repository.BoardRepository;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +16,11 @@ public class BoardServiceTest {
 
     @MockBean
     BoardRepository boardRepository;
+
+    @Before
+    public void startBoardServiceTest(){
+
+    }
 
     @Test
     public void getPosts() {
