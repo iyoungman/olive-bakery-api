@@ -1,12 +1,11 @@
 package com.dev.olivebakery.controller;
 
-import com.dev.olivebakery.domain.dto.SignDto;
+import com.dev.olivebakery.domain.dtos.SignDto;
 import com.dev.olivebakery.domain.entity.Member;
 import com.dev.olivebakery.repository.MemberRepository;
 import com.dev.olivebakery.security.JwtProvider;
 import com.dev.olivebakery.service.signService.SignService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Claims;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

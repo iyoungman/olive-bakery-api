@@ -1,7 +1,7 @@
 package com.dev.olivebakery.service;
 
-import com.dev.olivebakery.domain.dto.ReservationDto;
-import com.dev.olivebakery.domain.dto.SalesDto;
+import com.dev.olivebakery.domain.dtos.ReservationDto;
+import com.dev.olivebakery.domain.dtos.SalesDto;
 import com.dev.olivebakery.domain.entity.Sales;
 import com.dev.olivebakery.domain.enums.SaleType;
 import com.dev.olivebakery.exception.UserDefineException;

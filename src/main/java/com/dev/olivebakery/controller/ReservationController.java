@@ -1,6 +1,6 @@
 package com.dev.olivebakery.controller;
 
-import com.dev.olivebakery.domain.dto.ReservationDto;
+import com.dev.olivebakery.domain.dtos.ReservationDto;
 import com.dev.olivebakery.domain.enums.ReservationType;
 import com.dev.olivebakery.service.reservationService.ReservationDeleteService;
 import com.dev.olivebakery.service.reservationService.ReservationGetService;

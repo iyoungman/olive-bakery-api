@@ -1,4 +1,4 @@
-package com.dev.olivebakery.domain.dto;
+package com.dev.olivebakery.domain.dtos;
 
 
 import com.dev.olivebakery.domain.entity.Board;
@@ -10,7 +10,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.dev.olivebakery.domain.dto;
+package com.dev.olivebakery.domain.dtos;
 
 import com.dev.olivebakery.domain.entity.Sales;
 import com.dev.olivebakery.domain.enums.ReservationType;

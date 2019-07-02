@@ -1,6 +1,6 @@
 package com.dev.olivebakery.service.reservationService;
 
-import com.dev.olivebakery.domain.dto.ReservationDto;
+import com.dev.olivebakery.domain.dtos.ReservationDto;
 import com.dev.olivebakery.domain.entity.Bread;
 import com.dev.olivebakery.domain.entity.Reservation;
 import com.dev.olivebakery.domain.entity.ReservationInfo;
@@ -12,7 +12,6 @@ import com.dev.olivebakery.repository.ReservationRepository;
 import com.dev.olivebakery.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;

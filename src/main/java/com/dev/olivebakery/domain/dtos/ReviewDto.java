@@ -1,4 +1,4 @@
-package com.dev.olivebakery.domain.dto;
+package com.dev.olivebakery.domain.dtos;
 
 import lombok.Builder;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package com.dev.olivebakery.service.signService;
 
-import com.dev.olivebakery.domain.dto.SignDto;
+import com.dev.olivebakery.domain.dtos.SignDto;
 import com.dev.olivebakery.domain.entity.Member;
 import com.dev.olivebakery.domain.enums.MemberRole;
 import com.dev.olivebakery.exception.UserDefineException;

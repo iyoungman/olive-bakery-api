@@ -1,13 +1,11 @@
-package com.dev.olivebakery.domain.dto;
+package com.dev.olivebakery.domain.dtos;
 
 
-import com.dev.olivebakery.domain.entity.Days;
 import com.dev.olivebakery.domain.enums.BreadState;
 import com.dev.olivebakery.domain.enums.DayType;
 import lombok.*;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data

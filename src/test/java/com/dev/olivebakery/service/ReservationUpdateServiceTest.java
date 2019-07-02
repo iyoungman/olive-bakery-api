@@ -1,6 +1,6 @@
 //package com.dev.olivebakery.service;
 //
-//import com.dev.olivebakery.domain.dto.ReservationDto;
+//import com.dev.olivebakery.domain.dtos.ReservationDto;
 //import com.dev.olivebakery.service.reservationService.ReservationDeleteService;
 //import com.dev.olivebakery.service.reservationService.ReservationSaveService;
 //import org.junit.Test;

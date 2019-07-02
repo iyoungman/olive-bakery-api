@@ -1,6 +1,6 @@
 //package com.dev.olivebakery.service;
 //
-//import com.dev.olivebakery.domain.dto.ReservationDto;
+//import com.dev.olivebakery.domain.dtos.ReservationDto;
 //import com.dev.olivebakery.domain.enums.ReservationType;
 //import com.dev.olivebakery.repository.BreadRepository;
 //import com.dev.olivebakery.repository.MemberRepository;

@@ -1,6 +1,6 @@
 package com.dev.olivebakery.service.reservationService;
 
-import com.dev.olivebakery.domain.dto.ReservationDto;
+import com.dev.olivebakery.domain.dtos.ReservationDto;
 import com.dev.olivebakery.domain.entity.Reservation;
 import com.dev.olivebakery.domain.enums.MemberRole;
 import com.dev.olivebakery.domain.enums.ReservationType;

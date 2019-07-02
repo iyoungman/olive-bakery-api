@@ -1,6 +1,6 @@
 package com.dev.olivebakery.exception;
 
-import com.dev.olivebakery.domain.dto.ErrorDto;
+import com.dev.olivebakery.domain.dtos.ErrorDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .userDefineErrorMessage(e.getMessage())
                 .originalErrorMessage(e.getOriginalErrorMessage())
                 .requestURL(requestURL)
-                .build(), httpHeaders, HttpStatus.BAD_REQUEST);
+                .build(), httpHeaders, e.getErrorCode());
     }
 
     @ExceptionHandler(Exception.class)
