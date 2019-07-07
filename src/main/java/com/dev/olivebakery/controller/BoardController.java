@@ -1,8 +1,7 @@
 package com.dev.olivebakery.controller;
 
-import com.dev.olivebakery.domain.dtos.BoardDto;
-import com.dev.olivebakery.domain.dtos.CommentDto;
 import com.dev.olivebakery.domain.dtos.board.CommentRequestDto;
+import com.dev.olivebakery.domain.dtos.board.PostDetailsRequestDto;
 import com.dev.olivebakery.domain.dtos.board.PostDetailsResponseDto;
 import com.dev.olivebakery.domain.dtos.board.PostListResponseDto;
 import com.dev.olivebakery.domain.enums.BoardType;
@@ -25,7 +24,7 @@ public class BoardController {
         this.boardService = boardService;
     }
 
-    @ApiOperation(value = "게시물 리스트", notes = "게시판과 QnA의 게시물들 불러오기", response = BoardDto.GetPosts.class, responseContainer = "list")
+    @ApiOperation(value = "게시물 리스트", notes = "게시판과 QnA의 게시물들 불러오기", response = PostListResponseDto.class, responseContainer = "list")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "type", value = "게시판인지 QnA인지", required = true),
             @ApiImplicitParam(name = "num", value = "페이지 번호", required = true)
@@ -49,13 +48,13 @@ public class BoardController {
 
     @ApiOperation(value = "게시물 저장하기")
     @PostMapping
-    public void savePost(@RequestHeader(name = "Authorization") String token, @RequestBody BoardDto.SavePost savePostDto) {
+    public void savePost(@RequestHeader(name = "Authorization") String token, @RequestBody PostDetailsRequestDto savePostDto) {
         boardService.saveBoard(token, savePostDto);
     }
 
     @ApiOperation("게시물 수정하기")
     @PutMapping
-    public void updatePost(@RequestHeader(name = "Authorization") String token, @RequestBody BoardDto.UpdatePost updatePostDto) {
+    public void updatePost(@RequestHeader(name = "Authorization") String token, @RequestBody PostDetailsRequestDto updatePostDto) {
         boardService.updateBoard(token, updatePostDto);
     }
 

@@ -12,16 +12,19 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostDetailsRequestDto {
+    @ApiModelProperty(notes = "게시물 업데이트할 때만 필요")
+    private Long boardId;
     private String context;
     private String title;
     private BoardType boardType;
     @ApiModelProperty(notes = "true 또는 false로 보내야함")
-    private String isNotice;
+    private boolean isNotice;
     @ApiModelProperty(notes = "true 또는 false로 보내야함")
-    private String isSecret;
+    private boolean isSecret;
 
     @Builder
-    public PostDetailsRequestDto(String context, String title, BoardType boardType, String isSecret, String isNotice) {
+    public PostDetailsRequestDto(Long boardId, String context, String title, BoardType boardType, boolean isSecret, boolean isNotice) {
+        this.boardId = boardId;
         this.context = context;
         this.title = title;
         this.boardType = boardType;
@@ -35,8 +38,8 @@ public class PostDetailsRequestDto {
                 .title(title)
                 .member(member)
                 .boardType(boardType)
-                .isNotice(isNotice.matches("true"))
-                .isSecret(isSecret.matches("true"))
+                .isNotice(isNotice)
+                .isSecret(isSecret)
                 .build();
     }
 }

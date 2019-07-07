@@ -1,6 +1,6 @@
 package com.dev.olivebakery.domain.entity;
 
-import com.dev.olivebakery.domain.dtos.BoardDto;
+import com.dev.olivebakery.domain.dtos.board.PostDetailsRequestDto;
 import com.dev.olivebakery.domain.enums.BoardType;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -62,10 +62,10 @@ public class Board {
         this.member = member;
     }
 
-    public void updateBoard(BoardDto.UpdatePost updatePostDto) {
+    public void updateBoard(PostDetailsRequestDto updatePostDto) {
         this.context = updatePostDto.getContext();
         this.title = updatePostDto.getTitle();
-        this.isNotice = updatePostDto.getIsNotice().matches("true");
-        this.isSecret = updatePostDto.getIsSecret().matches("true");
+        this.isNotice = updatePostDto.isNotice();
+        this.isSecret = updatePostDto.isSecret();
     }
 }
