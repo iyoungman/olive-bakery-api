@@ -1,6 +1,6 @@
 package com.dev.olivebakery.controller;
 
-import com.dev.olivebakery.domain.dto.BreadDto;
+import com.dev.olivebakery.domain.dtos.BreadDto;
 import com.dev.olivebakery.domain.entity.Ingredients;
 import com.dev.olivebakery.service.IngredientsService;
 import io.swagger.annotations.ApiOperation;

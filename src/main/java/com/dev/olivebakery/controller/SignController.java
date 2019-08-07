@@ -1,16 +1,14 @@
 package com.dev.olivebakery.controller;
 
-import com.dev.olivebakery.domain.dto.SignDto;
+import com.dev.olivebakery.domain.dtos.SignDto;
 import com.dev.olivebakery.domain.enums.MemberRole;
 import com.dev.olivebakery.security.JwtProvider;
 import com.dev.olivebakery.service.signService.SignService;
-import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * 로그인 관련 Controller

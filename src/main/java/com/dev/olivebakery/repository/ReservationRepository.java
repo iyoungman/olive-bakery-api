@@ -1,6 +1,6 @@
 package com.dev.olivebakery.repository;
 
-import com.dev.olivebakery.domain.dto.ReservationDto;
+import com.dev.olivebakery.domain.dtos.ReservationDto;
 import com.dev.olivebakery.domain.entity.Reservation;
 import com.dev.olivebakery.domain.enums.ReservationType;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,7 +16,7 @@ import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
-	@Query(value = "select new com.dev.olivebakery.domain.dto.ReservationDto$ReservationResponseTemp(reservation.reservationId, reservation.reservationTime, reservation.bringTime, reservation.price, memeber.name, " +
+	@Query(value = "select new com.dev.olivebakery.domain.dtos.ReservationDto$ReservationResponseTemp(reservation.reservationId, reservation.reservationTime, reservation.bringTime, reservation.price, memeber.name, " +
 			"bread.name, reservationinfos.breadCount) " +
 			"from Reservation reservation " +
 			"join reservation.member memeber " +
@@ -27,7 +27,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 	List<ReservationDto.ReservationResponseTemp> getReservationInfos(@Param("email") String email, @Param("reservationType") ReservationType reservationType);
 
 
-	@Query(value = "select new com.dev.olivebakery.domain.dto.ReservationDto$ReservationResponseTemp(reservation.reservationId, reservation.reservationTime, reservation.bringTime, reservation.price, memeber.name, " +
+	@Query(value = "select new com.dev.olivebakery.domain.dtos.ReservationDto$ReservationResponseTemp(reservation.reservationId, reservation.reservationTime, reservation.bringTime, reservation.price, memeber.name, " +
 			"bread.name, reservationinfos.breadCount) " +
 			"from Reservation reservation " +
 			"join reservation.member memeber " +
@@ -38,7 +38,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 	List<ReservationDto.ReservationResponseTemp> getReservationInfoByRecently(@Param("email") String email);
 
 
-	@Query(value = "select new com.dev.olivebakery.domain.dto.ReservationDto$ReservationResponseTemp(reservation.reservationId, reservation.reservationTime, reservation.bringTime, reservation.price, memeber.name, " +
+	@Query(value = "select new com.dev.olivebakery.domain.dtos.ReservationDto$ReservationResponseTemp(reservation.reservationId, reservation.reservationTime, reservation.bringTime, reservation.price, memeber.name, " +
 			"bread.name, reservationinfos.breadCount) " +
 			"from Reservation reservation " +
 			"join reservation.member memeber " +
@@ -49,7 +49,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 	List<ReservationDto.ReservationResponseTemp> getReservationInfosByDate(@Param("reservationType") ReservationType reservationType, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
 
-	@Query(value = "select new com.dev.olivebakery.domain.dto.ReservationDto$ReservationSale(count(reservation.reservationId), sum(reservation.price)) " +
+	@Query(value = "select new com.dev.olivebakery.domain.dtos.ReservationDto$ReservationSale(count(reservation.reservationId), sum(reservation.price)) " +
 			"from Reservation reservation " +
 			"where reservation.reservationType = :reservationType and reservation.reservationTime > :startDate and reservation.reservationTime < :endDate")
 	ReservationDto.ReservationSale getReservationSaleByDate(@Param("reservationType") ReservationType reservationType, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);

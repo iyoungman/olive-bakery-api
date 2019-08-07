@@ -1,6 +1,6 @@
 package com.dev.olivebakery.service.breadService;
 
-import com.dev.olivebakery.domain.dto.BreadDto;
+import com.dev.olivebakery.domain.dtos.BreadDto;
 import com.dev.olivebakery.domain.entity.Bread;
 import com.dev.olivebakery.domain.entity.BreadImage;
 import com.dev.olivebakery.domain.entity.Days;
@@ -10,46 +10,32 @@ import com.dev.olivebakery.exception.UserDefineException;
 import com.dev.olivebakery.repository.BreadImageRepository;
 import com.dev.olivebakery.repository.BreadRepository;
 import com.dev.olivebakery.repository.DaysRepository;
-import org.apache.commons.io.FileUtils;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class BreadGetService {
 
-    private BreadRepository breadRepository;
-    private DaysRepository daysRepository;
-    private BreadImageRepository breadImageRepository;
+    private final BreadRepository breadRepository;
+    private final DaysRepository daysRepository;
+    private final BreadImageRepository breadImageRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(BreadGetService.class);
 
     private static final String IMAGE_PATH_KEY = "resources.image-locations";
+
     @Autowired
     private Environment environment;
-
-    public BreadGetService(BreadRepository breadRepository, DaysRepository daysRepository, BreadImageRepository breadImageRepository){
-        this.breadRepository = breadRepository;
-        this.daysRepository = daysRepository;
-        this.breadImageRepository = breadImageRepository;
-    }
 
     public List<BreadDto.BreadGetAll> getAllBread(){
 
@@ -140,6 +126,7 @@ public class BreadGetService {
                 .orElseThrow(() -> new UserDefineException(name + "이란 빵은 존재하지 않습니다."));
 
         List<BreadDto.BreadIngredient> breadIngredientList = ingredientList2Dto(bread.getIngredientsList());
+        List<DayType> dayTypes = daysRepository.findByBread(bread);
 
         return BreadDto.BreadGetDetail.builder()
                 .name(bread.getName())
@@ -149,10 +136,11 @@ public class BreadGetService {
                 .ingredientsList(breadIngredientList)
                 .isSoldOut(bread.getIsSoldOut())
                 .breadState(bread.getState())
+                .daysList(dayTypes)
                 .build();
     }
 
-    // 성분 -> 성분 dto
+    // 성분 -> 성분 dtos
     private List<BreadDto.BreadIngredient> ingredientList2Dto(List<Ingredients> ingredientsList) {
 
         List<BreadDto.BreadIngredient> ingredientDtoList = new ArrayList<>();

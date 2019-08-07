@@ -1,6 +1,6 @@
 package com.dev.olivebakery.domain.entity;
 
-import com.dev.olivebakery.domain.dto.SignDto;
+import com.dev.olivebakery.domain.dtos.SignDto;
 import com.dev.olivebakery.domain.enums.MemberRole;
 import lombok.Builder;
 import lombok.Getter;

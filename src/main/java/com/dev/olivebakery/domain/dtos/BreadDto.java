@@ -1,4 +1,4 @@
-package com.dev.olivebakery.domain.dto;
+package com.dev.olivebakery.domain.dtos;
 
 
 import com.dev.olivebakery.domain.enums.BreadState;
@@ -6,7 +6,6 @@ import com.dev.olivebakery.domain.enums.DayType;
 import lombok.*;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -54,14 +53,15 @@ public class BreadDto {
     @NoArgsConstructor
     @Builder
     @AllArgsConstructor
-    public static class BreadGetDetail{
-        private String name;
-        private int price;
-        private String detailDescription;
-        private String description;
-        private List<BreadIngredient> ingredientsList;
-        private Boolean isSoldOut;
-        private BreadState breadState;
+        public static class BreadGetDetail{
+            private String name;
+            private int price;
+            private String detailDescription;
+            private String description;
+            private List<BreadIngredient> ingredientsList;
+            private Boolean isSoldOut;
+            private BreadState breadState;
+            private List<DayType> daysList;
     }
 
     @Getter
@@ -71,7 +71,6 @@ public class BreadDto {
     public static class BreadSave{
         private String name;
         private int price;
-//        private MultipartFile breadImage;
         private String description;
         private String detailDescription;
         private List<BreadIngredient> ingredientsList;
@@ -93,10 +92,12 @@ public class BreadDto {
     @AllArgsConstructor
     public static class BreadUpdate {
         private String oldName;
+        private String newName;
         private int price;
         private String description;
         private String detailDescription;
         private List<BreadIngredient> ingredientsList;
+        private List<DayType> dayTypes;
     }
 
     @Getter

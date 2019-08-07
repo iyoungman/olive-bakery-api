@@ -1,6 +1,6 @@
 package com.dev.olivebakery.service.signService;
 
-import com.dev.olivebakery.domain.dto.SignDto;
+import com.dev.olivebakery.domain.dtos.SignDto;
 import com.dev.olivebakery.domain.entity.Member;
 import com.dev.olivebakery.domain.enums.MemberRole;
 import com.dev.olivebakery.exception.UserDefineException;
@@ -30,13 +30,16 @@ public class SignService {
     }
 
     public String signIn(SignDto.SignIn signInDto){
+
+        log.info("----login --- " + signInDto.getId() + "  " + signInDto.getPw());
+
+
         Member member = memberRepository.findByEmail(signInDto.getId())
                 .orElseThrow(() -> new UserDefineException("아이디를 잘못 입력하셨습니다."));
 
         if(!passwordEncoder.matches(signInDto.getPw(), member.getPw())){
             throw new UserDefineException("비밀번호를 잘못 입력하셨습니다.");
         }
-
         return jwtProvider.createToken(member.getEmail(), member.getRole());
     }
 

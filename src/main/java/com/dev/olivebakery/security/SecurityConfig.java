@@ -15,6 +15,14 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
@@ -26,6 +34,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final AccessDeniedHandler accessDeniedHandler;
     private final LogoutSuccessHandlerCustom logoutSuccessHandlerCustom;
 
+    private static final String[] AUTH_ARR = {
+            "**/swagger-resources/**",
+            "/webjars/**","/v2/api-docs", "/configuration/ui",
+            "/swagger-resources", "/configuration/security",
+            "/swagger-ui.html", "/webjars/**","/swagger/**"
+    };
+    private static final List<String> AUTH_LIST = Arrays.asList(
+            "/swagger-resources/**",
+            "/swagger-ui.html**",
+            "/webjars/**",
+            "favicon.ico");
+
+
     public SecurityConfig(UserDetailsServiceImpl userDetailsService, PasswordEncoder passwordEncoder, LogoutSuccessHandlerCustom logoutSuccessHandlerCustom, HttpAuthenticationEntryPoint httpAuthenticationEntryPoint, AuthenticationTokenFilter authenticationTokenFilter, AccessDeniedHandler accessDeniedHandler) {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
@@ -35,23 +56,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.accessDeniedHandler = accessDeniedHandler;
     }
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .httpBasic().disable()
+//                .httpBasic().disable()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                    .antMatchers(AUTH_ARR).anonymous()
                     .antMatchers("/olive/sign/admin").hasRole(MemberRole.ADMIN.name())
                     .antMatchers(HttpMethod.PUT,"/olive/sign").hasRole(MemberRole.CLIENT.name())
                     .antMatchers(HttpMethod.DELETE,"/olive/sign").hasRole(MemberRole.CLIENT.name())
+                    .antMatchers("/olive/ingredients").hasRole(MemberRole.ADMIN.name())
+                    .antMatchers(HttpMethod.POST, "/olive/bread/**").hasRole(MemberRole.ADMIN.name())
+                    .antMatchers(HttpMethod.DELETE, "/olive/bread/**").hasRole(MemberRole.ADMIN.name())
+                    .antMatchers(HttpMethod.PUT, "/olive/bread/**").hasRole(MemberRole.ADMIN.name())
 
                 //TODO("여기에 위 방식처럼 제한하고 싶은 url들 제한좀 해줘")
-                    .anyRequest().permitAll()
+//                    .antMatchers("/**").anonymous()
+                    .anyRequest().anonymous()
                 .and()
-                    .exceptionHandling().authenticationEntryPoint(httpAuthenticationEntryPoint).accessDeniedHandler(accessDeniedHandler)
+                    .exceptionHandling().defaultAuthenticationEntryPointFor(swaggerAuthenticationEntryPoint(), new CustomRequestMatcher(AUTH_LIST))
+                    .authenticationEntryPoint(httpAuthenticationEntryPoint).accessDeniedHandler(accessDeniedHandler)
                 .and()
                     .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
                     .logout().logoutUrl("/olive/logout").logoutSuccessHandler(logoutSuccessHandlerCustom)
@@ -71,9 +98,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring()
                 .antMatchers(HttpMethod.POST, "/olive/sign/client")
                 .antMatchers(HttpMethod.POST, "/olive/sign")
-                .antMatchers("/v2/api-docs", "/configuration/ui",
-                                "/swagger-resources", "/configuration/security",
-                                "/swagger-ui.html", "/webjars/**","/swagger/**");
+                .antMatchers(AUTH_ARR)
+        ;
 //        web.ignoring().antMatchers("/**");
     }
 
@@ -81,6 +107,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+    @Bean
+    public BasicAuthenticationEntryPoint swaggerAuthenticationEntryPoint() {
+        BasicAuthenticationEntryPoint entryPoint = new BasicAuthenticationEntryPoint();
+        entryPoint.setRealmName("Swagger Realm");
+        return entryPoint;
+    }
+
+    private class CustomRequestMatcher implements RequestMatcher {
+
+        private List<AntPathRequestMatcher> matchers;
+
+        private CustomRequestMatcher(List<String> matchers) {
+            this.matchers = matchers.stream().map(AntPathRequestMatcher::new).collect(Collectors.toList());
+        }
+
+        @Override
+        public boolean matches(HttpServletRequest request) {
+            return matchers.stream().anyMatch(a -> a.matches(request));
+        }
+
     }
 
 }

@@ -1,6 +1,6 @@
 package com.dev.olivebakery.service.reservationService;
 
-import com.dev.olivebakery.domain.dto.ReservationDto;
+import com.dev.olivebakery.domain.dtos.ReservationDto;
 import com.dev.olivebakery.domain.entity.Reservation;
 import com.dev.olivebakery.domain.enums.MemberRole;
 import com.dev.olivebakery.domain.enums.ReservationType;
@@ -25,11 +25,6 @@ public class ReservationGetService {
 
 	private final ReservationRepository reservationRepository;
 	private final JwtProvider jwtProvider;
-
-
-	public Reservation findById(Long reservationId) {
-		return reservationRepository.findById(reservationId).orElseThrow(() -> new UserDefineException("해당 예약내역이 없습니다."));
-	}
 
 
 	/**

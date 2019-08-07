@@ -1,16 +1,17 @@
 package com.dev.olivebakery.service.breadService;
 
-import com.dev.olivebakery.domain.dto.BreadDto;
+import com.dev.olivebakery.domain.dtos.BreadDto;
 import com.dev.olivebakery.domain.entity.Bread;
 import com.dev.olivebakery.domain.entity.BreadImage;
 import com.dev.olivebakery.domain.entity.Days;
 import com.dev.olivebakery.domain.entity.Ingredients;
+import com.dev.olivebakery.domain.enums.BreadState;
 import com.dev.olivebakery.domain.enums.DayType;
-import com.dev.olivebakery.exception.UserDefineException;
 import com.dev.olivebakery.repository.BreadImageRepository;
 import com.dev.olivebakery.repository.BreadRepository;
 import com.dev.olivebakery.repository.DaysRepository;
 import com.dev.olivebakery.repository.IngredientsRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -18,20 +19,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 @Service
 @Log
+@RequiredArgsConstructor
 public class BreadSaveService {
 
     //private static final String IMAGE_PATH = "C:\\Users\\Kimyunsang\\Desktop\\spring\\imageTest\\";
@@ -45,23 +41,17 @@ public class BreadSaveService {
     private final DaysRepository daysRepository;
     private final BreadImageRepository breadImageRepository;
 
-
-
-
-    public BreadSaveService(BreadRepository breadRepository, IngredientsRepository ingredientsRepository, DaysRepository daysRepository,
-                            BreadImageRepository breadImageRepository) {
-        this.breadRepository = breadRepository;
-        this.ingredientsRepository = ingredientsRepository;
-        this.daysRepository = daysRepository;
-        this.breadImageRepository = breadImageRepository;
-    }
-
-    @Transactional
     public Bread saveBread(BreadDto.BreadSave breadSave, MultipartFile image) throws IOException{
 
-        if(breadRepository.findByName(breadSave.getName()).isPresent()){
-            throw new UserDefineException("해당 이름의 빵이 이미 존재합니다.");
-        }
+//        breadRepository.findByName(breadSave.getName())
+//                .ifPresent(bread -> {
+//                    log.info("bread ---- 존재" + bread.getName());
+//                    throw new UserDefineException("해당 이름의 빵이 이미 존재합니다.");
+//                });
+
+//        log.info("check bread name  " + checkBreadName(breadSave.getName()));
+
+        log.info("bread save ------------");
 
         Bread bread = breadSaveDto2Bread(breadSave);
 
@@ -76,6 +66,14 @@ public class BreadSaveService {
         return bread;
     }
 
+    public Boolean checkBreadName(String breadName){
+        breadRepository.findByName(breadName)
+                .ifPresent(bread -> {
+                    return;
+                });
+        return false;
+    }
+
     private Bread breadSaveDto2Bread(BreadDto.BreadSave breadSave){
         return Bread.builder()
                 .name(breadSave.getName())
@@ -83,6 +81,7 @@ public class BreadSaveService {
                 .description(breadSave.getDescription())
                 .detailDescription(breadSave.getDetailDescription())
                 .ingredientsList(getIngredientsListFromIngredientsDtoList(breadSave.getIngredientsList()))
+                .state(BreadState.NEW)
                 .isSoldOut(false)
                 .deleteFlag(false)
                 .build();
@@ -91,10 +90,8 @@ public class BreadSaveService {
     public List<Ingredients> getIngredientsListFromIngredientsDtoList(List<BreadDto.BreadIngredient> breadIngredientsList) {
         List<Ingredients> ingredientsList = new ArrayList<>();
         breadIngredientsList.forEach(breadIngredients -> {
-            Ingredients ingredients = ingredientsRepository.findByNameAndOrigin(breadIngredients.getName(), breadIngredients.getOrigin());
-            if(ingredients == null){
-                ingredients = ingredientsRepository.save(Ingredients.builder().name(breadIngredients.getName()).origin(breadIngredients.getOrigin()).build());
-            }
+            Ingredients ingredients = Optional.ofNullable(ingredientsRepository.findByNameAndOrigin(breadIngredients.getName(), breadIngredients.getOrigin()))
+                    .orElseGet(() -> ingredientsRepository.save(Ingredients.builder().name(breadIngredients.getName()).origin(breadIngredients.getOrigin()).build()));
             ingredientsList.add(ingredients);
         });
 

@@ -1,8 +1,7 @@
-package com.dev.olivebakery.domain.dto;
+package com.dev.olivebakery.domain.dtos;
 
 import com.dev.olivebakery.domain.entity.Board;
 import com.dev.olivebakery.domain.entity.Comment;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;

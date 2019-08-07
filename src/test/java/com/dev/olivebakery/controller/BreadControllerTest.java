@@ -1,6 +1,6 @@
 package com.dev.olivebakery.controller;
 
-import com.dev.olivebakery.domain.dto.BreadDto;
+import com.dev.olivebakery.domain.dtos.BreadDto;
 import com.dev.olivebakery.domain.entity.Bread;
 import com.dev.olivebakery.repository.BreadRepository;
 import com.dev.olivebakery.repository.IngredientsRepository;
@@ -14,9 +14,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import java.util.ArrayList;
+
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
