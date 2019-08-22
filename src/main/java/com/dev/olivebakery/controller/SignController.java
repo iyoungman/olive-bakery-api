@@ -1,10 +1,14 @@
 package com.dev.olivebakery.controller;
 
-import com.dev.olivebakery.domain.dto.SignDto;
+import com.dev.olivebakery.domain.dtos.SignDto;
 import com.dev.olivebakery.domain.enums.MemberRole;
-import com.dev.olivebakery.service.SignService;
+import com.dev.olivebakery.security.JwtProvider;
+import com.dev.olivebakery.service.signService.SignService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 로그인 관련 Controller
@@ -15,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/olive/sign")
 public class SignController {
+    @Autowired
+    JwtProvider jwtProvider;
 
     private final SignService signService;
 
@@ -22,9 +28,15 @@ public class SignController {
         this.signService = signService;
     }
 
-    @ApiOperation("회원가입")
-    @PostMapping("/signup")
-    public String signUp(@RequestBody SignDto.SignUp signupDto){
+    @ApiOperation("관리자 회원가입")
+    @PostMapping("/admin")
+    public String signUpAdmin(@RequestBody SignDto.SignUp signupDto){
+        return signService.signUp(signupDto, MemberRole.ADMIN.name());
+    }
+
+    @ApiOperation("일반 회원가입")
+    @PostMapping("/client")
+    public String signUpClient(@RequestBody SignDto.SignUp signupDto){
         return signService.signUp(signupDto, MemberRole.CLIENT.name());
     }
 
@@ -46,26 +58,21 @@ public class SignController {
         signService.delete(signInDto);
     }
 
+//    @ApiOperation("회원정보 조회")
+//    @GetMapping("/userId/{userId:.+}/")
+//    public SignDto.MemberDto getMember(@PathVariable String userId){
+//        return signService.getMemberInfo(userId);
+//    }
+
     @ApiOperation("회원정보 조회")
-    @PostMapping("/check")
-    public SignDto.MemberDto getMember(@RequestBody SignDto.SignIn signInDto){
-        return signService.getMemberInfo(signInDto);
+    @GetMapping("/check")
+    public SignDto.MemberDto getMember(@RequestHeader(name = "Authorization") String bearerToken){
+        return signService.getMemberInfo(bearerToken);
     }
 
-
-    /*public AuthTokenDto login(@RequestBody AuthRequestDto authRequestDto, HttpSession session){
-        String username = authRequestDto.getUsername();
-        String password = authRequestDto.getPassword();
-
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
-        Authentication authentication = authenticationManager.authenticate(token);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
-                SecurityContextHolder.getContext());
-
-        Member member = loginService.getMemberById(username);
-        return new AuthTokenDto(member.getId(), member.getRole(), session.getId());
-
+    @ApiOperation("전체 회원정보 조회")
+    @GetMapping("/members")
+    public List<SignDto.MemberDto> getWholeMembers(){
+        return signService.getMembersInfo();
     }
-*/
 }

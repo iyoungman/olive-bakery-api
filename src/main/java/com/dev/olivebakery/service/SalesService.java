@@ -1,7 +1,7 @@
 package com.dev.olivebakery.service;
 
-import com.dev.olivebakery.domain.dto.ReservationDto;
-import com.dev.olivebakery.domain.dto.SalesDto;
+import com.dev.olivebakery.domain.dtos.ReservationDto;
+import com.dev.olivebakery.domain.dtos.SalesDto;
 import com.dev.olivebakery.domain.entity.Sales;
 import com.dev.olivebakery.domain.enums.SaleType;
 import com.dev.olivebakery.exception.UserDefineException;
@@ -87,7 +87,7 @@ public class SalesService {
         else
             throw new UserDefineException("이미 저장되어 있는 매출정보가 있습니다.");
     }
-
+    
     public void updateSale(SalesDto.SaveSale updateSales){
         Sales sales = salesRepository.findByDateEqualsAndSaleType(updateSales.getDate(), SaleType.OFFLINE)
                 .orElseThrow(() -> new UserDefineException("해당 매출 정보가 존재하지 않습니다."));

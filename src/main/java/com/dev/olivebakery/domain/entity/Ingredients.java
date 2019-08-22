@@ -19,8 +19,4 @@ public class Ingredients {
     private String name;
 
     private String origin;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "bread_id")
-    private Bread bread;
 }

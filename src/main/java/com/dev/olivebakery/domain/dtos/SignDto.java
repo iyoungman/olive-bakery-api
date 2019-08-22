@@ -1,9 +1,10 @@
-package com.dev.olivebakery.domain.dto;
+package com.dev.olivebakery.domain.dtos;
 
 import com.dev.olivebakery.domain.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 public class SignDto {
 
@@ -14,7 +15,7 @@ public class SignDto {
         private String pw;
     }
 
-    @Getter
+    @Getter @Setter
     @NoArgsConstructor
     public static class SignUp {
         private String email;
@@ -55,6 +56,15 @@ public class SignDto {
             this.name = name;
             this.phoneNumber = phoneNumber;
             this.stamp = stamp;
+        }
+
+        public Member toEntity(){
+            return Member.builder()
+                    .email(email)
+                    .name(name)
+                    .phoneNumber(phoneNumber)
+                    .stamp(stamp)
+                    .build();
         }
     }
 }

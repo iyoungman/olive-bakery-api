@@ -1,85 +1,123 @@
 package com.dev.olivebakery.service.breadService;
 
-import com.dev.olivebakery.domain.dto.BreadDto;
+import com.dev.olivebakery.domain.dtos.BreadDto;
 import com.dev.olivebakery.domain.entity.Bread;
 import com.dev.olivebakery.domain.entity.BreadImage;
 import com.dev.olivebakery.exception.UserDefineException;
 import com.dev.olivebakery.repository.BreadImageRepository;
 import com.dev.olivebakery.repository.BreadRepository;
+import com.dev.olivebakery.repository.DaysRepository;
 import com.dev.olivebakery.repository.IngredientsRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Log4j2
+@RequiredArgsConstructor
 public class BreadUpdateService {
 
     private final BreadRepository breadRepository;
     private final IngredientsRepository ingredientsRepository;
     private final BreadSaveService breadSaveService;
+    private final DaysRepository daysRepository;
     private final BreadImageRepository breadImageRepository;
 
-    public BreadUpdateService(BreadRepository breadRepository, IngredientsRepository ingredientsRepository,
-                              BreadSaveService breadSaveService, BreadImageRepository breadImageRepository){
-        this.breadRepository = breadRepository;
-        this.ingredientsRepository = ingredientsRepository;
-        this.breadSaveService = breadSaveService;
-        this.breadImageRepository = breadImageRepository;
-    }
-
-    public String updateBreadName(BreadDto.BreadUpdateName breadNames){
+        /* 빵 이름 수정*/
+    public Bread updateBreadName(BreadDto.BreadUpdateName breadNames){
         Bread bread = breadRepository.findByName(breadNames.getOldName()).get();
 
         bread.updateName(breadNames.getNewName());
 
-        breadRepository.save(bread);
-
-        return bread.getName();
+        return breadRepository.save(bread);
     }
 
-    public void updateBread(BreadDto.BreadUpdate updateBread){
-        Bread bread = breadRepository.findByName(updateBread.getOldName())
-                .orElseThrow(() -> new UserDefineException(updateBread.getOldName() + "이란 빵은 존재하지 않습니다."));
+    /* 빵 내용 수정 */
+    @Transactional
+    public Bread updateBread(MultipartFile image, String breadUpdateDtoJson) throws IOException {
 
-        bread.updatePrice(updateBread.getPrice());
-        bread.updateDescription(updateBread.getDescription());
-        bread.updateDetailDescription(updateBread.getDetailDescription());
-        updateIngredients(updateBread.getIngredientsList(), bread);
+        BreadDto.BreadUpdate breadUpdate = breadUpdateMapper(breadUpdateDtoJson);
 
-        breadRepository.save(bread);
+        Bread bread = breadRepository.findByName(breadUpdate.getOldName())
+                .orElseThrow(() -> new UserDefineException(breadUpdate.getOldName() + "이란 빵은 존재하지 않습니다."));
+
+        if(image != null){
+            updateBreadImage(image, breadUpdate.getOldName());
+        }
+
+        daysRepository.deleteByBread(bread);
+
+        breadSaveService.saveDays(breadUpdate.getDayTypes(), bread);
+
+        bread = updateBreadInfo(bread, breadUpdate);
+
+        return breadRepository.save(bread);
     }
 
-    public void updateIngredients(List<BreadDto.BreadIngredient> breadIngredients, Bread bread) {
-        ingredientsRepository.deleteAllByBread(bread);
+    private Bread updateBreadInfo(Bread bread, BreadDto.BreadUpdate breadUpdate){
 
-        breadSaveService.saveIngredients(breadIngredients, bread);
+        if(breadUpdate.getNewName() != null){
+            bread.updateName(breadUpdate.getNewName());
+        }
+
+        bread.updatePrice(breadUpdate.getPrice());
+        bread.updateDescription(breadUpdate.getDescription());
+        bread.updateDetailDescription(breadUpdate.getDetailDescription());
+        bread = updateIngredients(breadUpdate.getIngredientsList(), bread);
+
+        return bread;
     }
 
-    public void updateBreadImage(MultipartFile image, String breadname) throws IOException {
-        Optional<Bread> breadOptional = breadRepository.findByName(breadname);
+    private BreadDto.BreadUpdate breadUpdateMapper(String breadUpdateDto) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(breadUpdateDto, BreadDto.BreadUpdate.class);
+    }
+
+    private Bread updateIngredients(List<BreadDto.BreadIngredient> breadIngredients, Bread bread) {
+        bread.updateBreadIngredients(breadSaveService.getIngredientsListFromIngredientsDtoList(breadIngredients));
+        return bread;
+    }
+
+    /* 빵 이미지 수정*/
+    @Transactional
+    public BreadImage updateBreadImage(MultipartFile image, String breadName) throws IOException {
+        Optional<Bread> breadOptional = breadRepository.findByName(breadName);
+
         Optional<BreadImage> breadImageOptional = breadImageRepository.findByBread(breadOptional.get());
+
         breadImageOptional.get().changeCurrentStatus(false);
 
-        breadSaveService.saveImage(image, breadOptional.get());
+        breadImageRepository.save(breadImageOptional.get());
+
+        return breadImageRepository.save(breadSaveService.saveImage(image, breadOptional.get()));
     }
 
-    public void deleteBread(String name){
+    /* 빵 삭제 */
+    public Bread deleteBread(String name){
         Optional<Bread> breadOptional = breadRepository.findByName(name);
         breadOptional.get().deleteBread(true);
-        breadRepository.save(breadOptional.get());
+        return breadRepository.save(breadOptional.get());
     }
 
-    public void updateBreadState(BreadDto.BreadUpdateState breadUpdateState){
+    /* 빵 상태 수정 */
+    public Bread updateBreadState(BreadDto.BreadUpdateState breadUpdateState){
         Optional<Bread> breadOptional = breadRepository.findByName(breadUpdateState.getName());
         breadOptional.get().updateBreadState(breadUpdateState.getBreadState());
-        breadRepository.save(breadOptional.get());
+        return breadRepository.save(breadOptional.get());
     }
 
-    public void updateBreadSoldOut(BreadDto.BreadUpdateSoldOut breadUpdateSoldOut){
-        breadRepository.findByName(breadUpdateSoldOut.getName())
-                .get().updateBreadSoldOut(breadUpdateSoldOut.getIsSoldOut());
+    /* 빵 매진 상태 변경 */
+    public Bread updateBreadSoldOut(BreadDto.BreadUpdateSoldOut breadUpdateSoldOut){
+        Bread bread = breadRepository.findByName(breadUpdateSoldOut.getName()).get();
+        log.info("매진상태 변경 ---- ");
+        bread.updateBreadSoldOut(breadUpdateSoldOut.getIsSoldOut());
+        return breadRepository.save(bread);
     }
 }
