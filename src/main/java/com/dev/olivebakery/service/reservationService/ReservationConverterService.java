@@ -15,55 +15,55 @@ import java.util.List;
 @Service
 public class ReservationConverterService {
 
-	/**
-	 * ReservationResponseTemp -> ReservationResponse
-	 */
-	public static ReservationDto.ReservationResponse convertGetTmpDtoToGetDto(List<ReservationDto.ReservationResponseTemp> reservationResponseTemps) {
+    /**
+     * ReservationResponseTemp -> ReservationResponse
+     */
+    public static ReservationDto.ReservationResponse convertGetTmpDtoToGetDto(List<ReservationDto.ReservationResponseTemp> reservationResponseTemps) {
 
-		if(ObjectUtils.isEmpty(reservationResponseTemps)) {
-			throw new UserDefineException("예약 내역이 없습니다.");
-		}
-		List<ReservationDto.ReservationBread> reservationBreads = new ArrayList<>();
+        if (ObjectUtils.isEmpty(reservationResponseTemps)) {
+            throw new UserDefineException("예약 내역이 없습니다.");
+        }
+        List<ReservationDto.ReservationBread> reservationBreads = new ArrayList<>();
 
-		for (ReservationDto.ReservationResponseTemp reservationResponseTemp : reservationResponseTemps) {
-			reservationBreads.add(ReservationDto.ReservationBread.of(reservationResponseTemp));
-		}
-		return ReservationDto.ReservationResponse.of(reservationResponseTemps.get(0), reservationBreads);
-	}
+        for (ReservationDto.ReservationResponseTemp reservationResponseTemp : reservationResponseTemps) {
+            reservationBreads.add(ReservationDto.ReservationBread.of(reservationResponseTemp));
+        }
+        return ReservationDto.ReservationResponse.of(reservationResponseTemps.get(0), reservationBreads);
+    }
 
-	/**
-	 * List<GetTempDto> -> List<GetDto>
-	 */
-	public static List<ReservationDto.ReservationResponse> convertGetTempDtoListToGetDtoList(List<ReservationDto.ReservationResponseTemp> reservationResponseTemps) {
+    /**
+     * List<GetTempDto> -> List<GetDto>
+     */
+    public static List<ReservationDto.ReservationResponse> convertGetTempDtoListToGetDtoList(List<ReservationDto.ReservationResponseTemp> reservationResponseTemps) {
 
-		List<ReservationDto.ReservationResponse> reservationResponses = new ArrayList<>();
-		List<ReservationDto.ReservationBread> reservationBreads = new ArrayList<>();
-		Long reservationId = reservationResponseTemps.get(0).getReservationId();
+        List<ReservationDto.ReservationResponse> reservationResponses = new ArrayList<>();
+        List<ReservationDto.ReservationBread> reservationBreads = new ArrayList<>();
+        Long reservationId = reservationResponseTemps.get(0).getReservationId();
 
-		for (ReservationDto.ReservationResponseTemp reservationResponseTemp : reservationResponseTemps) {
-			if (reservationResponseTemp.getReservationId().equals(reservationId)) {
-				reservationBreads.add(ReservationDto.ReservationBread.of(reservationResponseTemp));
+        for (ReservationDto.ReservationResponseTemp reservationResponseTemp : reservationResponseTemps) {
+            if (reservationResponseTemp.getReservationId().equals(reservationId)) {
+                reservationBreads.add(ReservationDto.ReservationBread.of(reservationResponseTemp));
 
-				if (reservationResponseTemps.indexOf(reservationResponseTemp) == reservationResponseTemps.size() - 1) {
-					reservationResponses.add(ReservationDto.ReservationResponse.of(reservationResponseTemps.get(reservationResponseTemps.indexOf(reservationResponseTemp)),
-							reservationBreads)
-					);
-				}
-				continue;
-			}
-			reservationResponses.add(ReservationDto.ReservationResponse.of(reservationResponseTemps.get(reservationResponseTemps.indexOf(reservationResponseTemp) - 1),
-					reservationBreads));
+                if (reservationResponseTemps.indexOf(reservationResponseTemp) == reservationResponseTemps.size() - 1) {
+                    reservationResponses.add(ReservationDto.ReservationResponse.of(reservationResponseTemps.get(reservationResponseTemps.indexOf(reservationResponseTemp)),
+                            reservationBreads)
+                    );
+                }
+                continue;
+            }
+            reservationResponses.add(ReservationDto.ReservationResponse.of(reservationResponseTemps.get(reservationResponseTemps.indexOf(reservationResponseTemp) - 1),
+                    reservationBreads));
 
-			reservationId = reservationResponseTemp.getReservationId();
-			reservationBreads = new ArrayList<>();
-			reservationBreads.add(ReservationDto.ReservationBread.of(reservationResponseTemp));
+            reservationId = reservationResponseTemp.getReservationId();
+            reservationBreads = new ArrayList<>();
+            reservationBreads.add(ReservationDto.ReservationBread.of(reservationResponseTemp));
 
-			if (reservationResponseTemps.indexOf(reservationResponseTemp) == reservationResponseTemps.size() - 1) {
-				reservationResponses.add(ReservationDto.ReservationResponse.of(reservationResponseTemps.get(reservationResponseTemps.indexOf(reservationResponseTemp)),
-						reservationBreads)
-				);
-			}
-		}
-		return reservationResponses;
-	}
+            if (reservationResponseTemps.indexOf(reservationResponseTemp) == reservationResponseTemps.size() - 1) {
+                reservationResponses.add(ReservationDto.ReservationResponse.of(reservationResponseTemps.get(reservationResponseTemps.indexOf(reservationResponseTemp)),
+                        reservationBreads)
+                );
+            }
+        }
+        return reservationResponses;
+    }
 }
