@@ -6,6 +6,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * test
+ */
+
 @Configuration
 @EnableScheduling
 public class AppConfig {
